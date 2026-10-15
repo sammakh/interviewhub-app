@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Interview Hub</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0D12;--card:#131820;--card2:#0F141B;--line:#232B37;--tx:#F2F5F8;--tx2:#D5DCE5;--hint:#8A95A5;--g:#3DDC97;--gt:#5BE3A6;--gbg:#12301F;--gbg2:#0F2019;--a:#F5B94A;--abg:#33260B;--ink:#06140D}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+body{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+button{font-family:inherit;color:inherit}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--line);flex:none}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;letter-spacing:-.2px}
+.mark{width:32px;height:32px;border-radius:10px;background:var(--g);color:var(--ink);display:flex;align-items:center;justify-content:center}
+.chip{font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;display:inline-block}
+.chip.g{color:var(--gt);background:var(--gbg)}.chip.a{color:var(--a);background:var(--abg)}.chip.n{color:#C3CBD6;background:var(--line)}
+#view{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.pad{padding:24px 20px 32px;display:flex;flex-direction:column;gap:28px}
+h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.5px}
+h2{margin:0;font-size:19px;font-weight:800}
+p{margin:0}.sub{font-size:14px;line-height:1.5;color:var(--hint)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sec{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
+.link{background:none;border:0;color:var(--g);font-size:14px;font-weight:700;min-height:44px;padding:0}
+.btn{width:100%;height:56px;border:0;border-radius:18px;background:var(--g);color:var(--ink);font-size:16px;font-weight:800}
+.btn.ghost{background:transparent;border:1px solid var(--g);color:var(--gt);height:48px;font-size:14px;border-radius:14px}
+.btn:disabled{opacity:.45}
+.segs{display:flex;gap:4px}.segs i{flex:1;height:6px;border-radius:3px;background:var(--line)}.segs i.on{background:var(--g)}
+.scroll{display:flex;gap:12px;overflow-x:auto;margin:0 -20px;padding:0 20px 4px}
+.fb{flex:none;width:296px;display:flex;flex-direction:column;gap:12px}
+.av{width:44px;height:44px;border-radius:22px;background:#1F2A37;color:var(--hint);display:flex;align-items:center;justify-content:center;flex:none}
+.tar{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:16px;min-height:76px}
+.tar.on{background:var(--gbg2);border-color:var(--g)}
+.rad{width:22px;height:22px;border-radius:11px;border:2px solid #3A4554;flex:none;display:flex;align-items:center;justify-content:center}
+.tar.on .rad{border-color:var(--g)}.tar.on .rad::after{content:"";width:10px;height:10px;border-radius:5px;background:var(--g)}
+.step{display:flex;gap:14px}.rail{display:flex;flex-direction:column;align-items:center}
+.dot{width:24px;height:24px;border-radius:12px;border:2px solid #2E3948;display:flex;align-items:center;justify-content:center;flex:none}
+.dot.done{background:var(--g);border-color:var(--g);color:var(--ink)}.dot.cur{border-color:var(--g)}.dot.cur::after{content:"";width:8px;height:8px;border-radius:4px;background:var(--g)}
+.ln{width:2px;height:26px;background:var(--line)}.ln.on{background:var(--g)}
+.st{display:flex;flex-direction:column;gap:2px;padding-bottom:10px}.st b{font-size:15px;font-weight:600;color:#C3CBD6}.st.cur b{color:var(--gt);font-weight:700}.st.done b{color:var(--tx)}.st span{font-size:13px;color:var(--hint)}
+nav{display:flex;padding:8px 8px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg);flex:none}
+nav button{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;font-size:11px;font-weight:600;color:var(--hint)}
+nav button i{width:56px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center}
+nav button.on{color:var(--g);font-weight:700}nav button.on i{background:var(--gbg)}
+.chips{display:flex;gap:8px;overflow-x:auto}.pill{flex:none;min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--line);background:var(--card);color:#C3CBD6;font-size:14px;font-weight:600}.pill.on{background:var(--tx);color:var(--bg);border-color:var(--tx);font-weight:700}
+.bar{height:8px;border-radius:4px;background:var(--line)}.bar i{display:block;height:8px;border-radius:4px;background:var(--g)}
+.lesson{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px;width:100%;text-align:left}
+.lesson.cur{background:var(--gbg2);border-color:var(--g);border-width:1.5px}
+.thumb{width:96px;height:64px;border-radius:14px;background:linear-gradient(135deg,#1C2B3C,#111A25);display:flex;align-items:center;justify-content:center;flex:none}
+.lesson.lock{color:var(--hint)}.lesson.lock .thumb{background:#1A212B}
+.list{background:var(--card);border:1px solid var(--line);border-radius:20px}
+.li{display:flex;align-items:center;gap:12px;padding:0 16px;min-height:58px;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left;font-size:15px;font-weight:600}
+.li:last-child{border-bottom:0}.li .grow{flex:1}.li .v{font-size:14px;color:var(--hint);font-weight:500}
+.sw{width:52px;height:32px;border:0;border-radius:16px;background:#2E3948;padding:3px;display:flex;align-items:center}.sw span{width:26px;height:26px;border-radius:13px;background:var(--tx);transition:.15s}.sw[aria-checked=true]{background:var(--g)}.sw[aria-checked=true] span{margin-left:auto;background:var(--ink)}
+.stats{display:flex;gap:10px}.stats div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}.stats b{display:block;font-size:24px;font-weight:800}.stats span{font-size:12px;color:var(--hint)}
+.box{background:var(--card2);border-radius:14px;padding:12px;font-size:14px;line-height:1.5;color:var(--tx2)}.box small{display:block;font-size:12px;font-weight:700;color:var(--hint);margin-bottom:4px}
+.reels{height:100%;overflow-y:auto;scroll-snap-type:y mandatory}
+.reel{height:100%;scroll-snap-align:start;padding:0 12px 12px;display:flex;flex-direction:column}
+.vid{flex:1;border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(165deg,#1C2B3C,#111A25 55%,#0A0D12)}
+.vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ov{position:absolute;left:0;right:0;bottom:0;padding:48px 16px 16px;background:linear-gradient(to top,rgba(10,13,18,.96),rgba(10,13,18,0));display:flex;flex-direction:column;gap:8px}
+.ctr{position:absolute;left:0;right:0;top:22%;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--hint);font-size:13px}
+.ctr .pl{width:76px;height:76px;border-radius:38px;background:rgba(242,245,248,.16);display:flex;align-items:center;justify-content:center;color:var(--tx)}
+.tag{position:absolute;top:16px;left:16px}
+.empty{text-align:center;color:var(--hint);font-size:14px;line-height:1.5;padding:32px 16px}
+/* ariza oqimi */
+#flow{position:fixed;inset:0;background:var(--bg);z-index:10;display:none;flex-direction:column}
+#flow.on{display:flex}
+.fbody{flex:1;overflow-y:auto;padding:20px}
+.ffoot{padding:12px 20px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:flex;gap:8px;flex-direction:column}
+.fnav{display:flex;gap:8px}.fnav button{height:52px;border:0;border-radius:16px;font-size:16px;font-weight:700}
+.opt{display:flex;align-items:center;gap:12px;background:var(--card);padding:14px;border-radius:14px;margin-bottom:8px;border:2px solid transparent;width:100%;text-align:left;font-size:16px;font-weight:600}
+.opt.on{border-color:var(--g)}
+label.f{display:block;margin-bottom:14px;font-size:14px;color:var(--hint)}
+input,select,textarea{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #2E3948;background:var(--card);color:var(--tx);font:inherit;font-size:16px}
+textarea{min-height:80px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;font-size:14px;line-height:1.45;color:var(--tx2)}
+.chk input{width:22px;height:22px;margin:0;flex:none;accent-color:var(--g)}
+.err{color:#FF8A8A;font-size:14px;min-height:20px}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Interview Hub</div>
+  <span class="chip a" id="pilotChip">Pilot</span>
+</header>
+
+<div id="view"></div>
+
+<nav id="tabs"></nav>
+
+<!-- ARIZA OQIMI -->
+<div id="flow" role="dialog" aria-modal="true" aria-label="Ariza topshirish">
+  <header><div class="logo" id="flowTitle">Ariza</div><button class="link" id="flowClose" type="button">Yopish</button></header>
+  <div class="fbody" id="flowBody"></div>
+  <div class="ffoot"><div class="err" id="err"></div><div class="fnav"><button id="fBack" type="button" style="flex:0 0 100px;background:var(--card);color:var(--tx)">Orqaga</button><button id="fNext" type="button" style="flex:1;background:var(--g);color:var(--ink)">Davom etish</button></div></div>
+</div>
+
+<script>
+/* ============ SOZLAMALAR: faqat shu blokni o'zgartiring ============ */
+const CONFIG = {
+  DEMO: true,                 // true: namunaviy ma'lumot ko'rsatiladi. Haqiqiy ma'lumot ulangach false qiling
+  PILOT: true,                // true: to'lov o'chirilgan ("Pilot: bepul")
+  API_URL: "",                // backend manzili, masalan "https://api.sizning-domen.uz". Bo'sh bo'lsa sendData ishlatiladi
+  BOT_USERNAME: "interviewhub_bot",
+  SUPPORT_URL: "",            // masalan "https://t.me/sizning_username"
+  POSITIONS: ["Dispatch", "Update", "Safety"],
+  PRICES: {1: null, 2: null, 3: null},   // so'mda. null bo'lsa "[narx]" ko'rsatiladi (narx hali aniq emas)
+  REFUND_TEXT: "[qaytarish yoki qo'shimcha intervyu shartlari]"
+};
+
+/* ============ MA'LUMOT (keyin backend'dan keladi) ============ */
+const STAGES = [
+  ["Pozitsiyalar tanlandi","Pozitsiya va tarif tasdiqlanadi"],
+  ["Screening","Inglizcha video va mindset savollari"],
+  ["Shartlar bilan tanishuv","Ish vaqti, lokatsiya, oylik"],
+  ["Shartnoma","Kafolat yo'qligini tasdiqlaysiz"],
+  ["To'lov","Faqat screeningdan o'tgandan keyin"],
+  ["Darslar","Video darslar va kitoblar"],
+  ["Yakuniy call","Intervyuga oxirgi tayyorgarlik"],
+  ["3 ta intervyu","Joy, vaqt va HR kontakti yuboriladi"]
+];
+const DEMO_DATA = {
+  user: {stage: 0, positions: [], tariff: 3},
+  feedback: [
+    {name:"[Talaba ismi]", meta:"[Pozitsiya] · [Kompaniya]", text:"[Talabaning fikri: intervyu qanday o'tdi va tayyorgarlik nimasi bilan yordam berdi. Faqat uning yozma roziligi bilan.]", badge:"Intervyu → Offer", tone:"g"},
+    {name:"[Talaba ismi]", meta:"[Pozitsiya] · [Kompaniya]", text:"[Talabaning fikri: mock intervyu va CV tayyorlash natijaga qanday ta'sir qildi.]", badge:"2-bosqichga o'tdi", tone:"a"},
+    {name:"[Talaba ismi]", meta:"[Pozitsiya] · [Kompaniya]", text:"[Talabaning fikri: birinchi intervyudan keyin nimani o'rgandi.]", badge:"Intervyu o'tdi", tone:"g"}
+  ],
+  reels: [
+    {src:"", name:"[Talaba ismi]", pos:"[Pozitsiya]", text:"[Qisqa izoh: intervyudan keyin nima o'zgardi.]", tag:"Nomzod fikri"},
+    {src:"", name:"[Talaba ismi]", pos:"[Pozitsiya]", text:"[Mock intervyudan lavha.]", tag:"Mock"}
+  ],
+  lessons: {
+    Dispatch: [["Dispatch nima va kun tartibi","[daq]"],["Load board bilan ishlash","[daq]"],["Broker va driver bilan muloqot","[daq]"],["Narx kelishuvi asoslari","[daq]"],["Ish iboralari va ingliz terminlari","[daq]"]],
+    Update:   [["Update lavozimi: vazifalar","[daq]"],["Yuk holatini kuzatish","[daq]"],["Mijozga hisobot berish","[daq]"]],
+    Safety:   [["Safety: asosiy talablar","[daq]"],["Hujjatlar va nazorat","[daq]"],["Hodisa holatida harakat","[daq]"]]
+  },
+  books: [["Dispatch terminlar lug'ati","PDF · [bet]"],["Intervyu savollari to'plami","PDF · [bet]"],["[Kitob nomi]","Kitob · [muallif]"]],
+  interviews: [
+    {n:1, company:"[Kompaniya nomi]", meta:"[Pozitsiya] · [sana]", status:"Offer", tone:"g", note:"[Kompaniyaning intervyudan keyingi feedbacki]", cta:true},
+    {n:2, company:"[Kompaniya nomi]", meta:"[Pozitsiya] · [sana]", status:"Natija kutilmoqda", tone:"a", note:"Kompaniya javobi kelgach shu yerda ko'rinadi.", dim:true},
+    {n:3, company:"[Kompaniya nomi]", meta:"[Pozitsiya] · [sana va vaqt]", status:"Rejalashtirilgan", tone:"n", note:"[HR ismi va Telegram / email]", label:"HR kontakti"}
+  ]
+};
+let DATA = CONFIG.DEMO ? DEMO_DATA : {user:{stage:0,positions:[],tariff:3},feedback:[],reels:[],lessons:{},books:[],interviews:[]};
+
+/* ============ YORDAMCHI ============ */
+const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
+try{tg.setHeaderColor("#0A0D12");tg.setBackgroundColor("#0A0D12");}catch(e){}
+const $ = id => document.getElementById(id);
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ICON = {
+  home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  reels:'<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M10 9.5v5l4.5-2.5z"/>',
+  book:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M8 7h8"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  chev:'<path d="M9 6l6 6-6 6"/>',
+  shield:'<path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6z"/><path d="M9 12l2.2 2.2L15.5 10"/>',
+  file:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
+  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/>',
+  play:'<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>'
+};
+const ic = (n,s=22,c="currentColor") => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+const fmtPrice = n => { const p = CONFIG.PRICES[n]; return p ? p.toLocaleString("ru-RU").replace(/ /g," ")+" so'm" : "[narx] so'm"; };
+const userName = () => (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) || "do'st";
+
+let tab = "home", lessonPos = null, notif = true;
+const stage = () => DATA.user.stage || 0;
+const haptic = () => { try{tg.HapticFeedback.impactOccurred("light")}catch(e){} };
+
+/* ============ EKRANLAR ============ */
+function viewHome(){
+  const st = stage();
+  const fb = DATA.feedback.length ? DATA.feedback.map(f=>`
+    <article class="card fb"><div class="row" style="justify-content:flex-start;gap:12px"><span class="av">${ic("user")}</span>
+    <div><div style="font-size:15px;font-weight:700">${esc(f.name)}</div><div style="font-size:13px;color:var(--hint)">${esc(f.meta)}</div></div></div>
+    <p style="font-size:14px;line-height:1.55;color:var(--tx2)">${esc(f.text)}</p>
+    <span class="chip ${f.tone==="a"?"a":"g"}" style="align-self:flex-start">${esc(f.badge)}</span></article>`).join("")
+    : `<div class="card empty" style="width:100%">Birinchi natijalar tez orada shu yerda paydo bo'ladi.</div>`;
+  const tars = [1,2,3].map(n=>`
+    <button type="button" class="tar ${DATA.user.tariff===n?"on":""}" data-tariff="${n}" aria-pressed="${DATA.user.tariff===n}">
+      <span class="rad"></span>
+      <span style="flex:1"><b style="font-size:16px;display:block">${n} ta pozitsiya</b><span style="font-size:13px;color:var(--hint)">${esc(CONFIG.POSITIONS.slice(0,n).join(" + "))}</span></span>
+      <b style="font-size:15px;${DATA.user.tariff===n?"color:var(--gt)":""}${CONFIG.PILOT?";text-decoration:line-through;opacity:.7":""}">${fmtPrice(n)}</b>
+    </button>`).join("");
+  const steps = STAGES.map((s,i)=>{
+    const cls = i<st?"done":i===st?"cur":"";
+    const last = i===STAGES.length-1;
+    return `<div class="step"><div class="rail"><span class="dot ${cls}">${i<st?ic("check",14):""}</span>${last?"":`<span class="ln ${i<st?"on":""}"></span>`}</div>
+      <div class="st ${cls}"><b>${esc(s[0])}${i===st?" · hozir":""}</b><span>${esc(s[1])}</span></div></div>`;
+  }).join("");
+  return `<div class="pad">
+  <section class="sec"><h1>Salom, ${esc(userName())}</h1>
+    <p class="sub">${st===0?"Arizangiz hali yuborilmagan. Pozitsiyalarni tanlab, ariza topshiring.":`Arizangiz hozir <b style="color:var(--tx)">${esc(STAGES[Math.min(st,7)][0])}</b> bosqichida.`}</p>
+    <div class="segs" aria-hidden="true">${STAGES.map((_,i)=>`<i class="${i<=st?"on":""}"></i>`).join("")}</div></section>
+
+  <section class="sec"><div class="row"><h2>Nomzodlar fikri</h2><button class="link" type="button" data-go="reels">Videolar ›</button></div>
+    <div class="scroll">${fb}</div></section>
+
+  <section class="sec"><div class="row"><h2>Tarifni tanlang</h2>${CONFIG.PILOT?'<span class="chip a">Pilot: bepul</span>':""}</div>
+    <p class="sub">Narx tanlangan pozitsiyalar soniga bog'liq. To'lov faqat screeningdan o'tganingizdan keyin.</p>${tars}
+    <div class="card" style="display:flex;flex-direction:column;gap:10px"><span style="font-size:13px;font-weight:700;color:var(--hint)">Har bir tarifga kiradi</span>
+    ${["3 ta intervyu tashkil etish","Tanlangan pozitsiyalar bo'yicha darslar","CV, mock intervyu va yakuniy call"].map(t=>`<div style="display:flex;gap:10px;align-items:center;font-size:14px">${ic("check",18,"#3DDC97")}${t}</div>`).join("")}</div></section>
+
+  <section class="sec" style="gap:16px"><h2>Keyingi bosqichlar</h2><div>${steps}</div></section>
+
+  <section class="card" style="padding:20px;display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;gap:10px;align-items:center;color:var(--gt)">${ic("shield")}<h2 style="color:var(--tx);font-size:17px">To'lov va shartlar</h2></div>
+    <p style="font-size:14px;line-height:1.55;color:var(--tx2)">To'lov faqat screeningdan o'tganingizdan keyin olinadi.</p>
+    <p style="font-size:14px;line-height:1.55;color:var(--tx2)">Biz ishga kirishni <b>kafolatlamaymiz</b>. Xizmat: 3 ta intervyu tashkil etish.</p>
+    <p style="font-size:14px;line-height:1.55;color:var(--tx2)">Intervyu tashkil etilmasa: ${esc(CONFIG.REFUND_TEXT)}.</p>
+    <p style="font-size:14px;line-height:1.55;color:var(--tx2)">Natijangiz reklamada faqat sizning roziligingiz bilan ishlatiladi.</p></section>
+
+  ${st===0?`<button class="btn" type="button" id="apply">Ariza topshirish</button>`:""}
+  </div>`;
+}
+
+function viewReels(){
+  if(!DATA.reels.length) return `<div class="empty" style="padding-top:120px">Videolar hali qo'shilmagan.</div>`;
+  return `<div class="reels">${DATA.reels.map(r=>`
+    <div class="reel"><div class="vid">
+      ${r.src?`<video src="${esc(r.src)}" playsinline loop muted controls preload="metadata"></video>`:`<div class="ctr"><span class="pl">${ic("play",32)}</span>[Video: nomzod tajribasi, 9:16]</div>`}
+      <span class="chip g tag">${esc(r.tag)}</span>
+      <div class="ov"><div style="display:flex;gap:10px;align-items:center"><b style="font-size:17px">${esc(r.name)}</b><span class="chip n" style="background:rgba(242,245,248,.14);color:var(--tx)">${esc(r.pos)}</span></div>
+      <p style="font-size:14px;line-height:1.5;color:var(--tx2);max-width:300px">${esc(r.text)}</p></div>
+    </div></div>`).join("")}</div>`;
+}
+
+function viewLessons(){
+  const posList = (DATA.user.positions && DATA.user.positions.length) ? DATA.user.positions : CONFIG.POSITIONS;
+  if(!lessonPos || !posList.includes(lessonPos)) lessonPos = posList[0];
+  const ls = DATA.lessons[lessonPos] || [];
+  const open = stage() >= 5;
+  const done = open ? 1 : 0;
+  const pct = ls.length ? Math.round(done/ls.length*100) : 0;
+  const rows = ls.map((l,i)=>{
+    const state = !open ? "lock" : i<done ? "done" : i===done ? "cur" : "lock";
+    return `<button type="button" class="lesson ${state}" ${state==="lock"?"disabled":""} data-lesson="${i}">
+      <span class="thumb" style="color:${state==="lock"?"var(--hint)":"var(--tx)"}">${state==="lock"?ic("lock"):ic("play",26)}</span>
+      <span style="flex:1"><span style="display:block;font-size:12px;color:var(--hint)">${i+1}-dars · Video · ${esc(l[1])}</span><b style="font-size:15px;line-height:1.3;${state==="lock"?"color:#C3CBD6":""}">${esc(l[0])}</b></span>
+      ${state==="done"?`<span class="mark" style="width:28px;height:28px;border-radius:14px">${ic("check",16)}</span>`:state==="cur"?'<span class="chip g" style="background:var(--g);color:var(--ink)">Hozir</span>':""}
+    </button>`;}).join("");
+  return `<div class="pad">
+  <section class="sec"><h1>Darslar</h1><div class="chips">${posList.map(p=>`<button type="button" class="pill ${p===lessonPos?"on":""}" data-pos="${esc(p)}">${esc(p)}</button>`).join("")}</div></section>
+  <section class="card sec"><div class="row"><b style="font-size:15px">${esc(lessonPos)}: ${done} / ${ls.length} dars</b><b style="font-size:13px;color:var(--gt)">${pct}%</b></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <span style="font-size:13px;color:var(--hint)">${open?"Darslar ochiq.":"Darslar screeningdan o'tib, to'lov tasdiqlangandan keyin ochiladi."}</span></section>
+  <section class="sec"><h2>Video darslar</h2>${rows||'<div class="empty">Bu pozitsiya uchun darslar hali qo\'shilmagan.</div>'}</section>
+  <section class="sec"><h2>Kitoblar va materiallar</h2>${DATA.books.map(b=>`
+    <div class="card" style="display:flex;gap:14px;align-items:center;padding:14px"><span class="av" style="border-radius:14px">${ic("file")}</span>
+    <span style="flex:1"><b style="display:block;font-size:15px">${esc(b[0])}</b><span style="font-size:13px;color:var(--hint)">${esc(b[1])}</span></span>${ic("chev",20,"#8A95A5")}</div>`).join("")}</section>
+  <section class="card sec" style="padding:20px;gap:14px"><h2>Intervyuga tayyorgarlik</h2>
+    ${["Mock intervyu savollari","CV va o'zingizni tanishtirish","Yakuniy call: jamoa bilan oxirgi mashq"].map(t=>`<div style="display:flex;gap:10px;align-items:center;font-size:14px;color:var(--tx2)">${ic("check",18,"#3DDC97")}${t}</div>`).join("")}
+    <button class="btn" type="button" style="height:52px;font-size:15px;border-radius:16px" id="callBtn" ${open?"":"disabled"}>Call vaqtini tanlash</button></section>
+  </div>`;
+}
+
+function viewMe(){
+  const iv = DATA.interviews;
+  const offers = iv.filter(i=>i.status==="Offer").length;
+  const cards = iv.length ? iv.map(i=>`
+    <article class="card sec" style="gap:12px"><div class="row"><span style="font-size:13px;color:var(--hint)">${i.n}-intervyu</span><span class="chip ${i.tone}">${esc(i.status)}</span></div>
+    <div><b style="font-size:16px;display:block">${esc(i.company)}</b><span style="font-size:13px;color:var(--hint)">${esc(i.meta)}</span></div>
+    <div class="box" style="${i.dim?"color:var(--hint)":""}"><small>${esc(i.label||"HR fikri")}</small>${esc(i.note)}</div>
+    ${i.cta?`<button class="btn ghost" type="button" id="videoFb">Video fikr qoldirish</button>`:""}</article>`).join("")
+    : `<div class="card empty">Intervyular tayinlangach natijalar shu yerda ko'rinadi.</div>`;
+  const li = (icon,label,v) => `<button type="button" class="li">${ic(icon,20,"#8A95A5")}<span class="grow">${label}</span>${v?`<span class="v">${esc(v)}</span>`:""}${ic("chev",20,"#8A95A5")}</button>`;
+  return `<div class="pad">
+  <section style="display:flex;gap:16px;align-items:center"><span class="av" style="width:68px;height:68px;border-radius:34px">${ic("user",32)}</span>
+    <div><h1 style="font-size:22px">${esc(userName())}</h1><span style="font-size:13px;color:var(--hint)">ID: ${esc((tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.id)||"—")}</span></div></section>
+  <section class="stats"><div><b>${(DATA.user.positions||[]).length}</b><span>Pozitsiya</span></div><div><b>${iv.length}</b><span>Intervyu</span></div><div><b style="color:var(--gt)">${offers}</b><span>Offer</span></div></section>
+  <section class="sec"><h2>Intervyu natijalari</h2>${cards}</section>
+  <section class="sec"><h2>Hujjatlar</h2><div class="list">${li("file","Shartnoma",stage()>=3?"Tasdiqlangan":"Hali yo'q")}${li("file","Mening CV'm","")}${li("shield","Roziliklar","")}</div></section>
+  <section class="sec"><h2>Sozlamalar</h2><div class="list">
+    ${li("globe","Til","O'zbekcha")}${li("brief","Pozitsiyalarim",(DATA.user.positions||[]).length?(DATA.user.positions.length+" ta"):"Tanlanmagan")}
+    <div class="li">${ic("bell",20,"#8A95A5")}<span class="grow">Bildirishnomalar</span><button type="button" class="sw" id="notif" role="switch" aria-checked="${notif}" aria-label="Bildirishnomalar"><span></span></button></div>
+    ${li("shield","Maxfiylik va ma'lumotlarim","")}<button type="button" class="li" id="help">${ic("help",20,"#8A95A5")}<span class="grow">Yordam: jamoa bilan bog'lanish</span>${ic("chev",20,"#8A95A5")}</button></div></section>
+  </div>`;
+}
+
+/* ============ RENDER + TABLAR ============ */
+const TABS = [["home","Bosh sahifa","home"],["reels","Reels","reels"],["lessons","Darslar","book"],["me","Men","user"]];
+function renderTabs(){
+  $("tabs").innerHTML = TABS.map(t=>`<button type="button" class="${tab===t[0]?"on":""}" data-tab="${t[0]}"><i>${ic(t[2])}</i>${t[1]}</button>`).join("");
+}
+function render(){
+  const v = $("view");
+  const html = tab==="home"?viewHome():tab==="reels"?viewReels():tab==="lessons"?viewLessons():viewMe();
+  v.style.overflowY = tab==="reels" ? "hidden" : "auto";
+  v.innerHTML = html;
+  if(tab!=="reels") v.scrollTop = 0;
+  renderTabs();
+  $("pilotChip").classList.toggle("hide", !CONFIG.PILOT);
+  bind();
+}
+function go(t){ tab=t; haptic(); render(); }
+function bind(){
+  document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>go(b.dataset.tab));
+  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+  document.querySelectorAll("[data-tariff]").forEach(b=>b.onclick=()=>{DATA.user.tariff=+b.dataset.tariff;haptic();const y=$("view").scrollTop;render();$("view").scrollTop=y;});
+  document.querySelectorAll("[data-pos]").forEach(b=>b.onclick=()=>{lessonPos=b.dataset.pos;render();});
+  const a=$("apply"); if(a) a.onclick=openFlow;
+  const n=$("notif"); if(n) n.onclick=()=>{notif=!notif;n.setAttribute("aria-checked",notif);haptic();};
+  const h=$("help"); if(h) h.onclick=()=>{ if(CONFIG.SUPPORT_URL) tg.openTelegramLink(CONFIG.SUPPORT_URL); else tg.showAlert("Yordam havolasi hali sozlanmagan."); };
+  const c=$("callBtn"); if(c) c.onclick=()=>tg.showAlert("Call vaqtini tanlash backend ulangach ishlaydi.");
+  const vf=$("videoFb"); if(vf) vf.onclick=()=>tg.showAlert("Video fikrni botga yuboring, jamoa uni qabul qiladi.");
+}
+
+/* ============ ARIZA OQIMI ============ */
+let fs = 1, picked = [];
+const FTOTAL = 4;
+const fe = {};
+function openFlow(){ fs=1; picked=[]; $("flow").classList.add("on"); drawFlow(); }
+function closeFlow(){ $("flow").classList.remove("on"); }
+function drawFlow(){
+  const n = DATA.user.tariff;
+  $("flowTitle").textContent = `Ariza · ${fs}/${FTOTAL}`;
+  $("fBack").style.visibility = fs===1?"hidden":"visible";
+  $("fNext").textContent = fs===FTOTAL?"Yuborish":"Davom etish";
+  $("err").textContent = "";
+  let h = "";
+  if(fs===1){
+    h = `<h2>Pozitsiyalarni tanlang</h2><p class="sub" style="margin:6px 0 16px">Tarifingiz bo'yicha aynan ${n} ta tanlang.</p>` +
+      CONFIG.POSITIONS.map(p=>`<button type="button" class="opt ${picked.includes(p)?"on":""}" data-p="${esc(p)}">${ic(picked.includes(p)?"check":"brief",20,picked.includes(p)?"#3DDC97":"#8A95A5")}${esc(p)}</button>`).join("");
+  } else if(fs===2){
+    h = `<h2>Ma'lumotlaringiz</h2><div style="height:14px"></div>
+    <label class="f">Ism, familiya<input id="f_name" autocomplete="name" value="${esc(fe.name||"")}"></label>
+    <label class="f">Telefon<input id="f_phone" type="tel" placeholder="+998" value="${esc(fe.phone||"")}"></label>
+    <label class="f">Yosh<input id="f_age" type="number" inputmode="numeric" value="${esc(fe.age||"")}"></label>
+    <label class="f">Hozir qayerda o'qiysiz / o'qigansiz<input id="f_edu" value="${esc(fe.edu||"")}"></label>
+    <label class="f">Ingliz tili darajasi (o'zingiz baholang)<select id="f_lvl">${["","B1","B2","C1","C2"].map(o=>`<option ${fe.lvl===o?"selected":""} value="${o}">${o||"Tanlang"}</option>`).join("")}</select></label>
+    <label class="f">Logistika bo'yicha tajriba / kurs<textarea id="f_exp">${esc(fe.exp||"")}</textarea></label>
+    <label class="f">Tungi smenaga (AQSh vaqti) tayyormisiz?<select id="f_shift">${["","Ha","Yo'q","Kelishsa bo'ladi"].map(o=>`<option ${fe.shift===o?"selected":""} value="${o}">${o||"Tanlang"}</option>`).join("")}</select></label>
+    <label class="f">Kutilayotgan oylik (USD)<input id="f_sal" type="number" inputmode="numeric" value="${esc(fe.sal||"")}"></label>`;
+  } else if(fs===3){
+    h = `<h2>Screening</h2><p class="sub" style="margin:6px 0 16px">Inglizcha javob bering.</p>
+    <div class="card" style="margin-bottom:14px;font-size:14px;line-height:1.5"><b>1-qadam.</b> Botga 1 daqiqalik <b>inglizcha video</b> yuboring: ism, tajriba, nega logistika. Keyin shu yerga qaytib belgilang.
+    <button class="btn ghost" type="button" id="toBot" style="margin-top:12px">Botga o'tish</button></div>
+    <div class="chk"><input type="checkbox" id="f_vid" ${fe.vid?"checked":""}><label for="f_vid">Videoni botga yubordim</label></div>
+    <label class="f">Nega aynan shu sohada ishlamoqchisiz? (inglizcha)<textarea id="f_q1">${esc(fe.q1||"")}</textarea></label>
+    <label class="f">Qiyin vaziyatda (shikoyat, kechikish) nima qilasiz? (inglizcha)<textarea id="f_q2">${esc(fe.q2||"")}</textarea></label>
+    <label class="f">Tunda ishlash va bosim bilan qanday kurashasiz? (inglizcha)<textarea id="f_q3">${esc(fe.q3||"")}</textarea></label>`;
+  } else {
+    h = `<h2>Shartlar va rozilik</h2><p class="sub" style="margin:6px 0 16px">Har birini alohida belgilang.</p>
+    <div class="card" style="margin-bottom:14px;font-size:14px">Ish vaqti, lokatsiya va maosh haqida ma'lumot screeningdan o'tganingizdan keyin yuboriladi.</div>
+    ${[["c1","Ishga kirishga kafolat berilmasligini tushundim."],["c2","Xizmat 3 ta intervyu tashkil etish ekanini tushundim."],["c3","Ma'lumotlarim va intervyu natijam kompaniyalarga berilishiga roziman."],["c4","Natijam reklama maqsadida (video/fikr) ishlatilishiga roziman."]].map(c=>`<div class="chk"><input type="checkbox" id="${c[0]}"><label for="${c[0]}">${c[1]}</label></div>`).join("")}
+    <div class="card" style="font-size:14px">Intervyu tashkil etilmasa: <b>${esc(CONFIG.REFUND_TEXT)}</b></div>`;
+  }
+  $("flowBody").innerHTML = h; $("flowBody").scrollTop = 0;
+  document.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
+    const p=b.dataset.p, i=picked.indexOf(p);
+    if(i>-1) picked.splice(i,1); else if(picked.length<n) picked.push(p); else {try{tg.HapticFeedback.notificationOccurred("warning")}catch(e){} return;}
+    drawFlow();
+  });
+  const tb=$("toBot"); if(tb) tb.onclick=()=>{saveFields(); tg.close();};
+}
+function saveFields(){
+  const g=id=>{const e=$(id);return e?e.value:undefined};
+  if(fs===2){fe.name=g("f_name");fe.phone=g("f_phone");fe.age=g("f_age");fe.edu=g("f_edu");fe.lvl=g("f_lvl");fe.exp=g("f_exp");fe.shift=g("f_shift");fe.sal=g("f_sal");}
+  if(fs===3){fe.vid=$("f_vid").checked;fe.q1=g("f_q1");fe.q2=g("f_q2");fe.q3=g("f_q3");}
+}
+function validate(){
+  const n=DATA.user.tariff;
+  if(fs===1&&picked.length!==n) return `Aynan ${n} ta pozitsiya tanlang`;
+  if(fs===2){
+    if((fe.name||"").trim().length<3) return "Ismingizni kiriting";
+    if(!/^\+?\d{9,15}$/.test((fe.phone||"").replace(/[\s-]/g,""))) return "Telefon raqamini to'g'ri kiriting";
+    if(!fe.age||+fe.age<16) return "Yoshni kiriting";
+    if(!fe.lvl) return "Ingliz tili darajasini tanlang";
+    if(!fe.shift) return "Smena savoliga javob bering";
+  }
+  if(fs===3){
+    if(!fe.vid) return "Avval videoni botga yuboring";
+    for(const q of ["q1","q2","q3"]) if((fe[q]||"").trim().split(/\s+/).length<5) return "Har bir savolga kamida 5 so'zli javob yozing";
+  }
+  if(fs===4) for(const c of ["c1","c2","c3","c4"]) if(!$(c).checked) return "Barcha rozilik bandlarini belgilang";
+  return "";
+}
+async function submit(){
+  const u=(tg.initDataUnsafe&&tg.initDataUnsafe.user)||{};
+  const payload={v:2,ts:new Date().toISOString(),tg_id:u.id||null,tg_username:u.username||null,
+    tariff:DATA.user.tariff,positions:picked,price:CONFIG.PILOT?0:(CONFIG.PRICES[DATA.user.tariff]||null),pilot:CONFIG.PILOT,
+    profile:{name:fe.name.trim(),phone:fe.phone.trim(),age:+fe.age,edu:(fe.edu||"").trim(),level:fe.lvl,exp:(fe.exp||"").trim(),shift:fe.shift,salary_usd:+fe.sal||null},
+    screening:{video_sent:true,q1:fe.q1.trim(),q2:fe.q2.trim(),q3:fe.q3.trim()},
+    consent:{no_guarantee:true,three_interviews:true,share_with_companies:true,marketing:true,accepted_at:new Date().toISOString()}};
+  if(CONFIG.API_URL){
+    // Backend initData imzosini (HMAC) TEKSHIRISHI SHART, aks holda soxta so'rov yuborish mumkin
+    $("fNext").disabled=true;
+    try{
+      const r=await fetch(CONFIG.API_URL+"/api/apply",{method:"POST",headers:{"Content-Type":"application/json","X-Telegram-Init-Data":tg.initData},body:JSON.stringify(payload)});
+      if(!r.ok) throw new Error(r.status);
+      DATA.user.stage=1; DATA.user.positions=picked; closeFlow(); render(); tg.showAlert("Arizangiz qabul qilindi. Screening natijasi botga yuboriladi.");
+    }catch(e){ $("err").textContent="Yuborib bo'lmadi, qayta urinib ko'ring."; }
+    $("fNext").disabled=false;
+  } else {
+    // API yo'q: faqat klaviatura tugmasi orqali ochilganda ishlaydi, mini app yopiladi
+    tg.sendData(JSON.stringify(payload));
+  }
+}
+$("fNext").onclick=()=>{ saveFields(); const e=validate(); if(e){$("err").textContent=e;return}
+  if(fs<FTOTAL){fs++;drawFlow();return} submit(); };
+$("fBack").onclick=()=>{ saveFields(); if(fs>1){fs--;drawFlow();} };
+$("flowClose").onclick=closeFlow;
+
+/* start_param orqali tabni ochish: t.me/BOT/APP?startapp=lessons */
+const sp=(tg.initDataUnsafe&&tg.initDataUnsafe.start_param)||"";
+if(["home","reels","lessons","me"].includes(sp)) tab=sp;
+render();
+</script>
+</body>
+</html>
