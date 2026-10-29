@@ -3,11 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#CF3637">
 <title>Interview Hub</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0A0D12;--card:#131820;--card2:#0F141B;--line:#232B37;--tx:#F2F5F8;--tx2:#D5DCE5;--hint:#8A95A5;--g:#3DDC97;--gt:#5BE3A6;--gbg:#12301F;--gbg2:#0F2019;--a:#F5B94A;--abg:#33260B;--ink:#06140D}
+:root{--bg:#0B0B0F;--card:#17171C;--card2:#101014;--line:#2A2A31;--tx:#F5F5F6;--tx2:#DADADD;--hint:#9C9CA5;--g:#CF3637;--gt:#FF6B6C;--gbg:#35171A;--gbg2:#251114;--ok:#3DDC97;--okt:#5BE3A6;--okbg:#12301F;--a:#F5B94A;--abg:#33260B;--ink:#FFFFFF}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--tx);font-family:'Plus Jakarta Sans',system-ui,sans-serif}
 body{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden}
@@ -16,7 +17,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:12p
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;letter-spacing:-.2px}
 .mark{width:32px;height:32px;border-radius:10px;background:var(--g);color:var(--ink);display:flex;align-items:center;justify-content:center}
 .chip{font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;display:inline-block}
-.chip.g{color:var(--gt);background:var(--gbg)}.chip.a{color:var(--a);background:var(--abg)}.chip.n{color:#C3CBD6;background:var(--line)}
+.chip.g{color:var(--okt);background:var(--okbg)}.chip.r{color:var(--gt);background:var(--gbg)}.chip.a{color:var(--a);background:var(--abg)}.chip.n{color:#C9C9CF;background:var(--line)}
 #view{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 .pad{padding:24px 20px 32px;display:flex;flex-direction:column;gap:28px}
 h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.5px}
@@ -25,44 +26,44 @@ p{margin:0}.sub{font-size:14px;line-height:1.5;color:var(--hint)}
 .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .sec{display:flex;flex-direction:column;gap:12px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
-.link{background:none;border:0;color:var(--g);font-size:14px;font-weight:700;min-height:44px;padding:0}
+.link{background:none;border:0;color:var(--gt);font-size:14px;font-weight:700;min-height:44px;padding:0}
 .btn{width:100%;height:56px;border:0;border-radius:18px;background:var(--g);color:var(--ink);font-size:16px;font-weight:800}
 .btn.ghost{background:transparent;border:1px solid var(--g);color:var(--gt);height:48px;font-size:14px;border-radius:14px}
 .btn:disabled{opacity:.45}
 .segs{display:flex;gap:4px}.segs i{flex:1;height:6px;border-radius:3px;background:var(--line)}.segs i.on{background:var(--g)}
 .scroll{display:flex;gap:12px;overflow-x:auto;margin:0 -20px;padding:0 20px 4px}
 .fb{flex:none;width:296px;display:flex;flex-direction:column;gap:12px}
-.av{width:44px;height:44px;border-radius:22px;background:#1F2A37;color:var(--hint);display:flex;align-items:center;justify-content:center;flex:none}
+.av{width:44px;height:44px;border-radius:22px;background:#26262B;color:var(--hint);display:flex;align-items:center;justify-content:center;flex:none}
 .tar{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:16px;min-height:76px}
 .tar.on{background:var(--gbg2);border-color:var(--g)}
-.rad{width:22px;height:22px;border-radius:11px;border:2px solid #3A4554;flex:none;display:flex;align-items:center;justify-content:center}
+.rad{width:22px;height:22px;border-radius:11px;border:2px solid #4A4A52;flex:none;display:flex;align-items:center;justify-content:center}
 .tar.on .rad{border-color:var(--g)}.tar.on .rad::after{content:"";width:10px;height:10px;border-radius:5px;background:var(--g)}
 .step{display:flex;gap:14px}.rail{display:flex;flex-direction:column;align-items:center}
-.dot{width:24px;height:24px;border-radius:12px;border:2px solid #2E3948;display:flex;align-items:center;justify-content:center;flex:none}
+.dot{width:24px;height:24px;border-radius:12px;border:2px solid #3A3A41;display:flex;align-items:center;justify-content:center;flex:none}
 .dot.done{background:var(--g);border-color:var(--g);color:var(--ink)}.dot.cur{border-color:var(--g)}.dot.cur::after{content:"";width:8px;height:8px;border-radius:4px;background:var(--g)}
 .ln{width:2px;height:26px;background:var(--line)}.ln.on{background:var(--g)}
-.st{display:flex;flex-direction:column;gap:2px;padding-bottom:10px}.st b{font-size:15px;font-weight:600;color:#C3CBD6}.st.cur b{color:var(--gt);font-weight:700}.st.done b{color:var(--tx)}.st span{font-size:13px;color:var(--hint)}
+.st{display:flex;flex-direction:column;gap:2px;padding-bottom:10px}.st b{font-size:15px;font-weight:600;color:#C9C9CF}.st.cur b{color:var(--gt);font-weight:700}.st.done b{color:var(--tx)}.st span{font-size:13px;color:var(--hint)}
 nav{display:flex;padding:8px 8px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg);flex:none}
 nav button{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:44px;font-size:11px;font-weight:600;color:var(--hint)}
 nav button i{width:56px;height:30px;border-radius:15px;display:flex;align-items:center;justify-content:center}
-nav button.on{color:var(--g);font-weight:700}nav button.on i{background:var(--gbg)}
-.chips{display:flex;gap:8px;overflow-x:auto}.pill{flex:none;min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--line);background:var(--card);color:#C3CBD6;font-size:14px;font-weight:600}.pill.on{background:var(--tx);color:var(--bg);border-color:var(--tx);font-weight:700}
+nav button.on{color:var(--gt);font-weight:700}nav button.on i{background:var(--gbg)}
+.chips{display:flex;gap:8px;overflow-x:auto}.pill{flex:none;min-height:44px;padding:0 18px;border-radius:22px;border:1px solid var(--line);background:var(--card);color:#C9C9CF;font-size:14px;font-weight:600}.pill.on{background:var(--tx);color:var(--bg);border-color:var(--tx);font-weight:700}
 .bar{height:8px;border-radius:4px;background:var(--line)}.bar i{display:block;height:8px;border-radius:4px;background:var(--g)}
 .lesson{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px;width:100%;text-align:left}
 .lesson.cur{background:var(--gbg2);border-color:var(--g);border-width:1.5px}
-.thumb{width:96px;height:64px;border-radius:14px;background:linear-gradient(135deg,#1C2B3C,#111A25);display:flex;align-items:center;justify-content:center;flex:none}
-.lesson.lock{color:var(--hint)}.lesson.lock .thumb{background:#1A212B}
+.thumb{width:96px;height:64px;border-radius:14px;background:linear-gradient(135deg,#2A1A1C,#171315);display:flex;align-items:center;justify-content:center;flex:none}
+.lesson.lock{color:var(--hint)}.lesson.lock .thumb{background:#1E1E22}
 .list{background:var(--card);border:1px solid var(--line);border-radius:20px}
 .li{display:flex;align-items:center;gap:12px;padding:0 16px;min-height:58px;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:left;font-size:15px;font-weight:600}
 .li:last-child{border-bottom:0}.li .grow{flex:1}.li .v{font-size:14px;color:var(--hint);font-weight:500}
-.sw{width:52px;height:32px;border:0;border-radius:16px;background:#2E3948;padding:3px;display:flex;align-items:center}.sw span{width:26px;height:26px;border-radius:13px;background:var(--tx);transition:.15s}.sw[aria-checked=true]{background:var(--g)}.sw[aria-checked=true] span{margin-left:auto;background:var(--ink)}
+.sw{width:52px;height:32px;border:0;border-radius:16px;background:#3A3A41;padding:3px;display:flex;align-items:center}.sw span{width:26px;height:26px;border-radius:13px;background:var(--tx);transition:.15s}.sw[aria-checked=true]{background:var(--g)}.sw[aria-checked=true] span{margin-left:auto;background:var(--ink)}
 .stats{display:flex;gap:10px}.stats div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px}.stats b{display:block;font-size:24px;font-weight:800}.stats span{font-size:12px;color:var(--hint)}
 .box{background:var(--card2);border-radius:14px;padding:12px;font-size:14px;line-height:1.5;color:var(--tx2)}.box small{display:block;font-size:12px;font-weight:700;color:var(--hint);margin-bottom:4px}
 .reels{height:100%;overflow-y:auto;scroll-snap-type:y mandatory}
 .reel{height:100%;scroll-snap-align:start;padding:0 12px 12px;display:flex;flex-direction:column}
-.vid{flex:1;border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(165deg,#1C2B3C,#111A25 55%,#0A0D12)}
+.vid{flex:1;border-radius:24px;overflow:hidden;position:relative;background:linear-gradient(165deg,#2A1A1C,#171315 55%,#0B0B0F)}
 .vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.ov{position:absolute;left:0;right:0;bottom:0;padding:48px 16px 16px;background:linear-gradient(to top,rgba(10,13,18,.96),rgba(10,13,18,0));display:flex;flex-direction:column;gap:8px}
+.ov{position:absolute;left:0;right:0;bottom:0;padding:48px 16px 16px;background:linear-gradient(to top,rgba(11,11,15,.96),rgba(11,11,15,0));display:flex;flex-direction:column;gap:8px}
 .ctr{position:absolute;left:0;right:0;top:22%;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--hint);font-size:13px}
 .ctr .pl{width:76px;height:76px;border-radius:38px;background:rgba(242,245,248,.16);display:flex;align-items:center;justify-content:center;color:var(--tx)}
 .tag{position:absolute;top:16px;left:16px}
@@ -76,19 +77,25 @@ nav button.on{color:var(--g);font-weight:700}nav button.on i{background:var(--gb
 .opt{display:flex;align-items:center;gap:12px;background:var(--card);padding:14px;border-radius:14px;margin-bottom:8px;border:2px solid transparent;width:100%;text-align:left;font-size:16px;font-weight:600}
 .opt.on{border-color:var(--g)}
 label.f{display:block;margin-bottom:14px;font-size:14px;color:var(--hint)}
-input,select,textarea{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #2E3948;background:var(--card);color:var(--tx);font:inherit;font-size:16px}
+input,select,textarea{width:100%;margin-top:6px;padding:12px;border-radius:12px;border:1px solid #3A3A41;background:var(--card);color:var(--tx);font:inherit;font-size:16px}
 textarea{min-height:80px}
 .chk{display:flex;gap:10px;align-items:flex-start;margin-bottom:14px;font-size:14px;line-height:1.45;color:var(--tx2)}
 .chk input{width:22px;height:22px;margin:0;flex:none;accent-color:var(--g)}
 .err{color:#FF8A8A;font-size:14px;min-height:20px}
 .hide{display:none!important}
+header.brand{background:var(--g);border-bottom:0;padding:10px 20px}
+.lockup{display:flex;align-items:center;gap:12px}
+.ih{width:44px;height:44px;border-radius:50%;background:#fff;color:#0B0B0F;font:700 22px/1 'Poppins',sans-serif;letter-spacing:-.5px;display:flex;align-items:center;justify-content:center;padding-bottom:3px}
+.wm{display:flex;flex-direction:column;font:600 18px/1.05 'Poppins',sans-serif;color:#fff;letter-spacing:-.3px}
+.wm b{color:#0B0B0F;font-weight:600}
+.chip.pilot{background:#fff;color:var(--g)}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo"><span class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Interview Hub</div>
-  <span class="chip a" id="pilotChip">Pilot</span>
+<header class="brand">
+  <div class="lockup" role="img" aria-label="Interview Hub"><span class="ih" aria-hidden="true">ih</span><span class="wm" aria-hidden="true">interview<b>hub</b></span></div>
+  <span class="chip pilot" id="pilotChip">Pilot</span>
 </header>
 
 <div id="view"></div>
@@ -153,7 +160,7 @@ let DATA = CONFIG.DEMO ? DEMO_DATA : {user:{stage:0,positions:[],tariff:3},feedb
 
 /* ============ YORDAMCHI ============ */
 const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
-try{tg.setHeaderColor("#0A0D12");tg.setBackgroundColor("#0A0D12");}catch(e){}
+try{tg.setHeaderColor("#CF3637");tg.setBackgroundColor("#0B0B0F");}catch(e){}
 const $ = id => document.getElementById(id);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const ICON = {
@@ -203,7 +210,7 @@ function viewHome(){
   }).join("");
   return `<div class="pad">
   <section class="sec"><h1>Salom, ${esc(userName())}</h1>
-    <p class="sub">${st===0?"Arizangiz hali yuborilmagan. Pozitsiyalarni tanlab, ariza topshiring.":`Arizangiz hozir <b style="color:var(--tx)">${esc(STAGES[Math.min(st,7)][0])}</b> bosqichida.`}</p>
+    <p class="sub">${st===0?"Pozitsiyalar va tariflar bilan tanishing. Natijalaringiz shu yerda ko'rinadi.":`Arizangiz hozir <b style="color:var(--tx)">${esc(STAGES[Math.min(st,7)][0])}</b> bosqichida.`}</p>
     <div class="segs" aria-hidden="true">${STAGES.map((_,i)=>`<i class="${i<=st?"on":""}"></i>`).join("")}</div></section>
 
   <section class="sec"><div class="row"><h2>Nomzodlar fikri</h2><button class="link" type="button" data-go="reels">Videolar ›</button></div>
@@ -223,7 +230,6 @@ function viewHome(){
     <p style="font-size:14px;line-height:1.55;color:var(--tx2)">Intervyu tashkil etilmasa: ${esc(CONFIG.REFUND_TEXT)}.</p>
     <p style="font-size:14px;line-height:1.55;color:var(--tx2)">Natijangiz reklamada faqat sizning roziligingiz bilan ishlatiladi.</p></section>
 
-  ${st===0?`<button class="btn" type="button" id="apply">Ariza topshirish</button>`:""}
   </div>`;
 }
 
@@ -232,7 +238,7 @@ function viewReels(){
   return `<div class="reels">${DATA.reels.map(r=>`
     <div class="reel"><div class="vid">
       ${r.src?`<video src="${esc(r.src)}" playsinline loop muted controls preload="metadata"></video>`:`<div class="ctr"><span class="pl">${ic("play",32)}</span>[Video: nomzod tajribasi, 9:16]</div>`}
-      <span class="chip g tag">${esc(r.tag)}</span>
+      <span class="chip r tag">${esc(r.tag)}</span>
       <div class="ov"><div style="display:flex;gap:10px;align-items:center"><b style="font-size:17px">${esc(r.name)}</b><span class="chip n" style="background:rgba(242,245,248,.14);color:var(--tx)">${esc(r.pos)}</span></div>
       <p style="font-size:14px;line-height:1.5;color:var(--tx2);max-width:300px">${esc(r.text)}</p></div>
     </div></div>`).join("")}</div>`;
@@ -249,7 +255,7 @@ function viewLessons(){
     const state = !open ? "lock" : i<done ? "done" : i===done ? "cur" : "lock";
     return `<button type="button" class="lesson ${state}" ${state==="lock"?"disabled":""} data-lesson="${i}">
       <span class="thumb" style="color:${state==="lock"?"var(--hint)":"var(--tx)"}">${state==="lock"?ic("lock"):ic("play",26)}</span>
-      <span style="flex:1"><span style="display:block;font-size:12px;color:var(--hint)">${i+1}-dars · Video · ${esc(l[1])}</span><b style="font-size:15px;line-height:1.3;${state==="lock"?"color:#C3CBD6":""}">${esc(l[0])}</b></span>
+      <span style="flex:1"><span style="display:block;font-size:12px;color:var(--hint)">${i+1}-dars · Video · ${esc(l[1])}</span><b style="font-size:15px;line-height:1.3;${state==="lock"?"color:#C9C9CF":""}">${esc(l[0])}</b></span>
       ${state==="done"?`<span class="mark" style="width:28px;height:28px;border-radius:14px">${ic("check",16)}</span>`:state==="cur"?'<span class="chip g" style="background:var(--g);color:var(--ink)">Hozir</span>':""}
     </button>`;}).join("");
   return `<div class="pad">
@@ -260,7 +266,7 @@ function viewLessons(){
   <section class="sec"><h2>Video darslar</h2>${rows||'<div class="empty">Bu pozitsiya uchun darslar hali qo\'shilmagan.</div>'}</section>
   <section class="sec"><h2>Kitoblar va materiallar</h2>${DATA.books.map(b=>`
     <div class="card" style="display:flex;gap:14px;align-items:center;padding:14px"><span class="av" style="border-radius:14px">${ic("file")}</span>
-    <span style="flex:1"><b style="display:block;font-size:15px">${esc(b[0])}</b><span style="font-size:13px;color:var(--hint)">${esc(b[1])}</span></span>${ic("chev",20,"#8A95A5")}</div>`).join("")}</section>
+    <span style="flex:1"><b style="display:block;font-size:15px">${esc(b[0])}</b><span style="font-size:13px;color:var(--hint)">${esc(b[1])}</span></span>${ic("chev",20,"#9C9CA5")}</div>`).join("")}</section>
   <section class="card sec" style="padding:20px;gap:14px"><h2>Intervyuga tayyorgarlik</h2>
     ${["Mock intervyu savollari","CV va o'zingizni tanishtirish","Yakuniy call: jamoa bilan oxirgi mashq"].map(t=>`<div style="display:flex;gap:10px;align-items:center;font-size:14px;color:var(--tx2)">${ic("check",18,"#3DDC97")}${t}</div>`).join("")}
     <button class="btn" type="button" style="height:52px;font-size:15px;border-radius:16px" id="callBtn" ${open?"":"disabled"}>Call vaqtini tanlash</button></section>
@@ -276,7 +282,7 @@ function viewMe(){
     <div class="box" style="${i.dim?"color:var(--hint)":""}"><small>${esc(i.label||"HR fikri")}</small>${esc(i.note)}</div>
     ${i.cta?`<button class="btn ghost" type="button" id="videoFb">Video fikr qoldirish</button>`:""}</article>`).join("")
     : `<div class="card empty">Intervyular tayinlangach natijalar shu yerda ko'rinadi.</div>`;
-  const li = (icon,label,v) => `<button type="button" class="li">${ic(icon,20,"#8A95A5")}<span class="grow">${label}</span>${v?`<span class="v">${esc(v)}</span>`:""}${ic("chev",20,"#8A95A5")}</button>`;
+  const li = (icon,label,v) => `<button type="button" class="li">${ic(icon,20,"#9C9CA5")}<span class="grow">${label}</span>${v?`<span class="v">${esc(v)}</span>`:""}${ic("chev",20,"#9C9CA5")}</button>`;
   return `<div class="pad">
   <section style="display:flex;gap:16px;align-items:center"><span class="av" style="width:68px;height:68px;border-radius:34px">${ic("user",32)}</span>
     <div><h1 style="font-size:22px">${esc(userName())}</h1><span style="font-size:13px;color:var(--hint)">ID: ${esc((tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.id)||"—")}</span></div></section>
@@ -285,8 +291,8 @@ function viewMe(){
   <section class="sec"><h2>Hujjatlar</h2><div class="list">${li("file","Shartnoma",stage()>=3?"Tasdiqlangan":"Hali yo'q")}${li("file","Mening CV'm","")}${li("shield","Roziliklar","")}</div></section>
   <section class="sec"><h2>Sozlamalar</h2><div class="list">
     ${li("globe","Til","O'zbekcha")}${li("brief","Pozitsiyalarim",(DATA.user.positions||[]).length?(DATA.user.positions.length+" ta"):"Tanlanmagan")}
-    <div class="li">${ic("bell",20,"#8A95A5")}<span class="grow">Bildirishnomalar</span><button type="button" class="sw" id="notif" role="switch" aria-checked="${notif}" aria-label="Bildirishnomalar"><span></span></button></div>
-    ${li("shield","Maxfiylik va ma'lumotlarim","")}<button type="button" class="li" id="help">${ic("help",20,"#8A95A5")}<span class="grow">Yordam: jamoa bilan bog'lanish</span>${ic("chev",20,"#8A95A5")}</button></div></section>
+    <div class="li">${ic("bell",20,"#9C9CA5")}<span class="grow">Bildirishnomalar</span><button type="button" class="sw" id="notif" role="switch" aria-checked="${notif}" aria-label="Bildirishnomalar"><span></span></button></div>
+    ${li("shield","Maxfiylik va ma'lumotlarim","")}<button type="button" class="li" id="help">${ic("help",20,"#9C9CA5")}<span class="grow">Yordam: jamoa bilan bog'lanish</span>${ic("chev",20,"#9C9CA5")}</button></div></section>
   </div>`;
 }
 
@@ -333,7 +339,7 @@ function drawFlow(){
   let h = "";
   if(fs===1){
     h = `<h2>Pozitsiyalarni tanlang</h2><p class="sub" style="margin:6px 0 16px">Tarifingiz bo'yicha aynan ${n} ta tanlang.</p>` +
-      CONFIG.POSITIONS.map(p=>`<button type="button" class="opt ${picked.includes(p)?"on":""}" data-p="${esc(p)}">${ic(picked.includes(p)?"check":"brief",20,picked.includes(p)?"#3DDC97":"#8A95A5")}${esc(p)}</button>`).join("");
+      CONFIG.POSITIONS.map(p=>`<button type="button" class="opt ${picked.includes(p)?"on":""}" data-p="${esc(p)}">${ic(picked.includes(p)?"check":"brief",20,picked.includes(p)?"#FF6B6C":"#9C9CA5")}${esc(p)}</button>`).join("");
   } else if(fs===2){
     h = `<h2>Ma'lumotlaringiz</h2><div style="height:14px"></div>
     <label class="f">Ism, familiya<input id="f_name" autocomplete="name" value="${esc(fe.name||"")}"></label>
