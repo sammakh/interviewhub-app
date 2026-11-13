@@ -133,6 +133,29 @@ const STAGES = [
   ["Yakuniy call","Intervyuga oxirgi tayyorgarlik"],
   ["3 ta intervyu","Joy, vaqt va HR kontakti yuboriladi"]
 ];
+/* ============ DARSLAR VA KITOBLAR (shu yerni tahrirlang) ============
+   Dars:  ["Nomi", "davomiyligi", "havola"]
+   Kitob: ["Nomi", "PDF · 24 bet", "havola"]
+   Havola: YouTube (unlisted), Telegram post (https://t.me/...), Google Drive va h.k.
+   Havola bo'sh ("") bo'lsa, dars "Tez orada" deb ko'rinadi.
+   LESSONS_OPEN: true bo'lsa, pilotda darslar screening/to'lovsiz hamma uchun ochiq. */
+const LESSONS_OPEN = true;
+const MAT = "https://sammakh.github.io/interviewhub-app/materials/";
+const LESSONS = {
+  Dispatch:   [["Dispatch (box truck): intervyu tayyorgarligi","26 slayd · PDF",MAT+"dispatch.pdf"]],
+  Update:     [["Updater: intervyu tayyorgarligi","22 slayd · PDF",MAT+"update.pdf"]],
+  Safety:     [["Safety: intervyu tayyorgarligi","23 slayd · PDF",MAT+"safety.pdf"]],
+  Fleet:      [["Fleet: intervyu tayyorgarligi","20 slayd · PDF",MAT+"fleet.pdf"]],
+  ELD:        [["ELD: intervyu tayyorgarligi","19 slayd · PDF",MAT+"eld.pdf"]],
+  Recruiting: [["Recruiting: intervyu tayyorgarligi","20 slayd · PDF",MAT+"recruiting.pdf"]]
+};
+const BOOKS = [];
+function openUrl(u){
+  if(!u){ tg.showAlert("Bu material tez orada qo'shiladi."); return; }
+  if(/^https?:\/\/t\.me\//.test(u) && tg.openTelegramLink) tg.openTelegramLink(u);
+  else tg.openLink(u);
+}
+
 const DEMO_DATA = {
   user: {stage: 0, positions: [], tariff: 3},
   feedback: [
@@ -245,28 +268,27 @@ function viewReels(){
 }
 
 function viewLessons(){
-  const posList = (DATA.user.positions && DATA.user.positions.length) ? DATA.user.positions : CONFIG.POSITIONS;
+  const posList = LESSONS_OPEN ? Object.keys(LESSONS) : ((DATA.user.positions && DATA.user.positions.length) ? DATA.user.positions : CONFIG.POSITIONS);
   if(!lessonPos || !posList.includes(lessonPos)) lessonPos = posList[0];
-  const ls = DATA.lessons[lessonPos] || [];
-  const open = stage() >= 5;
-  const done = open ? 1 : 0;
-  const pct = ls.length ? Math.round(done/ls.length*100) : 0;
+  const ls = LESSONS[lessonPos] || [];
+  const open = LESSONS_OPEN || stage() >= 5;
+  const done = 0;
+  const pct = 0;
   const rows = ls.map((l,i)=>{
-    const state = !open ? "lock" : i<done ? "done" : i===done ? "cur" : "lock";
+    const state = !open ? "lock" : l[2] ? "cur" : "soon";
     return `<button type="button" class="lesson ${state}" ${state==="lock"?"disabled":""} data-lesson="${i}">
       <span class="thumb" style="color:${state==="lock"?"var(--hint)":"var(--tx)"}">${state==="lock"?ic("lock"):ic("play",26)}</span>
-      <span style="flex:1"><span style="display:block;font-size:12px;color:var(--hint)">${i+1}-dars · Video · ${esc(l[1])}</span><b style="font-size:15px;line-height:1.3;${state==="lock"?"color:#C9C9CF":""}">${esc(l[0])}</b></span>
-      ${state==="done"?`<span class="mark" style="width:28px;height:28px;border-radius:14px">${ic("check",16)}</span>`:state==="cur"?'<span class="chip g" style="background:var(--g);color:var(--ink)">Hozir</span>':""}
+      <span style="flex:1"><span style="display:block;font-size:12px;color:var(--hint)">Material · ${esc(l[1])}${l[2]?"":" · tez orada"}</span><b style="font-size:15px;line-height:1.3;${state==="lock"?"color:#C9C9CF":""}">${esc(l[0])}</b></span>
+      ${state==="cur"?ic("chev",20,"#9C9CA5"):""}
     </button>`;}).join("");
   return `<div class="pad">
   <section class="sec"><h1>Darslar</h1><div class="chips">${posList.map(p=>`<button type="button" class="pill ${p===lessonPos?"on":""}" data-pos="${esc(p)}">${esc(p)}</button>`).join("")}</div></section>
-  <section class="card sec"><div class="row"><b style="font-size:15px">${esc(lessonPos)}: ${done} / ${ls.length} dars</b><b style="font-size:13px;color:var(--gt)">${pct}%</b></div>
-    <div class="bar"><i style="width:${pct}%"></i></div>
-    <span style="font-size:13px;color:var(--hint)">${open?"Darslar ochiq.":"Darslar screeningdan o'tib, to'lov tasdiqlangandan keyin ochiladi."}</span></section>
-  <section class="sec"><h2>Video darslar</h2>${rows||'<div class="empty">Bu pozitsiya uchun darslar hali qo\'shilmagan.</div>'}</section>
-  <section class="sec"><h2>Kitoblar va materiallar</h2>${DATA.books.map(b=>`
-    <div class="card" style="display:flex;gap:14px;align-items:center;padding:14px"><span class="av" style="border-radius:14px">${ic("file")}</span>
-    <span style="flex:1"><b style="display:block;font-size:15px">${esc(b[0])}</b><span style="font-size:13px;color:var(--hint)">${esc(b[1])}</span></span>${ic("chev",20,"#9C9CA5")}</div>`).join("")}</section>
+  <section class="card sec"><div class="row"><b style="font-size:15px">${esc(lessonPos)}: ${ls.length} ta material</b></div>
+    <span style="font-size:13px;color:var(--hint)">${open?"Slaydlarni ochib o'qing, so'ng intervyu savollarini mashq qiling.":"Darslar screeningdan o'tib, to'lov tasdiqlangandan keyin ochiladi."}</span></section>
+  <section class="sec"><h2>Darslar</h2>${rows||'<div class="empty">Bu pozitsiya uchun darslar hali qo\'shilmagan.</div>'}</section>
+  ${BOOKS.length?`<section class="sec"><h2>Kitoblar va materiallar</h2>${BOOKS.map((b,i)=>`
+    <div class="card" data-book="${i}" role="button" style="cursor:pointer;display:flex;gap:14px;align-items:center;padding:14px"><span class="av" style="border-radius:14px">${ic("file")}</span>
+    <span style="flex:1"><b style="display:block;font-size:15px">${esc(b[0])}</b><span style="font-size:13px;color:var(--hint)">${esc(b[1])}</span></span>${ic("chev",20,"#9C9CA5")}</div>`).join("")}</section>`:""}
   <section class="card sec" style="padding:20px;gap:14px"><h2>Intervyuga tayyorgarlik</h2>
     ${["Mock intervyu savollari","CV va o'zingizni tanishtirish","Yakuniy call: jamoa bilan oxirgi mashq"].map(t=>`<div style="display:flex;gap:10px;align-items:center;font-size:14px;color:var(--tx2)">${ic("check",18,"#3DDC97")}${t}</div>`).join("")}
     <button class="btn" type="button" style="height:52px;font-size:15px;border-radius:16px" id="callBtn" ${open?"":"disabled"}>Call vaqtini tanlash</button></section>
@@ -320,6 +342,8 @@ function bind(){
   const a=$("apply"); if(a) a.onclick=openFlow;
   const n=$("notif"); if(n) n.onclick=()=>{notif=!notif;n.setAttribute("aria-checked",notif);haptic();};
   const h=$("help"); if(h) h.onclick=()=>{ if(CONFIG.SUPPORT_URL) tg.openTelegramLink(CONFIG.SUPPORT_URL); else tg.showAlert("Yordam havolasi hali sozlanmagan."); };
+  document.querySelectorAll("[data-lesson]").forEach(b=>b.onclick=()=>openUrl((LESSONS[lessonPos]||[])[+b.dataset.lesson]?.[2]));
+  document.querySelectorAll("[data-book]").forEach(b=>b.onclick=()=>openUrl(BOOKS[+b.dataset.book]?.[2]));
   const c=$("callBtn"); if(c) c.onclick=()=>tg.showAlert("Call vaqtini tanlash backend ulangach ishlaydi.");
   const vf=$("videoFb"); if(vf) vf.onclick=()=>tg.showAlert("Video fikrni botga yuboring, jamoa uni qabul qiladi.");
 }
