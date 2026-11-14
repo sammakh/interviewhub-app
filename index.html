@@ -4,52 +4,74 @@
 <title>Interview Hub</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{--bg:#0B0B0F;--card:#17171C;--card2:#1F1F26;--red:#CF3637;--red2:#FF6B6C;--ok:#3DDC97;--am:#F2B84B;--tx:#fff;--mu:#9A9AA6;--ln:#2a2a33}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 "Plus Jakarta Sans",Inter,system-ui,sans-serif}
-body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
-button{font:inherit;color:inherit;border:0;cursor:pointer}
-.top{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--ln)}
-.logo{font:700 17px Poppins,system-ui,sans-serif}.logo b{color:var(--red)}
-.chip{background:var(--card);border-radius:20px;padding:6px 12px;font-size:13px;font-weight:600}
-.wrap{padding:16px;max-width:560px;margin:auto}
-h1{font-size:22px;margin:4px 0 6px}h2{font-size:17px;margin:18px 0 8px}
-.mu{color:var(--mu)}.sm{font-size:13px}
-.btn{display:block;width:100%;background:var(--red);padding:14px;border-radius:14px;font-weight:700;text-align:center;margin-top:12px}
-.btn.g{background:var(--card2)}.btn[disabled]{opacity:.4}
-.card{background:var(--card);border-radius:16px;padding:14px;margin:10px 0}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#0B0B0F;color:#fff;font-family:-apple-system,"Helvetica Neue",Arial,sans-serif;font-size:15px}
+body{min-height:100vh;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;text-align:left}
+.top{background:#C24443;padding:12px 18px 0;position:sticky;top:0;z-index:5}
+.lk{display:flex;align-items:center;gap:10px;padding:2px 0 14px}
+.ih{width:40px;height:40px;border-radius:20px;background:#fff;color:#111;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:20px}
+.wm{font-weight:800;line-height:1;font-size:17px}
+.pl{margin-left:auto;background:rgba(255,255,255,.18);color:#fff;font-weight:800;font-size:13px;padding:7px 12px;border-radius:99px}
+.pad{padding:16px 18px;max-width:560px;margin:auto}
+h1{font-size:26px;font-weight:800;margin-bottom:6px}
+h2{font-size:17px;font-weight:800;margin:18px 0 10px}
+.hint{color:#9c9ca5;font-size:14px;line-height:1.5}
+.btn{display:block;width:100%;text-align:center;background:#C24443;color:#fff;font-weight:800;border-radius:16px;padding:15px;font-size:15px;margin-top:14px}
+.btn.g{background:#1f1f25;border:1px solid #333}.btn[disabled],.btn.off{background:#2a2a30;color:#777}
+.card{background:#17171C;border:1px solid #2a2a30;border-radius:20px;padding:14px 16px;margin-bottom:10px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pos{background:var(--card);border:2px solid transparent;border-radius:14px;padding:14px 10px;text-align:center;font-weight:600;font-size:14px}
-.pos.on{border-color:var(--red);background:#2a1517}
-.pos i{display:block;font-size:22px;font-style:normal;margin-bottom:4px}
-.tabs{position:fixed;bottom:0;left:0;right:0;display:flex;background:#101015;border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom);z-index:6}
-.tabs button{flex:1;background:none;padding:10px 0 8px;font-size:11px;color:var(--mu)}
-.tabs button.on{color:var(--red2)}.tabs i{display:block;font-size:20px;font-style:normal}
-.ov{position:fixed;inset:0;background:var(--bg);z-index:20;overflow:auto;padding-bottom:40px}
+.pos{background:#17171C;border:1px solid #2a2a30;border-radius:16px;padding:12px;position:relative}
+.pos.on{background:#2a1517;border-color:#C24443}
+.pos b{font-size:15px;display:block;margin-bottom:4px}.pos span.d{font-size:12px;color:#9c9ca5;line-height:1.35;display:block;padding-right:6px}
+.pos .ck{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:11px;border:2px solid #444;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.pos.on .ck{background:#C24443;border-color:#C24443}
+.nav{position:fixed;bottom:0;left:0;right:0;height:calc(64px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:#0B0B0F;border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#9c9ca5;z-index:6}
+.nav button{flex:1;text-align:center;color:#9c9ca5;font-size:11px;padding:14px 0}.nav .a{color:#FF6B6C;font-weight:700}
+.ov{position:fixed;inset:0;background:#0B0B0F;z-index:20;overflow:auto;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 .sheet{position:fixed;inset:0;background:#000a;z-index:30;display:flex;align-items:flex-end}
-.sheet>div{background:var(--card);width:100%;border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom))}
-.row{display:flex;align-items:center;gap:10px}.row .grow{flex:1}
-.bar{height:6px;background:var(--card2);border-radius:4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--red)}
-.opt{display:block;width:100%;text-align:left;background:var(--card);padding:14px;border-radius:12px;margin:8px 0;border:2px solid transparent}
-.opt.ok{border-color:var(--ok);background:#12281f}.opt.no{border-color:var(--red);background:#2a1517}
-.back{background:none;color:var(--red2);padding:6px 0;font-weight:600}
-.blur{filter:blur(7px);opacity:.55;pointer-events:none}
-.lockw{position:relative}.lockw .lk{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--card2);color:var(--mu);margin-left:6px}
-.tag.ok{background:#12281f;color:var(--ok)}
-.q{background:var(--card2);border-left:3px solid var(--red);padding:10px 12px;border-radius:8px;margin:8px 0}
-.tip{background:#2a2412;border-left:3px solid var(--am);padding:10px 12px;border-radius:8px;margin:8px 0}
-.bad{color:var(--red2);font-weight:700}.good{color:var(--ok);font-weight:700}
-table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}td,th{border-bottom:1px solid var(--ln);padding:6px 4px;text-align:left;vertical-align:top}
-.chk{display:flex;gap:10px;align-items:flex-start;margin:14px 0}.chk input{width:22px;height:22px;accent-color:var(--red);flex:none}
-.pay{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:14px;padding:14px;margin:8px 0;width:100%;text-align:left;font-weight:700}
-.big{font-size:56px;text-align:center}
+.sheet>div{background:#17171C;width:100%;border-radius:24px 24px 0 0;border-top:1px solid #333;padding:18px 18px calc(28px + env(safe-area-inset-bottom))}
+.grab{width:40px;height:4px;border-radius:2px;background:#444;margin:0 auto 14px}
+.chip{display:inline-block;background:#2a1517;border:1px solid #C24443;font-weight:700;font-size:13px;padding:8px 14px;border-radius:99px;margin:0 6px 8px 0}
+.lg{display:flex;align-items:center;gap:12px;background:#17171C;border:1px solid #2a2a30;border-radius:16px;padding:14px;margin-bottom:10px;font-weight:700;width:100%}
+.lg.on{background:#2a1517;border-color:#C24443}.lg .r{margin-left:auto;width:22px;height:22px;border-radius:11px;border:2px solid #555;display:flex;align-items:center;justify-content:center;font-size:13px}
+.lg.on .r{background:#C24443;border-color:#C24443}
+.back{color:#9c9ca5;font-size:13px;margin-bottom:6px;display:block}
+.tot{background:#17171C;border:1px solid #2a2a30;border-radius:18px;text-align:center;padding:16px;margin:10px 0}
+.tot small{color:#9c9ca5;font-size:13px}.tot div{font-size:30px;font-weight:800;margin-top:4px}
+.li{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:9px 0;line-height:1.35}
+.li i{width:20px;height:20px;border-radius:10px;background:#12392a;color:#3DDC97;font-style:normal;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.chk{display:flex;gap:10px;align-items:center;margin:14px 0 0;font-size:14px}
+.chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:6px;border:2px solid #555;flex:none;display:grid;place-content:center}
+.chk input:checked{background:#C24443;border-color:#C24443}.chk input:checked::after{content:"✓";color:#fff;font-size:13px;font-weight:800}
+.pm{display:flex;align-items:center;gap:12px;background:#17171C;border:1px solid #2a2a30;border-radius:16px;padding:12px 14px;margin-bottom:10px;width:100%}
+.pm.on{background:#2a1517;border-color:#C24443}.pm .lt{width:30px;height:30px;border-radius:8px;background:#2a2a30;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:13px}
+.pm b{flex:1}.pm .r{width:22px;height:22px;border-radius:11px;border:2px solid #555;display:flex;align-items:center;justify-content:center;font-size:13px}.pm.on .r{background:#C24443;border-color:#C24443}
+.c{text-align:center}.bigc{width:96px;height:96px;border-radius:48px;display:flex;align-items:center;justify-content:center;font-size:48px;margin:30px auto 14px}
+.bk{display:flex;gap:12px;align-items:center;background:#17171C;border:1px solid #2a2a30;border-radius:18px;padding:12px;margin-bottom:10px;width:100%}
+.n{width:30px;height:30px;border-radius:15px;background:#2a1517;color:#FF6B6C;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none}
+.bi{width:46px;height:56px;border-radius:8px;background:#C24443;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;box-shadow:inset -6px 0 0 rgba(0,0,0,.2);flex:none}
+.bk b{display:block;font-size:14px}.bk small{font-size:12px;color:#9c9ca5}.bk .gt{margin-left:auto;color:#9c9ca5;font-size:20px}
+.bar{height:8px;background:#2a2a30;border-radius:4px;margin:10px 0 18px}.bar i{display:block;height:8px;background:#C24443;border-radius:4px}
+.qq{font-size:20px;font-weight:800;line-height:1.3;margin-bottom:16px}
+.o{display:flex;gap:12px;align-items:center;background:#17171C;border:1px solid #2a2a30;border-radius:16px;padding:14px;margin-bottom:10px;font-size:15px;width:100%}
+.o i{width:22px;height:22px;border-radius:11px;border:2px solid #555;flex:none}
+.o.s,.o.no{border-color:#C24443;background:#2a1517}.o.s i,.o.no i{border-color:#C24443;background:radial-gradient(#C24443 45%,transparent 50%)}
+.o.ok{border-color:#3DDC97;background:#12392a}.o.ok i{border-color:#3DDC97;background:radial-gradient(#3DDC97 45%,transparent 50%)}
+.sc{text-align:center;font-size:54px;font-weight:800}.okb{background:#12392a;color:#3DDC97}.nob{background:#3a1c1c;color:#FF6B6C}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:5px 9px;border-radius:99px;background:#2a2a30;color:#9c9ca5}.tag.ok{background:#12392a;color:#3DDC97}.tag.am{background:#2a2412;color:#F2B84B}
+.qt{background:#1f1f25;border-left:3px solid #C24443;padding:10px 12px;border-radius:8px;margin:8px 0}
+.tip{background:#2a2412;border-left:3px solid #F2B84B;padding:10px 12px;border-radius:8px;margin:8px 0}
+.bad{color:#FF6B6C;font-weight:800;margin-top:10px}.good{color:#3DDC97;font-weight:800;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}td,th{border-bottom:1px solid #2a2a30;padding:6px 4px;text-align:left;vertical-align:top}
+.blur{filter:blur(5px);opacity:.5;pointer-events:none}
+.st{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:9px 0;border-bottom:1px solid #222}.st:last-child{border:0}
 </style></head><body>
 <div id="app"></div>
 <script>
 /* ===== CONFIG (public repo: no prices, no card numbers, no real company data) ===== */
-const API_URL="";              // server later: GET /quote, POST /result, /accept, /pay
-const OFFER_URL="";            // link to public offer (ommaviy oferta) page
+const API_URL="";              // server later: /quote /result /accept /pay /status
+const OFFER_URL="";            // public offer page link
 const PAYMENT_LIVE=false;      // true when merchant + server are ready
 const TESTS_ON=true;           // false = tests off
 const PASS_MIN=7, LOCK_H=24;
@@ -61,157 +83,175 @@ const TESTS={"dispatch":[{"q":"What is the formula for rate per mile (RPM)?","a"
 
 </script>
 <script>
-const tg=window.Telegram&&Telegram.WebApp;try{tg&&(tg.ready(),tg.expand(),tg.setHeaderColor&&tg.setHeaderColor('#0B0B0F'))}catch(e){}
-const POS=[["accounting","📒","Accounting"],["update","📍","Updater"],["safety","🦺","Safety"],["dispatch","🚚","Dispatch (box truck)"],["fleet","🔧","Fleet"],["eld","📟","ELD"],["sales","🤝","Sales"],["recruiting","👥","Recruiting"]];
-const pn=k=>POS.find(p=>p[0]===k)[2];
+const tg=window.Telegram&&Telegram.WebApp;try{tg&&(tg.ready(),tg.expand(),tg.setHeaderColor&&tg.setHeaderColor('#C24443'))}catch(e){}
+const POS=["accounting","update","safety","dispatch","fleet","eld","sales","recruiting"];
+const PN={accounting:"Accounting",update:"Updater",safety:"Safety",dispatch:"Dispatch",fleet:"Fleet",eld:"ELD",sales:"Sales",recruiting:"Recruiting"};
+const pn=k=>PN[k];
 const T={
-uz:{hello:"Salom",tag:"Logistika sohasida intervyularga tayyorlaning",start:"Darslarni boshlash",pick:"Intervyu pozitsiyalarini tanlang",pickh:"Eng ko'pi bilan 3 ta pozitsiya",save:"Saqlash",saved:"Tanlovingiz saqlandi",conf:"Tanlangan pozitsiyalar:",cont:"Davom etish",edit:"O'zgartirish",
-price:"Xizmat narxi",pricesoon:"Narx tez orada e'lon qilinadi.",inc:"Narxga kiradi",inc1:"Har bir pozitsiya uchun intervyuga tayyorgarlik",inc2:"CV tayyorlash",inc3:"Real kompaniyalar bilan tashrif (mock) intervyular",inc4:"Interview Hub orqali kompaniyalarga yo'naltirish (ish kafolatlanmaydi)",
-terms:"Asosiy shartlar",t1:"Xizmat — intervyularga tayyorgarlik va kompaniyalar bilan intervyu tashkil qilish. Ishga olish kafolatlanmaydi.",t2:"Ko'pi bilan 3 ta intervyu tashkil qilinadi.",t3:"Darslar bepul va to'lovga bog'liq emas.",t4:"Batafsil shartlar keyingi bosqichda — shartnomada.",
-contract:"Shartnoma (ommaviy oferta)",accept:"Ofertani o'qidim va qabul qilaman",openoffer:"Ofertani ochish",offersoon:"Oferta havolasi tez orada qo'shiladi.",
-paytitle:"To'lov usuli",paysoon:"To'lov tez orada ulanadi.",paid:"To'lov qabul qilindi",paidtxt:"«Men» bo'limi ochildi. Keyingi qadamlar shu yerda ko'rinadi.",
-lessons:"Darslar",free:"Bepul",ch:"bob",soon:"Tez orada",read:"O'qish",test:"Testni boshlash",next:"Keyingi bob",prev:"Oldingi",done:"Tayyor",
-q:"Savol",res:"Natija",pass:"Tabriklaymiz! Test topshirildi",fail:"Hali yetarli emas",need:"O'tish uchun kamida",retry:"Qayta urinish",wait:"Qayta urinish mumkin:",nextles:"Keyingi darsga o'tish",allok:"Barcha darslar tugadi! 🎉",allokt:"Siz hamma tanlangan darslarni yakunladingiz. Tabriklaymiz!",
-me:"Men",melock:"To'lovdan keyin ochiladi",melockt:"Intervyular, kompaniyalar va jarayon holati shu yerda ko'rinadi.",mego:"Xizmat narxini ko'rish",mep:"Jarayon boshlandi",mepd:"Intervyu jadvali tez orada shu yerda paydo bo'ladi.",
-reels:"Reels",reelst:"Video darslar tez orada",lang:"Til",choose:"Tilni tanlang",tests_off:"Test hozircha o'chirilgan",home:"Bosh sahifa",back:"Orqaga",of:"dan"},
-ru:{hello:"Привет",tag:"Готовьтесь к собеседованиям в логистике",start:"Начать уроки",pick:"Выберите позиции для собеседований",pickh:"Не более 3 позиций",save:"Сохранить",saved:"Выбор сохранён",conf:"Выбранные позиции:",cont:"Продолжить",edit:"Изменить",
-price:"Стоимость услуги",pricesoon:"Стоимость будет объявлена в ближайшее время.",inc:"Что входит",inc1:"Подготовка к собеседованию по каждой позиции",inc2:"Составление резюме (CV)",inc3:"Пробные собеседования с реальными компаниями",inc4:"Направление в компании через Interview Hub (трудоустройство не гарантируется)",
-terms:"Основные условия",t1:"Услуга — подготовка к собеседованиям и организация собеседований с компаниями. Трудоустройство не гарантируется.",t2:"Организуется не более 3 собеседований.",t3:"Уроки бесплатны и не зависят от оплаты.",t4:"Подробные условия — на следующем этапе, в договоре.",
-contract:"Договор (публичная оферта)",accept:"Я прочитал(а) оферту и принимаю её",openoffer:"Открыть оферту",offersoon:"Ссылка на оферту скоро появится.",
-paytitle:"Способ оплаты",paysoon:"Оплата скоро будет подключена.",paid:"Оплата принята",paidtxt:"Раздел «Я» открыт. Следующие шаги будут там.",
-lessons:"Уроки",free:"Бесплатно",ch:"гл.",soon:"Скоро",read:"Читать",test:"Начать тест",next:"Следующая глава",prev:"Назад",done:"Готово",
-q:"Вопрос",res:"Результат",pass:"Поздравляем! Тест сдан",fail:"Пока недостаточно",need:"Для успеха нужно минимум",retry:"Повторить",wait:"Повтор возможен:",nextles:"К следующему уроку",allok:"Все уроки пройдены! 🎉",allokt:"Вы завершили все выбранные уроки. Поздравляем!",
-me:"Я",melock:"Откроется после оплаты",melockt:"Здесь будут собеседования, компании и статус процесса.",mego:"Посмотреть стоимость",mep:"Процесс начат",mepd:"Расписание собеседований скоро появится здесь.",
-reels:"Reels",reelst:"Видеоуроки скоро",lang:"Язык",choose:"Выберите язык",tests_off:"Тест временно отключён",home:"Главная",back:"Назад",of:"из"},
-en:{hello:"Hello",tag:"Prepare for logistics interviews",start:"Start lessons",pick:"Choose interview positions",pickh:"Up to 3 positions",save:"Save",saved:"Selection saved",conf:"Selected positions:",cont:"Continue",edit:"Edit",
-price:"Service price",pricesoon:"The price will be announced soon.",inc:"Included",inc1:"Interview preparation for each position",inc2:"CV preparation",inc3:"Mock interviews with real companies",inc4:"Referral to companies via Interview Hub (no job guarantee)",
-terms:"Key terms",t1:"The service is interview preparation and arranging interviews with companies. A job is not guaranteed.",t2:"Up to 3 interviews are arranged.",t3:"Lessons are free and not tied to payment.",t4:"Full terms come in the next step — the contract.",
-contract:"Contract (public offer)",accept:"I have read and accept the offer",openoffer:"Open the offer",offersoon:"The offer link will be added soon.",
-paytitle:"Payment method",paysoon:"Payment will be connected soon.",paid:"Payment received",paidtxt:"The “Me” tab is unlocked. Next steps will appear there.",
-lessons:"Lessons",free:"Free",ch:"ch.",soon:"Soon",read:"Read",test:"Start test",next:"Next chapter",prev:"Back",done:"Done",
-q:"Question",res:"Result",pass:"Congratulations! Test passed",fail:"Not enough yet",need:"To pass you need at least",retry:"Try again",wait:"You can retry:",nextles:"Next lesson",allok:"All lessons completed! 🎉",allokt:"You finished all selected lessons. Congratulations!",
-me:"Me",melock:"Opens after payment",melockt:"Interviews, companies and process status will appear here.",mego:"See service price",mep:"Process started",mepd:"Your interview schedule will appear here soon.",
-reels:"Reels",reelst:"Video lessons coming soon",lang:"Language",choose:"Choose language",tests_off:"Tests are temporarily off",home:"Home",back:"Back",of:"of"}};
+uz:{hello:"Salom",start:"Darslarni boshlash ›",startn:"Darslar bepul. Testdan o'tsangiz, keyingi bosqich ochiladi.",pick:"Intervyu pozitsiyalarini tanlang",pickh:"3 tagacha tanlang. Tanlaganingiz bo'yicha intervyu tashkil qilamiz.",picked:"Tanlandi:",clear:"Tozalash",save:"Saqlash",
+rules:"Shartlar",r1:"Hozir ishtirok <b style='color:#fff'>bepul</b>",r2:"Screeningdan o'tganlarga <b style='color:#fff'>3 tagacha intervyu</b> tashkil qilamiz",r3:"Ish kafolati yo'q: intervyu natijasi sizga bog'liq",
+d:{accounting:"Hisob-kitob va hujjatlar",update:"Yuk holatini kuzatish",safety:"Hujjatlar va xavfsizlik qoidalari",dispatch:"Yuk topish, narx kelishuvi",fleet:"Texnika va ta'mirlash nazorati",eld:"Haydovchi soatlari nazorati",sales:"Mijozlar bilan savdo",recruiting:"Haydovchi yollash"},
+sq:"Tanlovni saqlaymizmi?",sqy:"Siz tanladingiz:",sqn:"Keyin tanlovni o'zgartirish mumkin, lekin to'lovdan keyin emas.",sqok:"Ha, saqlash",back:"Orqaga",
+bpos:"‹ Pozitsiyalarni o'zgartirish",price:"Xizmat narxi",chosen:"Siz tanladingiz:",totl:"pozitsiya uchun jami",pricesoon:"Narx tez orada",inc:"Narxga kiradi:",inc1:"Intervyularni real kompaniyalar bilan tashkil qilish",inc2:"Har bir pozitsiya uchun intervyuga tayyorgarlik",inc3:"CV tayyorlab berish",ready:"Tayyorlik:",readyt:"Intervyuga yaxshi tayyorlanish uchun bepul darslarni o'qing",lessons:"Darslar",cont:"Davom etish ›",
+bprice:"‹ Narxga qaytish",terms:"Asosiy shartlar",t1:"<b>3 tagacha intervyu</b> real kompaniyalar bilan tashkil qilinadi",t2:"Tayyorgarlik va CV tayyorlash narxga kiradi",t3:"<b>Ish kafolati yo'q.</b> Natija sizga bog'liq",t4:"To'lovdan keyin <b>Men</b> bo'limi ochiladi",tn:"To'liq shartlar keyingi bosqichda, shartnomada.",tacc:"Asosiy shartlarni o'qidim",tnext:"Keyingi: shartnoma ›",
+bterms:"‹ Asosiy shartlarga qaytish",contract:"Shartnoma",cdoc:"Xizmat shartnomasi",cdocs:"O'qish uchun oching",cdesc:"Shartnomada: xizmat tarkibi, tomonlar majburiyati, to'lov tartibi, qaytarish shartlari, ma'lumotlar maxfiyligi.",offersoon:"Shartnoma havolasi tez orada qo'shiladi.",cacc:"Shartnomani o'qidim va roziman",cnext:"Keyingi: to'lov ›",
+bcon:"‹ Shartnomaga qaytish",paytitle:"To'lov",amount:"To'lov summasi",method:"To'lov usuli",payvia:"orqali to'lash",paynote:"To'lov xavfsiz, to'lov tizimi sahifasida amalga oshadi",paysoon:"To'lov tez orada ulanadi.",
+pend:"To'lov tekshirilmoqda",pendt:"To'lov tizimidan tasdiq kutilmoqda. Odatda bir necha soniya oladi.",refresh:"Holatni yangilash",paid:"To'lov qabul qilindi",paidt:"Rahmat! Tayyorgarlikni boshlang.",paidb:"Men bo'limiga o'tish ›",
+lang:"Til",langt:"Tilni tanlang",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",
+nm:"Kompaniya nomi",nmp:"Pozitsiya · sana",myint:"Mening intervyularim",sett:"Sozlamalar",mylock:"To'lovdan keyin ochiladi",mygo:"To'lovga o'tish ›",
+steps:"Sizning qadamlaringiz",sp:"To'lov",spd:"Qabul qilindi",scv:"CV tayyorlash",scvd:"Ma'lumot kutilmoqda",scall:"Jamoa bilan call",scalld:"Vaqt tanlang",sint:"Intervyu",sintd:"Tayyorlanmoqda",wait:"Kompaniya tanlanmoqda",
+home:"Bosh sahifa",reels:"Reels",les:"Darslar",me:"Men",reelst:"Video darslar tez orada",
+ls:"Bepul darslar",soon:"Tez orada",ch:"bob",readb:"O'qish",nextc:"Keyingi bob ›",done:"Tugatish",prevc:"Oldingi bob",
+test:"Testni boshlash ›",testoff:"Test hozircha o'chirilgan",q:"Savol",of:"/",res:"Tabriklaymiz!",resp:"Test topshirildi",fail:"Hali yetarli emas",need:"O'tish uchun kamida",retry:"Qayta urinish",waitr:"Qayta urinish mumkin:",nextles:"Keyingi darsga o'tish ›",allok:"Barcha darslar tugadi! 🎉",allokt:"Siz tanlangan hamma darslarni yakunladingiz. Tabriklaymiz!"},
+ru:{hello:"Привет",start:"Начать уроки ›",startn:"Уроки бесплатные. После теста откроется следующий этап.",pick:"Выберите позиции для собеседований",pickh:"До 3 позиций. Организуем собеседования по вашему выбору.",picked:"Выбрано:",clear:"Очистить",save:"Сохранить",
+rules:"Условия",r1:"Участие сейчас <b style='color:#fff'>бесплатно</b>",r2:"Прошедшим скрининг организуем <b style='color:#fff'>до 3 собеседований</b>",r3:"Гарантии работы нет: результат зависит от вас",
+d:{accounting:"Учёт и документы",update:"Отслеживание груза",safety:"Документы и правила безопасности",dispatch:"Поиск грузов, торг по цене",fleet:"Контроль техники и ремонта",eld:"Контроль часов водителей",sales:"Продажи клиентам",recruiting:"Найм водителей"},
+sq:"Сохранить выбор?",sqy:"Вы выбрали:",sqn:"Позже выбор можно изменить, но не после оплаты.",sqok:"Да, сохранить",back:"Назад",
+bpos:"‹ Изменить позиции",price:"Стоимость услуги",chosen:"Вы выбрали:",totl:"итого за позиции",pricesoon:"Цена скоро",inc:"Что входит:",inc1:"Собеседования с реальными компаниями",inc2:"Подготовка к собеседованию по каждой позиции",inc3:"Составление CV",ready:"Готовность:",readyt:"Читайте бесплатные уроки, чтобы хорошо подготовиться",lessons:"Уроки",cont:"Продолжить ›",
+bprice:"‹ Назад к цене",terms:"Основные условия",t1:"<b>До 3 собеседований</b> с реальными компаниями",t2:"Подготовка и CV входят в стоимость",t3:"<b>Гарантии работы нет.</b> Результат зависит от вас",t4:"После оплаты откроется раздел <b>Я</b>",tn:"Полные условия — на следующем этапе, в договоре.",tacc:"Я прочитал(а) основные условия",tnext:"Далее: договор ›",
+bterms:"‹ Назад к условиям",contract:"Договор",cdoc:"Договор на услуги",cdocs:"Открыть для чтения",cdesc:"В договоре: состав услуги, обязанности сторон, порядок оплаты, условия возврата, конфиденциальность данных.",offersoon:"Ссылка на договор скоро появится.",cacc:"Я прочитал(а) договор и согласен(на)",cnext:"Далее: оплата ›",
+bcon:"‹ Назад к договору",paytitle:"Оплата",amount:"Сумма оплаты",method:"Способ оплаты",payvia:"— оплатить",paynote:"Оплата безопасна и проходит на странице платёжной системы",paysoon:"Оплата скоро будет подключена.",
+pend:"Проверяем оплату",pendt:"Ожидаем подтверждение от платёжной системы. Обычно несколько секунд.",refresh:"Обновить статус",paid:"Оплата принята",paidt:"Спасибо! Начинайте подготовку.",paidb:"Перейти в «Я» ›",
+lang:"Язык",langt:"Выберите язык",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",
+nm:"Название компании",nmp:"Позиция · дата",myint:"Мои собеседования",sett:"Настройки",mylock:"Откроется после оплаты",mygo:"Перейти к оплате ›",
+steps:"Ваши шаги",sp:"Оплата",spd:"Принята",scv:"Подготовка CV",scvd:"Ждём данные",scall:"Звонок с командой",scalld:"Выберите время",sint:"Собеседование",sintd:"Готовится",wait:"Подбираем компанию",
+home:"Главная",reels:"Reels",les:"Уроки",me:"Я",reelst:"Видеоуроки скоро",
+ls:"Бесплатные уроки",soon:"Скоро",ch:"гл.",readb:"Читать",nextc:"Следующая глава ›",done:"Завершить",prevc:"Назад",
+test:"Начать тест ›",testoff:"Тест временно отключён",q:"Вопрос",of:"/",res:"Поздравляем!",resp:"Тест сдан",fail:"Пока недостаточно",need:"Для успеха нужно минимум",retry:"Повторить",waitr:"Повтор возможен:",nextles:"К следующему уроку ›",allok:"Все уроки пройдены! 🎉",allokt:"Вы завершили все выбранные уроки. Поздравляем!"},
+en:{hello:"Hello",start:"Start lessons ›",startn:"Lessons are free. Pass the test to unlock the next step.",pick:"Choose interview positions",pickh:"Up to 3. We arrange interviews for your choice.",picked:"Selected:",clear:"Clear",save:"Save",
+rules:"Terms",r1:"Participation is <b style='color:#fff'>free</b> for now",r2:"Those who pass screening get <b style='color:#fff'>up to 3 interviews</b>",r3:"No job guarantee: the interview result is up to you",
+d:{accounting:"Bookkeeping and documents",update:"Tracking load status",safety:"Documents and safety rules",dispatch:"Finding loads, rate negotiation",fleet:"Equipment and repair control",eld:"Driver hours monitoring",sales:"Selling to clients",recruiting:"Hiring drivers"},
+sq:"Save your selection?",sqy:"You selected:",sqn:"You can change it later, but not after payment.",sqok:"Yes, save",back:"Back",
+bpos:"‹ Change positions",price:"Service price",chosen:"You selected:",totl:"total for positions",pricesoon:"Price soon",inc:"Included:",inc1:"Interviews with real companies",inc2:"Interview preparation for each position",inc3:"CV preparation",ready:"Readiness:",readyt:"Read the free lessons to prepare well",lessons:"Lessons",cont:"Continue ›",
+bprice:"‹ Back to price",terms:"Key terms",t1:"<b>Up to 3 interviews</b> with real companies",t2:"Preparation and CV are included in the price",t3:"<b>No job guarantee.</b> The result is up to you",t4:"The <b>Me</b> tab unlocks after payment",tn:"Full terms are in the next step, the contract.",tacc:"I have read the key terms",tnext:"Next: contract ›",
+bterms:"‹ Back to key terms",contract:"Contract",cdoc:"Service contract",cdocs:"Open to read",cdesc:"The contract covers: service scope, obligations, payment, refund terms, data privacy.",offersoon:"The contract link will be added soon.",cacc:"I have read and accept the contract",cnext:"Next: payment ›",
+bcon:"‹ Back to contract",paytitle:"Payment",amount:"Amount",method:"Payment method",payvia:"— pay",paynote:"Payment is secure and happens on the payment system page",paysoon:"Payment will be connected soon.",
+pend:"Checking payment",pendt:"Waiting for confirmation from the payment system. Usually a few seconds.",refresh:"Refresh status",paid:"Payment received",paidt:"Thank you! Start preparing.",paidb:"Go to Me ›",
+lang:"Language",langt:"Choose language",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",
+nm:"Company name",nmp:"Position · date",myint:"My interviews",sett:"Settings",mylock:"Opens after payment",mygo:"Go to payment ›",
+steps:"Your steps",sp:"Payment",spd:"Received",scv:"CV preparation",scvd:"Waiting for info",scall:"Call with the team",scalld:"Pick a time",sint:"Interview",sintd:"Being prepared",wait:"Company being selected",
+home:"Home",reels:"Reels",les:"Lessons",me:"Me",reelst:"Video lessons coming soon",
+ls:"Free lessons",soon:"Soon",ch:"ch.",readb:"Read",nextc:"Next chapter ›",done:"Finish",prevc:"Previous",
+test:"Start test ›",testoff:"Tests are temporarily off",q:"Question",of:"/",res:"Congratulations!",resp:"Test passed",fail:"Not enough yet",need:"To pass you need at least",retry:"Try again",waitr:"You can retry:",nextles:"Next lesson ›",allok:"All lessons completed! 🎉",allokt:"You finished all selected lessons. Congratulations!"}};
 /* ===== state ===== */
-const S={lang:null,picks:[],stage:0,done:{},tests:{},tab:"home",ov:null,view:null,_ph:null};
+const S={lang:null,picks:[],stage:0,done:{},tests:{}};
+let UI={tab:"home",flow:null,view:null,sheet:null,pm:"Payme",acc:false};
 const KEY="ih_v2";
 try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
-S.ov=null;S.view=null;
-function save(){try{localStorage.setItem(KEY,JSON.stringify({lang:S.lang,picks:S.picks,stage:S.stage,done:S.done,tests:S.tests}))}catch(e){}}
-const t=k=>(T[S.lang]||T.uz)[k]||k;
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const t=k=>(T[S.lang]||T.uz)[k];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-function api(path,body){if(!API_URL)return Promise.resolve(null);
-  return fetch(API_URL+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({initData:tg&&tg.initData||""},body))}).then(r=>r.json()).catch(()=>null)}
+function api(p,b){if(!API_URL)return Promise.resolve(null);return fetch(API_URL+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({initData:tg&&tg.initData||""},b))}).then(r=>r.json()).catch(()=>null)}
 function alertx(m){try{tg&&tg.showAlert?tg.showAlert(m):alert(m)}catch(e){alert(m)}}
+function openUrl(u){try{/t\.me\//.test(u)&&tg.openTelegramLink?tg.openTelegramLink(u):tg.openLink?tg.openLink(u):window.open(u)}catch(e){window.open(u)}}
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
-/* ===== render ===== */
+const FL={uz:["🇺🇿","O'zbekcha"],ru:["🇷🇺","Русский"],en:["🇬🇧","English"]};
+let QUOTE=null;
+/* ===== shell ===== */
+function head(){return `<div class="top"><div class="lk"><span class="ih">ih</span><span class="wm">interview<br>hub</span>${S.lang?`<button class="pl" onclick="UI.sheet='lang';render()">🌐 ${S.lang.toUpperCase()} ▾</button>`:""}</div></div>`}
+function nav(){const l=S.stage<5;return `<div class="nav">${[["home",t("home")],["reels",t("reels")],["lessons",t("les")],["me",t("me")+(l?" 🔒":"")]].map(x=>`<button class="${UI.tab===x[0]&&!UI.flow?'a':''}" onclick="go('${x[0]}')">${x[1]}</button>`).join("")}</div>`}
 function render(){
   const app=$("#app");
-  if(!S.lang){app.innerHTML=langScreen();return}
-  let h=`<div class="top"><div class="logo">Interview<b>Hub</b></div><button class="chip" onclick="chLang()">🌐 ${S.lang.toUpperCase()}</button></div>`;
-  h+=`<div class="wrap">`+({home:home,reels:reels,lessons:lessonsTab,me:meTab}[S.tab])()+`</div>`;
-  h+=`<div class="tabs">`+[["home","🏠",t("home")],["reels","🎬",t("reels")],["lessons","📚",t("lessons")],["me","👤",t("me")]].map(x=>`<button class="${S.tab===x[0]?'on':''}" onclick="go('${x[0]}')"><i>${x[1]}</i>${x[2]}</button>`).join("")+`</div>`;
-  if(S.ov)h+=S.ov();
-  app.innerHTML=h;
+  if(!S.lang){app.innerHTML=head()+`<div class="pad c" style="padding-top:36px"><div style="font-size:54px">🌐</div><h1 style="margin-top:10px">${T.uz.langt}</h1><div class="hint" style="margin-bottom:20px">${T.uz.langs}</div>${Object.keys(FL).map(l=>`<button class="lg ${l==='uz'?'on':''}" onclick="setLang('${l}')"><span>${FL[l][0]}</span>${FL[l][1]}<span class="r">${l==='uz'?'✓':''}</span></button>`).join("")}</div>`;return}
+  let body;
+  if(UI.flow)body=flow();else body=({home:home,reels:reels,lessons:lessonsTab,me:meTab}[UI.tab])();
+  app.innerHTML=head()+`<div class="pad">${body}</div>`+nav()+(UI.sheet?sheet():"");
 }
-function go(tab){S.tab=tab;S.ov=null;S.view=null;render();scrollTo(0,0)}
-function langScreen(){return `<div class="wrap" style="padding-top:60px;text-align:center"><div class="logo" style="font-size:26px">Interview<b>Hub</b></div><h2 style="margin-top:30px">${T.uz.choose} · Выберите язык · Choose language</h2>
-${[["uz","O'zbekcha"],["ru","Русский"],["en","English"]].map(l=>`<button class="btn g" onclick="setLang('${l[0]}')">${l[1]}</button>`).join("")}</div>`}
-function setLang(l){S.lang=l;save();render()}
-function chLang(){S.ov=()=>`<div class="sheet" onclick="S.ov=null;render()"><div onclick="event.stopPropagation()"><h2 style="margin-top:0">${t("choose")}</h2>${[["uz","O'zbekcha"],["ru","Русский"],["en","English"]].map(l=>`<button class="btn ${S.lang===l[0]?'':'g'}" onclick="S.ov=null;setLang('${l[0]}')">${l[1]}</button>`).join("")}</div></div>`;render()}
-/* ----- home ----- */
+function go(tab){UI.tab=tab;UI.flow=null;UI.view=null;UI.sheet=null;render();scrollTo(0,0)}
+function setLang(l){S.lang=l;UI.sheet=null;save();render()}
+function sheet(){
+  if(UI.sheet==="lang")return `<div class="sheet" onclick="UI.sheet=null;render()"><div onclick="event.stopPropagation()"><div class="grab"></div><b style="font-size:18px;display:block;margin-bottom:12px">${t("langc")}</b>${Object.keys(FL).map(l=>`<button class="lg ${S.lang===l?'on':''}" onclick="setLang('${l}')"><span>${FL[l][0]}</span>${FL[l][1]}<span class="r">${S.lang===l?'✓':''}</span></button>`).join("")}</div></div>`;
+  if(UI.sheet==="save")return `<div class="sheet"><div><div class="grab"></div><b style="font-size:18px;display:block;margin-bottom:8px">${t("sq")}</b><div class="hint" style="margin-bottom:10px">${t("sqy")}</div><div>${S.picks.map(k=>`<span class="chip">${pn(k)}</span>`).join("")}</div><div class="hint" style="margin:4px 0 12px;font-size:13px">${t("sqn")}</div><button class="btn" style="margin-top:0" onclick="confirmPicks()">${t("sqok")}</button><button class="btn g" onclick="UI.sheet=null;render()">${t("back")}</button></div></div>`;
+  return ""}
+/* ===== home ===== */
 function home(){
-  const user=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||"";
-  let h=`<h1>${t("hello")}${user?", "+esc(user):""} 👋</h1><p class="mu">${t("tag")}</p><button class="btn" onclick="go('lessons')">📚 ${t("start")}</button>`;
-  h+=`<h2>${t("pick")}</h2><p class="mu sm" style="margin-top:-4px">${t("pickh")} · ${S.picks.length}/3</p><div class="grid">`+POS.map(p=>`<button class="pos ${S.picks.includes(p[0])?'on':''}" onclick="togglePick('${p[0]}')"><i>${p[1]}</i>${p[2]}</button>`).join("")+`</div>`;
-  h+=`<button class="btn" ${S.picks.length?"":"disabled"} onclick="askSave()">${t("save")}</button>`;
-  if(S.stage>=1)h+=`<button class="btn g" onclick="openFlow()">➡️ ${t("cont")}</button>`;
+  const u=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||"";
+  let h=`<h1>${t("hello")}${u?", "+esc(u):""}!</h1><button class="btn" style="margin-top:12px" onclick="go('lessons')">${t("start")}</button><div class="hint c" style="margin:8px 0 18px">${t("startn")}</div>`;
+  h+=`<h2 style="margin-top:6px">${t("pick")}</h2><div class="hint" style="margin-bottom:12px">${t("pickh")}</div><div class="grid">`+POS.map(k=>{const on=S.picks.includes(k);return `<button class="pos ${on?'on':''}" onclick="togglePick('${k}')"><span class="ck">${on?'✓':''}</span><b>${pn(k)}</b><span class="d">${t("d")[k]}</span></button>`}).join("")+`</div>`;
+  h+=`<div style="display:flex;justify-content:space-between;margin:14px 0 0;font-size:14px" class="hint"><span>${t("picked")} <b style="color:#fff">${S.picks.length} / 3</b></span><button style="color:#FF6B6C;font-weight:800" onclick="S.picks=[];render()">${t("clear")}</button></div>`;
+  h+=`<button class="btn ${S.picks.length?'':'off'}" ${S.picks.length?"":"disabled"} onclick="UI.sheet='save';render()">${t("save")}</button>`;
+  if(S.stage>=1&&S.stage<5)h+=`<button class="btn g" onclick="UI.flow=1;render()">${t("cont")}</button>`;
+  h+=`<h2 style="margin-top:22px">${t("rules")}</h2><div class="card" style="font-size:14px;line-height:1.6;color:#cfcfd6">• ${t("r1")}<br>• ${t("r2")}<br>• ${t("r3")}</div>`;
   return h}
-function togglePick(k){const i=S.picks.indexOf(k);if(i>=0)S.picks.splice(i,1);else if(S.picks.length<3)S.picks.push(k);else try{tg.HapticFeedback.notificationOccurred("warning")}catch(e){};render()}
-function askSave(){S.ov=()=>`<div class="sheet"><div><h2 style="margin-top:0">${t("saved")}</h2><p class="mu">${t("conf")}</p>${S.picks.map(k=>`<div class="card" style="margin:6px 0">${pn(k)}</div>`).join("")}<button class="btn" onclick="confirmPicks()">${t("cont")}</button><button class="btn g" onclick="S.ov=null;render()">${t("edit")}</button></div></div>`;render()}
-function confirmPicks(){if(S.stage<1)S.stage=1;save();api("/picks",{picks:S.picks});openFlow()}
-/* ----- paid flow ----- */
-function openFlow(){const st=Math.max(S.stage,1);S.ov=()=>flowScreen(st);if(S.stage>=5){go("me");return}render()}
-function flowHead(n,title){return `<div class="top"><button class="back" onclick="S.ov=null;render()">← ${t("back")}</button><span class="chip">${n}/4</span></div><div class="wrap"><h1>${title}</h1>`}
-let QUOTE=null;
-function flowScreen(st){
-  const stage=S.flowStep||1;
-  if(stage===1){return `<div class="ov">${flowHead(1,t("price"))}<div class="card"><div class="mu sm">${S.picks.map(pn).join(" · ")}</div><div style="font-size:24px;font-weight:800;margin-top:8px" id="quote">${QUOTE?esc(QUOTE):t("pricesoon")}</div></div>
-  <h2>${t("inc")}</h2><div class="card">✅ ${t("inc1")}<br>✅ ${t("inc2")}<br>✅ ${t("inc3")}<br>✅ ${t("inc4")}</div><button class="btn" onclick="S.flowStep=2;render()">${t("cont")}</button></div></div>`}
-  if(stage===2){return `<div class="ov">${flowHead(2,t("terms"))}<div class="card">📌 ${t("t1")}</div><div class="card">📌 ${t("t2")}</div><div class="card">📌 ${t("t3")}</div><p class="mu sm">${t("t4")}</p><button class="btn" onclick="S.flowStep=3;render()">${t("cont")}</button></div></div>`}
-  if(stage===3){return `<div class="ov">${flowHead(3,t("contract"))}<div class="card">${OFFER_URL?`<button class="btn g" style="margin:0" onclick="openUrl('${OFFER_URL}')">📄 ${t("openoffer")}</button>`:`<span class="mu">${t("offersoon")}</span>`}</div>
-  <label class="chk"><input type="checkbox" id="acc" onchange="$('#accb').disabled=!this.checked"><span>${t("accept")}</span></label><button class="btn" id="accb" disabled onclick="acceptOffer()">${t("cont")}</button></div></div>`}
-  return `<div class="ov">${flowHead(4,t("paytitle"))}${["Payme","Click","Uzum","Rahmat"].map(p=>`<button class="pay" onclick="payWith('${p}')">💳 ${p}</button>`).join("")}${PAYMENT_LIVE||DEMO?"":`<p class="mu sm">${t("paysoon")}</p>`}</div></div>`}
-function acceptOffer(){api("/accept",{picks:S.picks,ts:Date.now()});S.flowStep=4;render()}
-async function payWith(p){
-  if(DEMO){S.stage=5;S.flowStep=1;save();S.ov=()=>paidScreen();render();return}
+function togglePick(k){if(S.stage>=5)return;const i=S.picks.indexOf(k);if(i>=0)S.picks.splice(i,1);else if(S.picks.length<3)S.picks.push(k);save();render()}
+function confirmPicks(){if(S.stage<1)S.stage=1;save();api("/picks",{picks:S.picks});UI.sheet=null;UI.flow=1;render();scrollTo(0,0)}
+/* ===== flow: price → terms → contract → pay ===== */
+function readiness(){const ks=S.picks.filter(k=>BOOKS[k]);return [ks.filter(k=>(S.tests[k]||{}).pass).length,ks.length]}
+function flow(){const f=UI.flow;
+  if(f===1){const [a,b]=readiness();return `<a class="back" onclick="go('home')">${t("bpos")}</a><h1>${t("price")}</h1><div class="hint">${t("chosen")}</div><div style="margin:10px 0 4px">${S.picks.map(k=>`<span class="chip">${pn(k)}</span>`).join("")}</div>
+  <div class="tot"><small>${S.picks.length} ${t("totl")}</small><div>${QUOTE?esc(QUOTE):t("pricesoon")}</div></div>
+  <div class="card"><b style="font-size:14px">${t("inc")}</b><div class="li"><i>✓</i>${t("inc1")}</div><div class="li"><i>✓</i>${t("inc2")}</div><div class="li"><i>✓</i>${t("inc3")}</div></div>
+  ${b?`<div class="card" style="background:#2a2412;border-color:#4a3d18;display:flex;gap:12px;align-items:center"><span style="font-size:22px">📘</span><div style="font-size:12px;line-height:1.4;flex:1"><b style="color:#F2B84B;font-size:13px">${t("ready")} ${a} / ${b}</b><br>${t("readyt")}</div><button style="color:#F2B84B;font-weight:800;font-size:13px" onclick="go('lessons')">${t("lessons")} ›</button></div>`:""}
+  <button class="btn" onclick="UI.flow=2;render();scrollTo(0,0)">${t("cont")}</button>`}
+  if(f===2)return `<a class="back" onclick="UI.flow=1;render()">${t("bprice")}</a><h1>${t("terms")}</h1><div class="card" style="font-size:14px;line-height:1.6;color:#cfcfd6">• ${t("t1")}<br>• ${t("t2")}<br>• ${t("t3")}<br>• ${t("t4")}</div><div class="hint" style="font-size:12px">${t("tn")}</div>
+  <label class="chk"><input type="checkbox" ${UI.acc?"checked":""} onchange="UI.acc=this.checked;render()"><span>${t("tacc")}</span></label><button class="btn ${UI.acc?'':'off'}" ${UI.acc?"":"disabled"} onclick="UI.acc=false;UI.flow=3;render();scrollTo(0,0)">${t("tnext")}</button>`;
+  if(f===3)return `<a class="back" onclick="UI.flow=2;render()">${t("bterms")}</a><h1>${t("contract")}</h1><div class="card"><div class="bk" style="margin:0;border:0;padding:0;background:none" ${OFFER_URL?`onclick="openUrl('${OFFER_URL}')"`:""}><span class="bi" style="width:40px;height:40px;font-size:11px;border-radius:8px">DOC</span><div><b>${t("cdoc")}</b><small>${t("cdocs")}</small></div><span class="gt">›</span></div><div class="hint" style="font-size:12px;margin-top:10px">${t("cdesc")}</div>${OFFER_URL?"":`<div class="hint" style="font-size:12px;margin-top:6px;color:#F2B84B">${t("offersoon")}</div>`}</div>
+  <label class="chk"><input type="checkbox" ${UI.acc?"checked":""} onchange="UI.acc=this.checked;render()"><span>${t("cacc")}</span></label><button class="btn ${UI.acc?'':'off'}" ${UI.acc?"":"disabled"} onclick="acceptOffer()">${t("cnext")}</button>`;
+  if(f===4)return `<a class="back" onclick="UI.flow=3;render()">${t("bcon")}</a><h1>${t("paytitle")}</h1><div class="card" style="display:flex;justify-content:space-between;font-size:14px"><span class="hint">${t("amount")}</span><b>${QUOTE?esc(QUOTE):"—"}</b></div><div class="hint" style="margin:14px 0 10px;font-size:13px">${t("method")}</div>
+  ${["Payme","Click","Uzum","Rahmat"].map(p=>`<button class="pm ${UI.pm===p?'on':''}" onclick="UI.pm='${p}';render()"><span class="lt">${p[0]}</span><b>${p}</b><span class="r">${UI.pm===p?'✓':''}</span></button>`).join("")}
+  <button class="btn" onclick="payWith()">${UI.pm} ${t("payvia")}</button><div class="hint c" style="font-size:11px;margin-top:8px">${t("paynote")}</div>`;
+  if(f===5)return `<div class="c"><div class="bigc" style="background:#2a2412;color:#F2B84B">⏳</div><h1 style="font-size:22px">${t("pend")}</h1><div class="hint">${t("pendt")}</div><button class="btn g" onclick="checkPay()">${t("refresh")}</button></div>`;
+  if(f===6)return `<div class="c"><div class="bigc okb">✓</div><h1 style="font-size:22px">${t("paid")}</h1><div class="hint">${t("paidt")}</div><button class="btn" onclick="go('me')">${t("paidb")}</button></div>`}
+function acceptOffer(){api("/accept",{picks:S.picks,ts:Date.now()});UI.flow=4;render();scrollTo(0,0)}
+async function payWith(){
+  if(DEMO){UI.flow=5;render();setTimeout(()=>{S.stage=5;save();UI.flow=6;render()},1500);return}
   if(!PAYMENT_LIVE||!API_URL){alertx(t("paysoon"));return}
-  const r=await api("/pay",{provider:p,picks:S.picks});if(r&&r.url)openUrl(r.url);else alertx(t("paysoon"))}
-function paidScreen(){return `<div class="ov"><div class="wrap" style="padding-top:80px;text-align:center"><div class="big">✅</div><h1>${t("paid")}</h1><p class="mu">${t("paidtxt")}</p><button class="btn" onclick="go('me')">${t("me")}</button></div></div>`}
-function openUrl(u){try{/t\.me\//.test(u)&&tg.openTelegramLink?tg.openTelegramLink(u):tg.openLink?tg.openLink(u):window.open(u)}catch(e){window.open(u)}}
-Object.defineProperty(S,"flowStep",{value:1,writable:true,enumerable:false});
-/* ----- me / reels ----- */
+  const r=await api("/pay",{provider:UI.pm,picks:S.picks});if(r&&r.url){UI.flow=5;render();openUrl(r.url)}else alertx(t("paysoon"))}
+async function checkPay(){const r=await api("/status",{});if(r&&r.paid){S.stage=5;save();UI.flow=6;render()}}
+/* ===== me / reels ===== */
 function meTab(){
-  if(S.stage>=5)return `<h1>${t("me")}</h1><div class="card"><div class="row"><span style="font-size:26px">🚀</span><div class="grow"><b>${t("mep")}</b><div class="mu sm">${t("mepd")}</div></div></div></div>`+S.picks.map(k=>`<div class="card row"><div class="grow">${pn(k)}</div><span class="tag ok">✓</span></div>`).join("");
-  const fake=[1,2,3].map(()=>`<div class="card row"><span style="font-size:26px">🏢</span><div class="grow"><div style="height:12px;width:70%;background:#444;border-radius:6px"></div><div style="height:10px;width:45%;background:#333;border-radius:6px;margin-top:8px"></div></div></div>`).join("");
-  return `<h1>${t("me")}</h1><div class="lockw"><div class="blur">${fake}</div><div class="lk"><div class="big" style="font-size:38px">🔒</div><b style="font-size:17px">${t("melock")}</b><p class="mu sm">${t("melockt")}</p><button class="btn" style="width:auto;padding:12px 22px" onclick="${S.picks.length?'S.stage=Math.max(S.stage,1);openFlow()':"go('home')"}">${t("mego")}</button></div></div>`}
-function reels(){return `<div class="wrap" style="text-align:center;padding-top:80px"><div class="big">🎬</div><h2>${t("reelst")}</h2></div>`}
-/* ----- lessons ----- */
+  const sett=`<h2 style="font-size:14px;color:#cfcfd6">${t("sett")}</h2><div class="card"><button class="st" style="width:100%" onclick="UI.sheet='lang';render()"><span>${t("lang")}</span><span class="hint">${FL[S.lang][1]} ›</span></button></div>`;
+  if(S.stage>=5){const row=(a,b,c)=>`<div class="st"><span>${a}</span><span class="tag ${c||''}">${b}</span></div>`;
+    return `<h1>${t("me")}</h1><div class="card"><b style="font-size:13px">${t("steps")}</b>${row(t("sp"),t("spd"),"ok")}${row(t("scv"),t("scvd"),"am")}${row(t("scall"),t("scalld"),"am")}${row(t("sint"),t("sintd"))}</div>
+    <h2 style="font-size:14px;color:#cfcfd6">${t("myint")}</h2>`+S.picks.map((k,i)=>`<div class="card" style="display:flex;gap:12px;align-items:center"><span class="n">${i+1}</span><div style="flex:1"><b style="font-size:14px">${pn(k)}</b><br><small class="hint">${t("wait")}</small></div><span class="tag">…</span></div>`).join("")+sett}
+  const fk=[1,2,3].map(i=>`<div class="card" style="display:flex;gap:12px;align-items:center"><span class="n">${i}</span><div style="flex:1"><b style="font-size:14px">${t("nm")}</b><br><small class="hint">${t("nmp")}</small><div style="height:8px;background:#333;border-radius:4px;margin-top:8px"></div></div><span class="tag am">…</span></div>`).join("");
+  return `<h1>${t("me")}</h1><h2 style="font-size:14px;color:#cfcfd6;margin-top:4px">${t("myint")}</h2><div class="blur">${fk}</div>${sett}
+  <div style="position:fixed;left:14px;right:14px;bottom:calc(76px + env(safe-area-inset-bottom));background:#17171C;border:1px solid #C24443;border-radius:20px;padding:14px;z-index:7"><div class="c" style="font-weight:800;font-size:14px">🔒 ${t("mylock")}</div><button class="btn" style="margin-top:10px;text-align:center" onclick="${S.picks.length?"UI.flow=1;render()":"go('home')"}">${t("mygo")}</button></div>`}
+function reels(){return `<div class="c" style="padding-top:80px"><div style="font-size:54px">🎬</div><h2>${t("reelst")}</h2></div>`}
+/* ===== lessons ===== */
 function lessonsTab(){
-  if(S.view&&S.view.t==="chapters")return chapters(S.view.k);
-  if(S.view&&S.view.t==="read")return reader();
-  if(S.view&&S.view.t==="test")return testView();
-  return `<h1>${t("lessons")} <span class="tag ok">${t("free")}</span></h1>`+POS.map(p=>{const b=BOOKS[p[0]];
-    if(!b)return `<div class="card row" style="opacity:.6"><span style="font-size:24px">${p[1]}</span><div class="grow">${p[2]}</div><span class="tag">${t("soon")}</span></div>`;
-    const dn=(S.done[p[0]]||[]).length,tot=b.ch.length,pass=(S.tests[p[0]]||{}).pass;
-    return `<button class="card row" style="width:100%;text-align:left" onclick="openBook('${p[0]}')"><span style="font-size:24px">${p[1]}</span><div class="grow"><b>${p[2]}</b><div class="bar" style="margin-top:8px"><i style="width:${dn/tot*100}%"></i></div><div class="mu sm">${dn}/${tot} ${t("ch")}</div></div>${pass?'<span class="tag ok">✓ test</span>':''}</button>`}).join("")}
-function openBook(k){S.view={t:"chapters",k};render();scrollTo(0,0)}
+  const v=UI.view;if(v){if(v.t==="ch")return chapters(v.k);if(v.t==="read")return reader();if(v.t==="test")return testView()}
+  return `<h1>${t("ls")}</h1>`+POS.map(k=>{const b=BOOKS[k];
+    if(!b)return `<div class="bk" style="opacity:.55"><span class="bi" style="background:#333">${pn(k).slice(0,3)}</span><div><b>${pn(k)}</b></div><span class="tag">${t("soon")}</span></div>`;
+    const dn=(S.done[k]||[]).length,tot=b.ch.length,ps=(S.tests[k]||{}).pass;
+    return `<button class="bk" onclick="openBook('${k}')"><span class="bi">${pn(k).slice(0,3)}</span><div style="flex:1"><b>${pn(k)}</b><small>${dn}/${tot} ${t("ch")}</small><div class="bar" style="margin:6px 0 0;height:5px"><i style="width:${dn/tot*100}%;height:5px"></i></div></div>${ps?'<span class="tag ok">✓</span>':'<span class="gt">›</span>'}</button>`}).join("")}
+function openBook(k){UI.view={t:"ch",k};render();scrollTo(0,0)}
 function chapters(k){const b=BOOKS[k],dn=S.done[k]||[];
-  let h=`<button class="back" onclick="S.view=null;render()">← ${t("lessons")}</button><h1>${pn(k)}</h1><p class="mu sm">${esc(b.intro)}</p>`;
-  h+=b.ch.map((c,i)=>`<button class="card row" style="width:100%;text-align:left" onclick="openCh('${k}',${i})"><b style="color:var(--red2)">${i+1}</b><div class="grow">${esc(c.t)}</div>${dn.includes(i)?'<span class="tag ok">✓</span>':''}</button>`).join("");
-  if(TESTS_ON&&TESTS[k])h+=`<button class="btn" onclick="startTest('${k}')">📝 ${t("test")}</button>`;else h+=`<p class="mu sm">${t("tests_off")}</p>`;
-  return h}
-function openCh(k,i){S.view={t:"read",k,i};render();scrollTo(0,0)}
+  let h=`<a class="back" onclick="UI.view=null;render()">‹ ${t("ls")}</a><h1>${pn(k)}</h1><div class="hint" style="margin-bottom:14px">${esc(b.intro)}</div>`;
+  h+=b.ch.map((c,i)=>`<button class="bk" onclick="openCh('${k}',${i})"><span class="n">${i+1}</span><div style="flex:1"><b>${esc(c.t)}</b></div>${dn.includes(i)?'<span class="tag ok">✓</span>':'<span class="gt">›</span>'}</button>`).join("");
+  h+=TESTS_ON&&TESTS[k]?`<button class="btn" onclick="startTest('${k}')">${t("test")}</button>`:`<div class="hint c" style="margin-top:14px">${t("testoff")}</div>`;return h}
+function openCh(k,i){UI.view={t:"read",k,i};render();scrollTo(0,0)}
 function blk(b){
   if(b.t==="table")return `<table>${b.rows.map((r,i)=>`<tr>${r.map(c=>i?`<td>${esc(c)}</td>`:`<th>${esc(c)}</th>`).join("")}</tr>`).join("")}</table>`;
-  if(b.t==="quote")return `<div class="q">${esc(b.x)}</div>`;
+  if(b.t==="quote")return `<div class="qt">${esc(b.x)}</div>`;
   if(b.t==="tip")return `<div class="tip">💡 ${esc(b.x)}</div>`;
-  if(b.t==="who")return `<div class="${/BAD/.test(b.x)?'bad':'good'}" style="margin-top:10px">${/BAD/.test(b.x)?"❌":"✅"} ${esc(b.x)}</div>`;
-  if(b.t==="lines")return `<ul style="margin:6px 0;padding-left:20px">${b.x.map(l=>`<li>${esc(l)}</li>`).join("")}</ul>`;
-  if(b.t==="h")return `<div style="font-weight:700;margin-top:10px">${esc(b.x)}</div>`;
-  return `<p style="margin:4px 0">${esc(b.x)}</p>`}
-function reader(){const {k,i}=S.view,c=BOOKS[k].ch[i],n=BOOKS[k].ch.length;
-  let h=`<button class="back" onclick="openBook('${k}')">← ${pn(k)}</button><div class="mu sm">${i+1} ${t("of")} ${n}</div><div class="bar"><i style="width:${(i+1)/n*100}%"></i></div><h1 style="margin-top:14px">${esc(c.t)}</h1>`;
-  c.s.forEach(s=>{h+=`<div class="card"><div class="mu sm" style="letter-spacing:.5px">${esc(s.k)}</div><h2 style="margin-top:2px">${esc(s.h)}</h2>${s.b.map(blk).join("")}</div>`});
-  h+=`<button class="btn" onclick="finishCh('${k}',${i})">${i<n-1?t("next"):t("done")}</button>`;
-  if(i>0)h+=`<button class="btn g" onclick="openCh('${k}',${i-1})">${t("prev")}</button>`;
-  return h}
+  if(b.t==="who")return `<div class="${/BAD/.test(b.x)?'bad':'good'}">${/BAD/.test(b.x)?"❌":"✅"} ${esc(b.x)}</div>`;
+  if(b.t==="lines")return `<ul style="margin:6px 0;padding-left:20px;font-size:14px">${b.x.map(l=>`<li>${esc(l)}</li>`).join("")}</ul>`;
+  if(b.t==="h")return `<div style="font-weight:800;margin-top:10px">${esc(b.x)}</div>`;
+  return `<p style="margin:4px 0;font-size:14px;line-height:1.5;color:#cfcfd6">${esc(b.x)}</p>`}
+function reader(){const {k,i}=UI.view,c=BOOKS[k].ch[i],n=BOOKS[k].ch.length;
+  let h=`<a class="back" onclick="openBook('${k}')">‹ ${pn(k)}</a><div class="hint">${i+1} ${t("of")} ${n}</div><div class="bar" style="margin-bottom:12px"><i style="width:${(i+1)/n*100}%"></i></div><h1 style="font-size:22px">${esc(c.t)}</h1>`;
+  c.s.forEach(s=>{h+=`<div class="card"><div class="hint" style="font-size:11px;letter-spacing:.5px">${esc(s.k)}</div><b style="font-size:16px;display:block;margin-bottom:4px">${esc(s.h)}</b>${s.b.map(blk).join("")}</div>`});
+  h+=`<button class="btn" onclick="finishCh('${k}',${i})">${i<n-1?t("nextc"):t("done")}</button>`;if(i>0)h+=`<button class="btn g" onclick="openCh('${k}',${i-1})">${t("prevc")}</button>`;return h}
 function finishCh(k,i){const d=S.done[k]=S.done[k]||[];if(!d.includes(i))d.push(i);save();if(i<BOOKS[k].ch.length-1)openCh(k,i+1);else openBook(k)}
-/* ----- test ----- */
-function startTest(k){
-  const tr=S.tests[k]||{};
-  if(!DEMO&&tr.lock&&Date.now()<tr.lock){S.view={t:"test",k,wait:tr.lock};render();return}
-  S.view={t:"test",k,qs:shuffle(TESTS[k]).map(q=>({q:q.q,c:q.a[0],o:shuffle(q.a)})),i:0,sc:0,pick:null};render();scrollTo(0,0)}
-function testView(){const v=S.view,k=v.k;
-  if(v.wait)return `<button class="back" onclick="openBook('${k}')">←</button><div class="card" style="text-align:center"><div class="big">⏳</div><p>${t("wait")}<br><b>${new Date(v.wait).toLocaleString()}</b></p></div>`;
+/* ===== test ===== */
+function startTest(k){const tr=S.tests[k]||{};
+  if(!DEMO&&tr.lock&&Date.now()<tr.lock){UI.view={t:"test",k,wait:tr.lock};render();return}
+  UI.view={t:"test",k,qs:shuffle(TESTS[k]).map(q=>({q:q.q,c:q.a[0],o:shuffle(q.a)})),i:0,sc:0,pick:null};render();scrollTo(0,0)}
+function testView(){const v=UI.view,k=v.k;
+  if(v.wait)return `<a class="back" onclick="openBook('${k}')">‹ ${pn(k)}</a><div class="c"><div class="bigc" style="background:#2a2412">⏳</div><div class="hint">${t("waitr")}</div><b>${new Date(v.wait).toLocaleString()}</b></div>`;
   if(v.end){const ok=v.sc>=PASS_MIN;
-    let h=`<div style="text-align:center;padding-top:30px"><div class="big">${ok?"🎉":"💪"}</div><h1>${ok?t("pass"):t("fail")}</h1><div style="font-size:40px;font-weight:800;color:${ok?'var(--ok)':'var(--red2)'}">${v.sc}/10</div>${ok?"":`<p class="mu">${t("need")} ${PASS_MIN}/10</p>`}</div>`;
-    if(ok){const nk=nextLesson(k);h+=nk?`<button class="btn" onclick="openBook('${nk}')">${t("nextles")} →</button>`:`<div class="card" style="text-align:center"><b>${t("allok")}</b><p class="mu sm">${t("allokt")}</p></div>`}
+    let h=`<div class="c"><div class="bigc ${ok?'okb':'nob'}">${ok?"✓":"✕"}</div><h1 style="font-size:24px">${ok?t("res"):t("fail")}</h1><div class="hint">${ok?t("resp"):t("need")+" "+PASS_MIN+" / 10"}</div><div class="sc" style="color:${ok?'#3DDC97':'#FF6B6C'};margin-top:10px">${v.sc}/10</div></div>`;
+    if(ok){const nk=nextLesson(k);h+=nk?`<button class="btn" onclick="openBook('${nk}')">${t("nextles")}</button>`:`<div class="card c" style="margin-top:16px"><b>${t("allok")}</b><div class="hint" style="margin-top:4px">${t("allokt")}</div></div>`}
     else h+=`<button class="btn" onclick="startTest('${k}')">${t("retry")}</button>`;
     return h+`<button class="btn g" onclick="openBook('${k}')">${pn(k)}</button>`}
   const q=v.qs[v.i];
-  let h=`<div class="mu sm">${t("q")} ${v.i+1} ${t("of")} 10</div><div class="bar"><i style="width:${v.i/10*100}%"></i></div><h2>${esc(q.q)}</h2>`;
-  h+=q.o.map((o,j)=>{let c="";if(v.pick!==null){if(o===q.c)c="ok";else if(j===v.pick)c="no"}return `<button class="opt ${c}" ${v.pick!==null?"disabled":""} onclick="answer(${j})">${esc(o)}</button>`}).join("");
-  return h}
-function answer(j){const v=S.view,q=v.qs[v.i];v.pick=j;if(q.o[j]===q.c)v.sc++;render();
-  setTimeout(()=>{if(!S.view||S.view!==v)return;v.pick=null;v.i++;if(v.i>=10)endTest();render()},900)}
-function endTest(){const v=S.view,k=v.k,ok=v.sc>=PASS_MIN;v.end=true;
-  const tr=S.tests[k]=S.tests[k]||{};tr.score=v.sc;if(ok){tr.pass=true;tr.lock=0}else tr.lock=Date.now()+LOCK_H*3600e3;save();
-  api("/result",{position:k,score:v.sc,pass:ok})}
-function nextLesson(k){const ks=(S.picks.length?S.picks:POS.map(p=>p[0])).filter(x=>BOOKS[x]);const i=ks.indexOf(k);
-  const rest=i>=0?ks.slice(i+1).concat(ks.slice(0,i)):ks;return rest.find(x=>!(S.tests[x]||{}).pass)||null}
-/* quote: from server only */
-if(API_URL)api("/quote",{}).then(r=>{if(r&&r.text){QUOTE=r.text}});
+  return `<div class="hint">${t("q")} ${v.i+1} ${t("of")} 10</div><div class="bar"><i style="width:${v.i/10*100}%"></i></div><div class="qq">${esc(q.q)}</div>`+q.o.map((o,j)=>{let c="";if(v.pick!==null){if(o===q.c)c="ok";else if(j===v.pick)c="no"}return `<button class="o ${c}" ${v.pick!==null?"disabled":""} onclick="answer(${j})"><i></i>${esc(o)}</button>`}).join("")}
+function answer(j){const v=UI.view,q=v.qs[v.i];v.pick=j;if(q.o[j]===q.c)v.sc++;render();
+  setTimeout(()=>{if(UI.view!==v)return;v.pick=null;v.i++;if(v.i>=10)endTest();render()},900)}
+function endTest(){const v=UI.view,k=v.k,ok=v.sc>=PASS_MIN;v.end=true;const tr=S.tests[k]=S.tests[k]||{};tr.score=v.sc;if(ok){tr.pass=true;tr.lock=0}else tr.lock=Date.now()+LOCK_H*3600e3;save();api("/result",{position:k,score:v.sc,pass:ok})}
+function nextLesson(k){const ks=(S.picks.length?S.picks:POS).filter(x=>BOOKS[x]);const i=ks.indexOf(k);const rest=i>=0?ks.slice(i+1).concat(ks.slice(0,i)):ks;return rest.find(x=>!(S.tests[x]||{}).pass)||null}
+if(API_URL)api("/quote",{}).then(r=>{if(r&&r.text){QUOTE=r.text;render()}});
 render();
 </script></body></html>
