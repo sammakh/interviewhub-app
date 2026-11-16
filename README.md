@@ -20,4 +20,19 @@ pip install -r requirements.txt
 python3 bot.py
 ```
 
+## Railway'da ishga tushirish
+
+1. railway.com → **New Project → Deploy from GitHub repo** → `sammakh/interviewhub-app`.
+2. Servis → **Settings**:
+   - **Root Directory**: `/interviewhub-bot`
+   - **Config-as-code → Railway Config File**: `/interviewhub-bot/railway.json` (yoki **Custom Start Command**: `python bot.py`)
+3. Servis → o'ng tugma → **Attach Volume**, mount path: `/data` (nomzodlar bazasi saqlanib qolishi uchun).
+4. **Variables**:
+   - `BOT_TOKEN` — @BotFather bergan token
+   - `ADMIN_IDS` — admin Telegram ID lari, vergul bilan
+   - `DB_PATH` = `/data/data.db`
+5. Deploy. Logda `Bot ishga tushdi` chiqsa — tayyor. GitHub'ga har push qilinganda Railway o'zi qayta deploy qiladi.
+
+Faqat **1 ta** nusxa ishlashi kerak: bot boshqa joyda (masalan, Mac'da) ham ishlab tursa, Telegram `Conflict` xatosini beradi.
+
 `config.env` GitHub'ga yuklanmaydi (`.gitignore`da). Bu repo ochiq (public) — tokenni hech qachon repoga qo'shmang.
