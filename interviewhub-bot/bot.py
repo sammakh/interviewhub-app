@@ -27,6 +27,8 @@ from aiogram.types import (
     Message, ReplyKeyboardMarkup, ReplyKeyboardRemove, WebAppInfo,
 )
 
+import web
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("interviewhub")
 
@@ -109,6 +111,7 @@ def delete_user(tg_id):
     with closing(db()) as con:
         con.execute("DELETE FROM users WHERE tg_id=?", (tg_id,))
         con.commit()
+    web.delete_app_data(db, tg_id)
 
 
 # ---------------------------------------------------------------- klaviaturalar
@@ -288,9 +291,7 @@ async def decide(cb: CallbackQuery):
         await cb.answer(f"Allaqachon hal qilingan: {u['status']}", show_alert=True)
         return
     new = "passed" if act == "pass" else "rejected"
-    with closing(db()) as con:
-        con.execute("UPDATE users SET status=? WHERE tg_id=?", (new, uid))
-        con.commit()
+    await apply_decision(cb.bot, uid, new)
     await cb.answer("Saqlandi")
     mark = "✅ O'tdi" if new == "passed" else "❌ O'tmadi"
     try:
@@ -298,19 +299,41 @@ async def decide(cb: CallbackQuery):
         await cb.message.answer(f"{mark}: {html.escape(u['full_name'])} (qaror: {html.escape(cb.from_user.full_name)})")
     except Exception as ex:
         log.warning("admin xabari yangilanmadi: %s", ex)
+
+
+async def apply_decision(bot, uid, new):
+    """Skrining qarorini saqlaydi va nomzodga xabar beradi (bot tugmasi va dashboard uchun umumiy)."""
+    with closing(db()) as con:
+        cur = con.execute("UPDATE users SET status=? WHERE tg_id=? AND status='registered'", (new, uid))
+        con.commit()
+        if cur.rowcount == 0:
+            return False
     try:
         if new == "passed":
-            await cb.bot.send_message(
+            await bot.send_message(
                 uid,
                 "Tabriklaymiz! Siz screeningdan o'tdingiz.\n"
                 "Keyingi qadam: ilovada pozitsiyalarni tanlang va shartlar bilan tanishing.",
                 reply_markup=app_kb(),
             )
         else:
-            await cb.bot.send_message(uid, STATUS_TEXT["rejected"])
-            await cb.bot.set_chat_menu_button(chat_id=uid, menu_button=MenuButtonDefault())
+            await bot.send_message(uid, STATUS_TEXT["rejected"])
+            await bot.set_chat_menu_button(chat_id=uid, menu_button=MenuButtonDefault())
     except Exception as ex:
         log.warning("nomzodga natija yuborilmadi (%s): %s", uid, ex)
+    return True
+
+
+async def notify_paid(bot, uid):
+    try:
+        await bot.send_message(
+            uid,
+            "✅ To'lovingiz tasdiqlandi. Rahmat!\n"
+            "Ilovada «Men» bo'limi ochildi: intervyularga tayyorgarlikni boshlang.",
+            reply_markup=app_kb(),
+        )
+    except Exception as ex:
+        log.warning("to'lov xabari yuborilmadi (%s): %s", uid, ex)
 
 
 # ---------------------------------------------------------------- ro'yxatdan o'tish
@@ -552,6 +575,11 @@ async def main():
     ])
     dp = Dispatcher(storage=MemoryStorage())
     dp.include_router(router)
+    await web.start_web(
+        bot=bot, db=db, token=BOT_TOKEN,
+        on_paid=lambda uid: notify_paid(bot, uid),
+        on_decide=lambda uid, new: apply_decision(bot, uid, new),
+    )
     log.info("Bot ishga tushdi")
     await dp.start_polling(bot)
 

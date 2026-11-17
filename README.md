@@ -11,6 +11,15 @@ Telegram bot + Mini App: nomzodlarni ro'yxatdan o'tkazish, screening (o'tdi / o'
 | `interviewhub-bot/banner.png`, `avatar.png` | Bot banneri (/start) va avatar |
 | `interviewhub-bot/config.env.example` | Sozlamalar namunasi |
 
+## Admin dashboard
+
+https://interviewhub-bot-production.up.railway.app/admin — parol Railway'dagi `ADMIN_PASSWORD` o'zgaruvchisida.
+
+Ko'rinadi: anketa va video, skrining qarori, tanlangan pozitsiyalar va summa, to'lov holati (tasdiqlash tugmasi),
+ilovada o'tkazilgan vaqt, darslar progressi (%), test urinishlari, CSV eksport.
+Ilova ma'lumotlarni `interviewhub-bot/web.py` dagi `/api/*` ga yuboradi (Telegram initData imzosi bilan tekshiriladi).
+Narxlar `index.html` (`PRICES`) va `web.py` (`PRICES`) da bir xil bo'lishi kerak.
+
 ## Botni ishga tushirish
 
 ```bash

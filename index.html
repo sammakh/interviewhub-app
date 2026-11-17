@@ -70,7 +70,7 @@ table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}td,th{bord
 <div id="app"></div>
 <script>
 /* ===== CONFIG ===== */
-const API_URL="";              // server later: /quote /result /accept /pay /status
+const API_URL="https://interviewhub-bot-production.up.railway.app/api"; // /hb /sync /picks /result /accept /pay /status
 const OFFER_URL="";            // public offer page link
 const PAYMENT_LIVE=false;      // true when merchant + server are ready
 const TESTS_ON=true;           // false = tests off
@@ -197,7 +197,7 @@ function flow(){const f=UI.flow;
 function acceptOffer(){api("/accept",{picks:S.picks,ts:Date.now()});UI.flow=4;render();scrollTo(0,0)}
 async function payWith(){
   if(DEMO){UI.flow=5;render();setTimeout(()=>{S.stage=5;save();UI.flow=6;render()},1500);return}
-  if(!PAYMENT_LIVE||!API_URL){alertx(t("paysoon"));return}
+  if(!PAYMENT_LIVE||!API_URL){api("/pay",{provider:UI.pm,picks:S.picks});alertx(t("paysoon"));return}
   const r=await api("/pay",{provider:UI.pm,picks:S.picks});if(r&&r.url){UI.flow=5;render();openUrl(r.url)}else alertx(t("paysoon"))}
 async function checkPay(){const r=await api("/status",{});if(r&&r.paid){S.stage=5;save();UI.flow=6;render()}}
 function meTab(){
@@ -234,7 +234,7 @@ function reader(){const {k,i}=UI.view,c=BOOKS[k].ch[i],n=BOOKS[k].ch.length;
   let h=`<a class="back" onclick="openBook('${k}')">← ${pn(k)}</a><div class="hint">${i+1} ${t("of")} ${n}</div><div class="bar" style="margin-bottom:12px"><i style="width:${(i+1)/n*100}%"></i></div><h1 style="font-size:22px">${esc(c.t)}</h1>`;
   c.n.forEach(x=>{h+=`<img class="sl" loading="lazy" alt="" onerror="this.outerHTML='<div class=card style=color:#F2B84B>⚠️ Slayd topilmadi. GitHub\'da <b>slides</b> papkasi yuklanganini tekshiring.</div>'" onclick="zoomImg(this.src)" src="slides/${k}/s-${String(x).padStart(2,'0')}.jpg">`});
   h+=`<button class="btn" onclick="finishCh('${k}',${i})">${i<n-1?t("nextc"):t("done")}</button>`;if(i>0)h+=`<button class="btn g" onclick="openCh('${k}',${i-1})">${t("prevc")}</button>`;return h}
-function finishCh(k,i){const d=S.done[k]=S.done[k]||[];if(!d.includes(i))d.push(i);save();if(i<BOOKS[k].ch.length-1)openCh(k,i+1);else openBook(k)}
+function finishCh(k,i){const d=S.done[k]=S.done[k]||[];if(!d.includes(i))d.push(i);save();sync();if(i<BOOKS[k].ch.length-1)openCh(k,i+1);else openBook(k)}
 function startTest(k){const tr=S.tests[k]||{};
   if(!DEMO&&tr.lock&&Date.now()<tr.lock){UI.view={t:"test",k,wait:tr.lock};render();return}
   UI.view={t:"test",k,qs:shuffle(TESTS[k]).map(q=>({q:q.q,c:q.a[0],o:shuffle(q.a)})),i:0,sc:0,pick:null};render();scrollTo(0,0)}
@@ -252,5 +252,13 @@ function answer(j){const v=UI.view,q=v.qs[v.i];v.pick=j;if(q.o[j]===q.c)v.sc++;r
 function endTest(){const v=UI.view,k=v.k,ok=v.sc>=PASS_MIN;v.end=true;const tr=S.tests[k]=S.tests[k]||{};tr.score=v.sc;if(ok){tr.pass=true;tr.lock=0}else tr.lock=Date.now()+LOCK_H*3600e3;save();api("/result",{position:k,score:v.sc,pass:ok})}
 function nextLesson(k){const ks=(S.picks.length?S.picks:POS).filter(x=>BOOKS[x]);const i=ks.indexOf(k);const rest=i>=0?ks.slice(i+1).concat(ks.slice(0,i)):ks;return rest.find(x=>!(S.tests[x]||{}).pass)||null}
 if(API_URL)api("/quote",{picks:S.picks}).then(r=>{if(r&&r.text){QUOTE=r.text;render()}});
+/* ===== Kuzatuv: dashboard uchun (vaqt, darslar, testlar, to'lov holati) ===== */
+function sync(){if(DEMO)return;const tot={},ts={};Object.keys(BOOKS).forEach(k=>tot[k]=BOOKS[k].ch.length);
+  Object.keys(S.tests).forEach(k=>{const v=S.tests[k];if(v&&typeof v.score==="number")ts[k]={score:v.score,pass:!!v.pass}});
+  api("/sync",{picks:S.picks,done:S.done,totals:tot,tests:ts,lang:S.lang})}
+function hb(){if(!DEMO&&document.visibilityState==="visible")api("/hb",{})}
+if(API_URL&&!DEMO){sync();hb();setInterval(hb,30000);
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")hb()});
+  if(S.stage<5)api("/status",{}).then(r=>{if(r&&r.paid){S.stage=5;save();render()}})}
 render();
 </script></body></html>
