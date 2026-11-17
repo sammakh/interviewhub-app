@@ -547,13 +547,25 @@ async def admin_user(request):
 
     pay = p["pay"]
     pay_btns = ""
-    if pay != "paid":
+    if pay != "paid" and p["picks"]:
         pay_btns += form("pay", "confirm", "✅ To'lovni tasdiqlash", "", "To'lov tushganini tekshirdingizmi? Nomzodga xabar yuboriladi.")
     if pay == "pending":
         pay_btns += " " + form("pay", "reject", "Rad etish", "ghost")
     if pay in ("paid", "rejected"):
         pay_btns += " " + form("pay", "reset", "Holatni tozalash", "ghost", "To'lov holatini 'yo'q' ga qaytarasizmi?")
 
+    if p["picks"]:
+        rows = [("Pozitsiyalar", esc(", ".join(PN.get(k, k) for k in p["picks"]))),
+                ("Summa", f"<b>{money(s.get('amount'))}</b>"),
+                ("To'lov holati", tag(PAY_LABEL, pay))]
+        if s.get("pay_provider"):
+            rows.append(("Tanlagan to'lov usuli", esc(s["pay_provider"])))
+        if s.get("paid_at"):
+            rows.append(("To'lov tasdiqlangan", fmt_dt(s["paid_at"])))
+        pay_rows = "".join(f"<tr><th>{a}</th><td>{b}</td></tr>" for a, b in rows)
+    else:
+        pay_rows = ("<tr><td class='empty'>Nomzod ilovada hali pozitsiya tanlamagan "
+                    "(yoki ilovani yangi versiyada ochmagan).</td></tr>")
     prog_rows = "".join(
         f"<tr><td>{esc(PN.get(k, k))}</td><td class='num'>{d} / {t}</td>"
         f"<td><div class='meter'><i style='width:{round(d * 100 / t) if t else 0}%'></i></div></td>"
@@ -576,13 +588,7 @@ async def admin_user(request):
  <section class='card'><h2>Anketa</h2><table class='kv'>{anketa}</table>{video}
    {f"<div class='actions'>{screen_btns}</div>" if screen_btns else ""}</section>
  <section class='card'><h2>Pozitsiyalar va to'lov</h2><table class='kv'>
-   <tr><th>Tanlangan</th><td>{esc(', '.join(PN.get(k, k) for k in p['picks']) or '—')}</td></tr>
-   <tr><th>Summa</th><td><b>{money(s.get('amount')) if p['picks'] else '—'}</b></td></tr>
-   <tr><th>Tanlangan vaqt</th><td>{fmt_dt(s.get('picks_at'))}</td></tr>
-   <tr><th>Shartnoma qabul qilingan</th><td>{fmt_dt(s.get('accepted_at'))}</td></tr>
-   <tr><th>To'lov usuli</th><td>{esc(s.get('pay_provider') or '—')}</td></tr>
-   <tr><th>To'lov so'ralgan</th><td>{fmt_dt(s.get('pay_requested_at'))}</td></tr>
-   <tr><th>Tasdiqlangan</th><td>{fmt_dt(s.get('paid_at'))} {esc(s.get('pay_by') or '')}</td></tr>
+   {pay_rows}
  </table><div class='actions'>{pay_btns}</div></section>
  <section class='card'><h2>Ilovadagi faollik</h2><table class='kv'>
    <tr><th>Ilovada jami</th><td><b>{fmt_dur(s.get('total_sec'))}</b></td></tr>
