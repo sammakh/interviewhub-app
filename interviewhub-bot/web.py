@@ -403,7 +403,7 @@ async def login_post(request):
     await asyncio.sleep(1)
     left = MAX_FAILS - len(fails)
     err = f"Parol noto'g'ri. Yana {left} ta urinish qoldi." if left else "Ko'p urinish. 5 daqiqadan keyin qayta urinib ko'ring."
-    log.info("admin: noto'g'ri parol (uzunligi %s, kutilgan %s)", len(str(form.get("password", "")).strip()), len(pw))
+    log.info("admin: noto'g'ri parol urinishi")
     return page("Kirish", LOGIN_HTML.format(err=err), nav=False, status=401)
 
 
