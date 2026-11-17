@@ -376,6 +376,8 @@ def require_admin(handler):
 
 
 _login_fails = {}
+MAX_FAILS = 10
+LOCK_SEC = 300
 
 
 async def login_get(request):
@@ -385,12 +387,12 @@ async def login_get(request):
 async def login_post(request):
     ip = request.headers.get("X-Forwarded-For", request.remote or "").split(",")[0].strip()
     now = time.time()
-    fails = [t for t in _login_fails.get(ip, []) if now - t < 600]
-    if len(fails) >= 5:
-        return page("Kirish", LOGIN_HTML.format(err="Ko'p urinish. 10 daqiqadan keyin qayta urinib ko'ring."), nav=False, status=429)
+    fails = [t for t in _login_fails.get(ip, []) if now - t < LOCK_SEC]
+    if len(fails) >= MAX_FAILS:
+        return page("Kirish", LOGIN_HTML.format(err="Ko'p urinish. 5 daqiqadan keyin qayta urinib ko'ring."), nav=False, status=429)
     form = await request.post()
     pw = request.app["password"]
-    if pw and hmac.compare_digest(str(form.get("password", "")).encode(), pw.encode()):
+    if pw and hmac.compare_digest(str(form.get("password", "")).strip().encode(), pw.encode()):
         _login_fails.pop(ip, None)
         resp = web.HTTPFound("/admin")
         resp.set_cookie(COOKIE, make_session(request.app), max_age=SESSION_TTL, httponly=True,
@@ -399,7 +401,10 @@ async def login_post(request):
     fails.append(now)
     _login_fails[ip] = fails
     await asyncio.sleep(1)
-    return page("Kirish", LOGIN_HTML.format(err="Parol noto'g'ri."), nav=False, status=401)
+    left = MAX_FAILS - len(fails)
+    err = f"Parol noto'g'ri. Yana {left} ta urinish qoldi." if left else "Ko'p urinish. 5 daqiqadan keyin qayta urinib ko'ring."
+    log.info("admin: noto'g'ri parol (uzunligi %s, kutilgan %s)", len(str(form.get("password", "")).strip()), len(pw))
+    return page("Kirish", LOGIN_HTML.format(err=err), nav=False, status=401)
 
 
 async def logout(request):
@@ -727,7 +732,7 @@ def page(title, body, nav=True, status=200):
 # ---------------------------------------------------------------- ishga tushirish
 def build_app(*, bot, db, token, on_paid, on_decide):
     app = web.Application(middlewares=[cors], client_max_size=256 * 1024)
-    password = os.getenv("ADMIN_PASSWORD", "")
+    password = os.getenv("ADMIN_PASSWORD", "").strip().strip('"').strip("'").strip()
     app["bot"], app["db"], app["token"], app["password"] = bot, db, token, password
     app["on_paid"], app["on_decide"] = on_paid, on_decide
     app["secret"] = hashlib.sha256(f"ih-admin|{token}|{password}".encode()).digest()
