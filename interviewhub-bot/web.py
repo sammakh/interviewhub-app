@@ -33,6 +33,8 @@ PN = {
     "fleet": "Fleet", "eld": "ELD", "sales": "Sales", "recruiting": "Recruiting",
 }
 MAX_PICKS = 3
+# Click/Payme merchant ulanguncha to'lov o'chiq: tasdiqlash tugmasi yo'q, ilova "to'langan" holatini olmaydi.
+PAYMENTS_ON = os.getenv("PAYMENTS_ENABLED", "").strip().lower() in ("1", "true", "yes", "on")
 PASS_MIN = 7
 HB_GAP = 90           # soniya: shundan uzoq tanaffus vaqtga qo'shilmaydi
 SESSION_GAP = 30 * 60  # soniya: shundan keyin yangi sessiya hisoblanadi
@@ -289,9 +291,10 @@ async def api_pay(request):
         picks = clean_picks(body.get("picks"))
         if picks:
             store_picks(con, user["id"], picks)
+        status_sql = ("pay_status=CASE WHEN pay_status IN ('none','rejected') THEN 'pending' ELSE pay_status END"
+                      if PAYMENTS_ON else "pay_status=pay_status")
         con.execute(
-            "UPDATE app_state SET pay_provider=?, pay_requested_at=?, "
-            "pay_status=CASE WHEN pay_status IN ('none','rejected') THEN 'pending' ELSE pay_status END WHERE tg_id=?",
+            f"UPDATE app_state SET pay_provider=?, pay_requested_at=?, {status_sql} WHERE tg_id=?",
             (provider, now_iso(), user["id"]),
         )
         con.commit()
@@ -300,6 +303,8 @@ async def api_pay(request):
 
 async def api_status(request):
     user, _ = await read_api(request)
+    if not PAYMENTS_ON:
+        return json_resp({"paid": False})
     with closing(request.app["db"]()) as con:
         r = con.execute("SELECT pay_status FROM app_state WHERE tg_id=?", (user["id"],)).fetchone()
     return json_resp({"paid": bool(r and r["pay_status"] == "paid")})
@@ -461,12 +466,15 @@ async def admin_home(request):
     pending = sum(1 for p in people if p["pay"] == "pending")
     paid = [p for p in people if p["pay"] == "paid"]
     revenue = sum(p["s"].get("amount") or 0 for p in paid)
-    cards = "".join(
-        f"<div class='kpi'><small>{a}</small><b>{b}</b></div>" for a, b in [
-            ("Ro'yxatdan o'tgan", reg), ("Screeningdan o'tgan", passed), ("Pozitsiya tanlagan", chose),
-            ("To'lov kutilmoqda", pending), ("To'lagan", len(paid)), ("Tushum", money(revenue)),
-        ]
-    )
+    kpis = [("Ro'yxatdan o'tgan", reg), ("Screeningdan o'tgan", passed), ("Pozitsiya tanlagan", chose)]
+    if PAYMENTS_ON:
+        kpis += [("To'lov kutilmoqda", pending), ("To'lagan", len(paid)), ("Tushum", money(revenue))]
+    else:
+        reached = sum(1 for p in people if p["s"].get("pay_requested_at"))
+        kpis += [("To'lov bosqichiga yetgan", reached), ("To'lov", "Ulanmagan")]
+    cards = "".join(f"<div class='kpi'><small>{a}</small><b>{b}</b></div>" for a, b in kpis)
+    pay_opts = ("<option value='pay:pending'>To'lov kutilmoqda</option><option value='pay:paid'>To'lagan</option>"
+                if PAYMENTS_ON else "")
     rows = []
     for p in people:
         tests = ", ".join(f"{PN.get(k, k)} {v}/10" for k, v in p["best"].items()) or "—"
@@ -478,7 +486,7 @@ async def admin_home(request):
             f"<td>{tag(SCREEN_LABEL, p['screen'])}</td>"
             f"<td>{esc(', '.join(PN.get(k, k) for k in p['picks']) or '—')}</td>"
             f"<td class='num'>{money(p['s'].get('amount')) if p['picks'] else '—'}</td>"
-            f"<td>{tag(PAY_LABEL, p['pay'])}</td>"
+            f"<td>{tag(PAY_LABEL, p['pay']) if PAYMENTS_ON or p['pay'] != 'none' else '—'}</td>"
             f"<td class='num'>{fmt_dur(p['s'].get('total_sec'))}</td>"
             f"<td class='num'>{'—' if p['lesson_pct'] is None else str(p['lesson_pct']) + '%'}</td>"
             f"<td>{esc(tests)}</td>"
@@ -489,8 +497,7 @@ async def admin_home(request):
 <div class='bar'>
   <input id='q' placeholder='Qidirish: ism, telefon, username' oninput='flt()'>
   <select id='f' onchange='flt()'>
-    <option value=''>Hammasi</option><option value='pay:pending'>To'lov kutilmoqda</option>
-    <option value='pay:paid'>To'lagan</option><option value='screen:registered'>Screening kutilmoqda</option>
+    <option value=''>Hammasi</option>{pay_opts}<option value='screen:registered'>Screening kutilmoqda</option>
     <option value='screen:passed'>Screeningdan o'tgan</option><option value='screen:rejected'>O'tmagan</option>
   </select>
   <a class='btn ghost' href='/admin/export.csv'>CSV yuklab olish</a>
@@ -547,17 +554,18 @@ async def admin_user(request):
 
     pay = p["pay"]
     pay_btns = ""
-    if pay != "paid" and p["picks"]:
+    if PAYMENTS_ON and pay != "paid" and p["picks"]:
         pay_btns += form("pay", "confirm", "✅ To'lovni tasdiqlash", "", "To'lov tushganini tekshirdingizmi? Nomzodga xabar yuboriladi.")
-    if pay == "pending":
+    if PAYMENTS_ON and pay == "pending":
         pay_btns += " " + form("pay", "reject", "Rad etish", "ghost")
-    if pay in ("paid", "rejected"):
+    if pay in ("paid", "rejected") or (not PAYMENTS_ON and pay != "none"):
         pay_btns += " " + form("pay", "reset", "Holatni tozalash", "ghost", "To'lov holatini 'yo'q' ga qaytarasizmi?")
 
     if p["picks"]:
         rows = [("Pozitsiyalar", esc(", ".join(PN.get(k, k) for k in p["picks"]))),
                 ("Summa", f"<b>{money(s.get('amount'))}</b>"),
-                ("To'lov holati", tag(PAY_LABEL, pay))]
+                ("To'lov holati", tag(PAY_LABEL, pay) if PAYMENTS_ON or pay != "none"
+                 else "<span class='tag'>Click/Payme hali ulanmagan</span>")]
         if s.get("pay_provider"):
             rows.append(("Tanlagan to'lov usuli", esc(s["pay_provider"])))
         if s.get("paid_at"):
@@ -605,6 +613,8 @@ async def admin_user(request):
 async def admin_pay(request):
     uid = int(request.match_info["uid"])
     action = request["form"].get("v")
+    if not PAYMENTS_ON and action != "reset":
+        raise web.HTTPForbidden(text="To'lov hali ulanmagan")
     db, now = request.app["db"], now_iso()
     with closing(db()) as con:
         con.execute("INSERT OR IGNORE INTO app_state (tg_id, first_open) VALUES (?,?)", (uid, now))
