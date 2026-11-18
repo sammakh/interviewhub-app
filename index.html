@@ -140,6 +140,52 @@ background:radial-gradient(120% 90% at 100% 0%,rgba(210,63,64,.45),transparent 6
 .pad.enter{animation:fadein .28s var(--ease)}
 @keyframes fadein{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.pad.enter{animation:none}.bk,.pos,.pm,.lg,.o,.btn{transition:none}}
+
+/* ===== Kuchli qatlam ===== */
+body{background:radial-gradient(90% 40% at 50% 0%,rgba(210,63,64,.16),transparent 70%),radial-gradient(60% 30% at 100% 60%,rgba(210,63,64,.07),transparent 70%),var(--bg);background-attachment:fixed}
+.top{background:linear-gradient(135deg,#E04748 0%,#C23536 55%,#9E2829 100%);border-radius:0 0 22px 22px;padding-bottom:2px;overflow:hidden;box-shadow:0 10px 30px rgba(194,53,54,.35)}
+.top:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 85% -20%,rgba(255,255,255,.28),transparent 60%);pointer-events:none}
+.top .ih{box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.pl{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25)}
+/* hero: aylanuvchi nurli chegara */
+@property --a{syntax:"<angle>";initial-value:0deg;inherits:false}
+.hero{border:0;padding:22px 18px 18px;isolation:isolate}
+.hero:before{content:"";position:absolute;inset:0;border-radius:24px;padding:1.5px;background:conic-gradient(from var(--a),rgba(255,107,108,.0),#FF6B6C,rgba(255,107,108,.0) 30%,rgba(255,255,255,.35) 50%,rgba(255,107,108,0) 70%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:spin 6s linear infinite;z-index:-1}
+@keyframes spin{to{--a:360deg}}
+.hk{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#FF8A8B;background:rgba(210,63,64,.18);border:1px solid rgba(255,107,108,.3);padding:5px 10px;border-radius:99px;margin-bottom:12px}
+.hero h1{font-size:30px;letter-spacing:-.8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.stats div{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px 8px;text-align:center}
+.stats b{display:block;font-size:22px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(180deg,#fff,#FFB3B3);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stats span{font-size:11px;color:rgba(255,255,255,.65);font-weight:600}
+/* yaltiroq tugma */
+.btn.shine{position:relative;overflow:hidden}
+.btn.shine:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:lkshine 3.2s ease-in-out infinite}
+/* sarlavhalar */
+h2{display:flex;align-items:center;gap:8px}
+h2:before{content:"";width:4px;height:18px;border-radius:2px;background:linear-gradient(180deg,#FF6B6C,#B83233)}
+/* pozitsiya kartochkalari */
+.pos{padding:14px 12px 12px;overflow:hidden}
+.pos .pi{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:12px;font-size:20px;margin-bottom:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
+.pos.on .pi{background:rgba(210,63,64,.25);border-color:rgba(255,107,108,.4)}
+.pos .pr{display:inline-block;margin-top:10px;padding:4px 9px;border-radius:99px;background:rgba(255,255,255,.07);font-size:12px}
+.pos.on .pr{background:rgba(210,63,64,.25);color:#FFB3B3}
+.pos.on:after{content:"";position:absolute;inset:auto -20px -40px auto;width:110px;height:110px;border-radius:50%;background:radial-gradient(rgba(255,107,108,.35),transparent 70%);pointer-events:none}
+/* suzuvchi kapsula menyu */
+.nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));height:64px;padding:0 6px;border-radius:22px;border:1px solid rgba(255,255,255,.10);background:rgba(22,22,27,.72);box-shadow:0 12px 34px rgba(0,0,0,.5)}
+.nav button{padding:6px 0}
+body{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+.lockcard{bottom:calc(86px + env(safe-area-inset-bottom))}
+/* ketma-ket paydo bo'lish */
+.pad.enter .grid>*,.pad.enter .bk,.pad.enter .card,.pad.enter .pm{animation:rise .45s var(--ease) both}
+.pad.enter .grid>*:nth-child(2),.pad.enter .bk:nth-of-type(2){animation-delay:.04s}
+.pad.enter .grid>*:nth-child(3),.pad.enter .bk:nth-of-type(3){animation-delay:.08s}
+.pad.enter .grid>*:nth-child(4),.pad.enter .bk:nth-of-type(4){animation-delay:.12s}
+.pad.enter .grid>*:nth-child(5),.pad.enter .bk:nth-of-type(5){animation-delay:.16s}
+.pad.enter .grid>*:nth-child(6),.pad.enter .bk:nth-of-type(6){animation-delay:.2s}
+.pad.enter .grid>*:nth-child(n+7),.pad.enter .bk:nth-of-type(n+7){animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.hero:before,.btn.shine:after{animation:none}.pad.enter .grid>*,.pad.enter .bk,.pad.enter .card,.pad.enter .pm{animation:none}}
 </style></head><body>
 <div id="app"></div>
 <script>
@@ -164,7 +210,7 @@ const POS=["accounting","update","safety","dispatch","fleet","eld","sales","recr
 const PN={accounting:"Accounting",update:"Updater",safety:"Safety",dispatch:"Dispatch (box truck)",fleet:"Fleet",eld:"ELD",sales:"Sales",recruiting:"Recruiting"};
 const pn=k=>PN[k];
 const T={
-uz:{hello:"Salom",start:"Darslarni boshlash ›",startn:"Darslar bepul. Testdan o'tsangiz, keyingi bosqich ochiladi.",pick:"Intervyu pozitsiyalarini tanlang",pickh:"3 tagacha tanlang. Tanlaganingiz bo'yicha intervyu tashkil qilamiz.",picked:"Tanlandi:",clear:"Tozalash",save:"Saqlash",
+uz:{hello:"Salom",start:"Darslarni boshlash ›",st1:"pozitsiya",st2:"bepul darslik",st3:"intervyu",startn:"Darslar bepul. Testdan o'tsangiz, keyingi bosqich ochiladi.",pick:"Intervyu pozitsiyalarini tanlang",pickh:"3 tagacha tanlang. Tanlaganingiz bo'yicha intervyu tashkil qilamiz.",picked:"Tanlandi:",clear:"Tozalash",save:"Saqlash",
 rules:"Shartlar",r1:"Hozir ishtirok <b style='color:#fff'>bepul</b>",r2:"Screeningdan o'tganlarga <b style='color:#fff'>3 tagacha intervyu</b> tashkil qilamiz",r3:"Ish kafolati yo'q: intervyu natijasi sizga bog'liq",
 d:{accounting:"Hisob-kitob va hujjatlar",update:"Yuk holatini kuzatish",safety:"Hujjatlar va xavfsizlik qoidalari",dispatch:"Yuk topish, narx kelishuvi",fleet:"Texnika va ta'mirlash nazorati",eld:"Haydovchi soatlari nazorati",sales:"Mijozlar bilan savdo",recruiting:"Haydovchi yollash"},
 sq:"Tanlovni saqlaymizmi?",sqy:"Siz tanladingiz:",sqn:"Keyin tanlovni o'zgartirish mumkin, lekin to'lovdan keyin emas.",sqok:"Ha, saqlash",back:"Orqaga",
@@ -179,7 +225,7 @@ steps:"Sizning qadamlaringiz",sp:"To'lov",spd:"Qabul qilindi",scv:"CV tayyorlash
 home:"Bosh sahifa",reels:"Reels",les:"Darslar",me:"Men",reelst:"Video darslar tez orada",
 ls:"Bepul darslar",soon:"Tez orada",ch:"bob",nextc:"Keyingi bob ›",done:"Tugatish",prevc:"Oldingi bob",
 test:"Testni boshlash ›",testoff:"Test hozircha o'chirilgan",q:"Savol",of:"/",res:"Tabriklaymiz!",resp:"Test topshirildi",fail:"Hali yetarli emas",need:"O'tish uchun kamida",retry:"Qayta urinish",waitr:"Qayta urinish mumkin:",nextles:"Keyingi darsga o'tish ›",allok:"Barcha darslar tugadi! 🎉",allokt:"Siz tanlangan hamma darslarni yakunladingiz. Tabriklaymiz!"},
-ru:{hello:"Привет",start:"Начать уроки ›",startn:"Уроки бесплатные. После теста откроется следующий этап.",pick:"Выберите позиции для собеседований",pickh:"До 3 позиций. Организуем собеседования по вашему выбору.",picked:"Выбрано:",clear:"Очистить",save:"Сохранить",
+ru:{hello:"Привет",start:"Начать уроки ›",st1:"позиций",st2:"бесплатных курсов",st3:"собеседования",startn:"Уроки бесплатные. После теста откроется следующий этап.",pick:"Выберите позиции для собеседований",pickh:"До 3 позиций. Организуем собеседования по вашему выбору.",picked:"Выбрано:",clear:"Очистить",save:"Сохранить",
 rules:"Условия",r1:"Участие сейчас <b style='color:#fff'>бесплатно</b>",r2:"Прошедшим скрининг организуем <b style='color:#fff'>до 3 собеседований</b>",r3:"Гарантии работы нет: результат зависит от вас",
 d:{accounting:"Учёт и документы",update:"Отслеживание груза",safety:"Документы и правила безопасности",dispatch:"Поиск грузов, торг по цене",fleet:"Контроль техники и ремонта",eld:"Контроль часов водителей",sales:"Продажи клиентам",recruiting:"Найм водителей"},
 sq:"Сохранить выбор?",sqy:"Вы выбрали:",sqn:"Позже выбор можно изменить, но не после оплаты.",sqok:"Да, сохранить",back:"Назад",
@@ -194,7 +240,7 @@ steps:"Ваши шаги",sp:"Оплата",spd:"Принята",scv:"Подго
 home:"Главная",reels:"Reels",les:"Уроки",me:"Я",reelst:"Видеоуроки скоро",
 ls:"Бесплатные уроки",soon:"Скоро",ch:"гл.",nextc:"Следующая глава ›",done:"Завершить",prevc:"Назад",
 test:"Начать тест ›",testoff:"Тест временно отключён",q:"Вопрос",of:"/",res:"Поздравляем!",resp:"Тест сдан",fail:"Пока недостаточно",need:"Для успеха нужно минимум",retry:"Повторить",waitr:"Повтор возможен:",nextles:"К следующему уроку ›",allok:"Все уроки пройдены! 🎉",allokt:"Вы завершили все выбранные уроки. Поздравляем!"},
-en:{hello:"Hello",start:"Start lessons ›",startn:"Lessons are free. Pass the test to unlock the next step.",pick:"Choose interview positions",pickh:"Up to 3. We arrange interviews for your choice.",picked:"Selected:",clear:"Clear",save:"Save",
+en:{hello:"Hello",start:"Start lessons ›",st1:"positions",st2:"free courses",st3:"interviews",startn:"Lessons are free. Pass the test to unlock the next step.",pick:"Choose interview positions",pickh:"Up to 3. We arrange interviews for your choice.",picked:"Selected:",clear:"Clear",save:"Save",
 rules:"Terms",r1:"Participation is <b style='color:#fff'>free</b> for now",r2:"Those who pass screening get <b style='color:#fff'>up to 3 interviews</b>",r3:"No job guarantee: the interview result is up to you",
 d:{accounting:"Bookkeeping and documents",update:"Tracking load status",safety:"Documents and safety rules",dispatch:"Finding loads, rate negotiation",fleet:"Equipment and repair control",eld:"Driver hours monitoring",sales:"Selling to clients",recruiting:"Hiring drivers"},
 sq:"Save your selection?",sqy:"You selected:",sqn:"You can change it later, but not after payment.",sqok:"Yes, save",back:"Back",
@@ -246,8 +292,11 @@ function sheet(){
   return ""}
 function home(){
   const u=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||"";
-  let h=`<div class="hero"><h1>${t("hello")}${u?", "+esc(u):""}! 👋</h1><div class="hint">${t("startn")}</div><button class="btn" onclick="go('lessons')">${t("start")}</button></div>`;
-  h+=`<h2 style="margin-top:6px">${t("pick")}</h2><div class="hint" style="margin-bottom:12px">${t("pickh")}</div><div class="grid">`+POS.map(k=>{const on=S.picks.includes(k);return `<button class="pos ${on?'on':''}" onclick="togglePick('${k}')"><span class="ck">${on?'✓':''}</span><b>${pn(k)}</b><span class="d">${t("d")[k]}</span><span class="pr">${money(PRICES[k]||0)} ${t("cur")}</span></button>`}).join("")+`</div>`;
+  const nb=Object.keys(BOOKS).length;
+  let h=`<div class="hero"><div class="hk">Interview Hub</div><h1>${t("hello")}${u?", "+esc(u):""}! 👋</h1><div class="hint">${t("startn")}</div>
+  <div class="stats"><div><b>${POS.length}</b><span>${t("st1")}</span></div><div><b>${nb}</b><span>${t("st2")}</span></div><div><b>3</b><span>${t("st3")}</span></div></div>
+  <button class="btn shine" onclick="go('lessons')">${t("start")}</button></div>`;
+  h+=`<h2 style="margin-top:6px">${t("pick")}</h2><div class="hint" style="margin-bottom:12px">${t("pickh")}</div><div class="grid">`+POS.map(k=>{const on=S.picks.includes(k);return `<button class="pos ${on?'on':''}" onclick="togglePick('${k}')"><span class="ck">${on?'✓':''}</span><span class="pi">${PI[k]||"📘"}</span><b>${pn(k)}</b><span class="d">${t("d")[k]}</span><span class="pr">${money(PRICES[k]||0)} ${t("cur")}</span></button>`}).join("")+`</div>`;
   h+=`<div style="display:flex;justify-content:space-between;margin:14px 0 0;font-size:14px" class="hint"><span>${t("picked")} <b style="color:#fff">${S.picks.length} / 3</b></span><button style="color:#FF6B6C;font-weight:800" onclick="S.picks=[];render()">${t("clear")}</button></div>`;
   h+=`<button class="btn ${S.picks.length?'':'off'}" ${S.picks.length?"":"disabled"} onclick="UI.sheet='save';render()">${t("save")}</button>`;
   if(S.stage>=1&&S.stage<5)h+=`<button class="btn g" onclick="UI.flow=1;render()">${t("cont")}</button>`;
