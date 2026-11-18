@@ -186,6 +186,25 @@ body{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 .pad.enter .grid>*:nth-child(n+7),.pad.enter .bk:nth-of-type(n+7){animation-delay:.24s}
 @keyframes rise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.hero:before,.btn.shine:after{animation:none}.pad.enter .grid>*,.pad.enter .bk,.pad.enter .card,.pad.enter .pm{animation:none}}
+
+/* ===== Slayd ko'ruvchi ===== */
+.svhint{font-size:12px;color:var(--mu);margin:2px 0 10px;display:flex;align-items:center;gap:6px}
+.slw{position:relative;display:block;width:calc(100% + 24px);margin:0 -12px 12px;padding:0;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.slw .sl{margin:0;border:0;border-radius:14px}
+.slz{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:10px;background:rgba(0,0,0,.6);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.sv{position:fixed;inset:0;z-index:50;background:#000;overflow:hidden;animation:fadein .2s}
+.svr{position:absolute;inset:0}
+.sv.rot .svr{inset:auto;top:50%;left:50%;width:100vh;height:100vw;transform:translate(-50%,-50%) rotate(90deg)}
+.svs{position:absolute;inset:44px 0 0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.svs img{max-width:100%;max-height:100%;object-fit:contain;background:#fff;user-select:none;-webkit-user-drag:none}
+.svs.z{display:block;overflow:auto;-webkit-overflow-scrolling:touch}
+.svs.z img{max-width:none;max-height:none;width:220%;height:auto}
+.svt{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;gap:10px;padding:0 8px;background:linear-gradient(180deg,rgba(0,0,0,.85),rgba(0,0,0,.4));color:#fff;z-index:2}
+.svt b{flex:1;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.svt span{font-size:12px;color:#bbb;font-weight:700}
+.svb{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.12);color:#fff;font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.sva{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:56px;border-radius:12px;background:rgba(0,0,0,.45);color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;z-index:2}
+.sva.l{left:6px}.sva.r{right:6px}
+.svtip{position:absolute;left:50%;top:52px;transform:translateX(-50%);background:rgba(210,63,64,.88);animation:fadein .3s;color:#fff;font-size:12px;font-weight:700;padding:8px 14px;border-radius:99px;z-index:3;white-space:nowrap}
 </style></head><body>
 <div id="app"></div>
 <script>
@@ -223,7 +242,7 @@ langt:"Tilni tanlang",langs:"Выберите язык · Choose language",langc
 nm:"Kompaniya nomi",nmp:"Pozitsiya · sana",myint:"Mening intervyularim",sett:"Sozlamalar",mylock:"To'lovdan keyin ochiladi",mylocks:"Intervyular, CV va mock intervyu shu yerda bo'ladi",mygo:"To'lovga o'tish ›",
 steps:"Sizning qadamlaringiz",sp:"To'lov",spd:"Qabul qilindi",scv:"CV tayyorlash",scvd:"Ma'lumot kutilmoqda",scall:"Jamoa bilan call",scalld:"Vaqt tanlang",sint:"Intervyu",sintd:"Tayyorlanmoqda",wait:"Kompaniya tanlanmoqda",
 home:"Bosh sahifa",reels:"Reels",les:"Darslar",me:"Men",reelst:"Video darslar tez orada",
-ls:"Bepul darslar",soon:"Tez orada",ch:"bob",nextc:"Keyingi bob ›",done:"Tugatish",prevc:"Oldingi bob",
+ls:"Bepul darslar",soon:"Tez orada",ch:"bob",svh:"Slaydni bosing — to'liq ekranda ochiladi",svr:"Telefonni yon tomonga burang — slayd kattaroq ko'rinadi",nextc:"Keyingi bob ›",done:"Tugatish",prevc:"Oldingi bob",
 test:"Testni boshlash ›",testoff:"Test hozircha o'chirilgan",q:"Savol",of:"/",res:"Tabriklaymiz!",resp:"Test topshirildi",fail:"Hali yetarli emas",need:"O'tish uchun kamida",retry:"Qayta urinish",waitr:"Qayta urinish mumkin:",nextles:"Keyingi darsga o'tish ›",allok:"Barcha darslar tugadi! 🎉",allokt:"Siz tanlangan hamma darslarni yakunladingiz. Tabriklaymiz!"},
 ru:{hello:"Привет",start:"Начать уроки ›",st1:"позиций",st2:"бесплатных курсов",st3:"собеседования",startn:"Уроки бесплатные. После теста откроется следующий этап.",pick:"Выберите позиции для собеседований",pickh:"До 3 позиций. Организуем собеседования по вашему выбору.",picked:"Выбрано:",clear:"Очистить",save:"Сохранить",
 rules:"Условия",r1:"Участие сейчас <b style='color:#fff'>бесплатно</b>",r2:"Прошедшим скрининг организуем <b style='color:#fff'>до 3 собеседований</b>",r3:"Гарантии работы нет: результат зависит от вас",
@@ -238,7 +257,7 @@ langt:"Выберите язык",langs:"Выберите язык · Choose lan
 nm:"Название компании",nmp:"Позиция · дата",myint:"Мои собеседования",sett:"Настройки",mylock:"Откроется после оплаты",mylocks:"Здесь будут ваши собеседования, CV и mock-интервью",mygo:"Перейти к оплате ›",
 steps:"Ваши шаги",sp:"Оплата",spd:"Принята",scv:"Подготовка CV",scvd:"Ждём данные",scall:"Звонок с командой",scalld:"Выберите время",sint:"Собеседование",sintd:"Готовится",wait:"Подбираем компанию",
 home:"Главная",reels:"Reels",les:"Уроки",me:"Я",reelst:"Видеоуроки скоро",
-ls:"Бесплатные уроки",soon:"Скоро",ch:"гл.",nextc:"Следующая глава ›",done:"Завершить",prevc:"Назад",
+ls:"Бесплатные уроки",soon:"Скоро",ch:"гл.",svh:"Нажмите на слайд — откроется на весь экран",svr:"Поверните телефон боком — слайд будет крупнее",nextc:"Следующая глава ›",done:"Завершить",prevc:"Назад",
 test:"Начать тест ›",testoff:"Тест временно отключён",q:"Вопрос",of:"/",res:"Поздравляем!",resp:"Тест сдан",fail:"Пока недостаточно",need:"Для успеха нужно минимум",retry:"Повторить",waitr:"Повтор возможен:",nextles:"К следующему уроку ›",allok:"Все уроки пройдены! 🎉",allokt:"Вы завершили все выбранные уроки. Поздравляем!"},
 en:{hello:"Hello",start:"Start lessons ›",st1:"positions",st2:"free courses",st3:"interviews",startn:"Lessons are free. Pass the test to unlock the next step.",pick:"Choose interview positions",pickh:"Up to 3. We arrange interviews for your choice.",picked:"Selected:",clear:"Clear",save:"Save",
 rules:"Terms",r1:"Participation is <b style='color:#fff'>free</b> for now",r2:"Those who pass screening get <b style='color:#fff'>up to 3 interviews</b>",r3:"No job guarantee: the interview result is up to you",
@@ -253,7 +272,7 @@ langt:"Choose language",langs:"Выберите язык · Choose language",lan
 nm:"Company name",nmp:"Position · date",myint:"My interviews",sett:"Settings",mylock:"Opens after payment",mylocks:"Your interviews, CV and mock interview will appear here",mygo:"Go to payment ›",
 steps:"Your steps",sp:"Payment",spd:"Received",scv:"CV preparation",scvd:"Waiting for info",scall:"Call with the team",scalld:"Pick a time",sint:"Interview",sintd:"Being prepared",wait:"Company being selected",
 home:"Home",reels:"Reels",les:"Lessons",me:"Me",reelst:"Video lessons coming soon",
-ls:"Free lessons",soon:"Soon",ch:"ch.",nextc:"Next chapter ›",done:"Finish",prevc:"Previous",
+ls:"Free lessons",soon:"Soon",ch:"ch.",svh:"Tap a slide to open it full screen",svr:"Turn your phone sideways for a bigger slide",nextc:"Next chapter ›",done:"Finish",prevc:"Previous",
 test:"Start test ›",testoff:"Tests are temporarily off",q:"Question",of:"/",res:"Congratulations!",resp:"Test passed",fail:"Not enough yet",need:"To pass you need at least",retry:"Try again",waitr:"You can retry:",nextles:"Next lesson ›",allok:"All lessons completed! 🎉",allokt:"You finished all selected lessons. Congratulations!"}};
 const S={lang:null,picks:[],stage:0,promo:null,done:{},tests:{}};
 let UI={tab:"home",flow:null,view:null,sheet:null,pm:"Payme",acc:false};
@@ -282,9 +301,9 @@ function render(){
   if(!S.lang){app.innerHTML=head()+`<div class="pad c" style="padding-top:36px"><div style="font-size:54px">🌐</div><h1 style="margin-top:10px">${T.uz.langt}</h1><div class="hint" style="margin-bottom:20px">${T.uz.langs}</div>${Object.keys(FL).map(l=>`<button class="lg ${l==='uz'?'on':''}" onclick="setLang('${l}')"><span>${FL[l][0]}</span>${FL[l][1]}<span class="r">${l==='uz'?'✓':''}</span></button>`).join("")}</div>`;return}
   let body;if(UI.flow)body=flow();else body=({home:home,reels:reels,lessons:lessonsTab,me:meTab}[UI.tab])();
   const v=UI.view||{},key=[UI.tab,UI.flow,v.t,v.k,v.i,v.end].join("|"),enter=key!==UI._key;UI._key=key;
-  app.innerHTML=head()+`<div class="pad${enter?" enter":""}">${body}</div>`+nav()+(UI.sheet?sheet():"")+(UI.zoom?`<div style="position:fixed;inset:0;z-index:40;background:#000;overflow:auto"><button class="back" style="position:fixed;top:12px;left:12px;z-index:41" onclick="UI.zoom=null;render()">← ${t('back')}</button><img src="${UI.zoom}" style="width:230%;max-width:none;display:block;margin-top:70px;background:#fff"></div>`:"");
+  app.innerHTML=head()+`<div class="pad${enter?" enter":""}">${body}</div>`+nav()+(UI.sheet?sheet():"")+(UI.sv?svView():"")+(UI.zoom?`<div style="position:fixed;inset:0;z-index:40;background:#000;overflow:auto"><button class="back" style="position:fixed;top:12px;left:12px;z-index:41" onclick="UI.zoom=null;render()">← ${t('back')}</button><img src="${UI.zoom}" style="width:230%;max-width:none;display:block;margin-top:70px;background:#fff"></div>`:"");
 }
-function go(tab){UI.zoom=null;UI.tab=tab;UI.flow=null;UI.view=null;UI.sheet=null;render();scrollTo(0,0)}
+function go(tab){UI.zoom=null;UI.sv=null;UI.tab=tab;UI.flow=null;UI.view=null;UI.sheet=null;render();scrollTo(0,0)}
 function setLang(l){S.lang=l;UI.sheet=null;save();render()}
 function sheet(){
   if(UI.sheet==="lang")return `<div class="sheet" onclick="UI.sheet=null;render()"><div onclick="event.stopPropagation()"><div class="grab"></div><b style="font-size:18px;display:block;margin-bottom:12px">${t("langc")}</b>${Object.keys(FL).map(l=>`<button class="lg ${S.lang===l?'on':''}" onclick="setLang('${l}')"><span>${FL[l][0]}</span>${FL[l][1]}<span class="r">${S.lang===l?'✓':''}</span></button>`).join("")}</div></div>`;
@@ -366,9 +385,32 @@ function blk(b){
   if(b.t==="h")return `<div style="font-weight:800;margin-top:10px">${esc(b.x)}</div>`;
   return `<p style="margin:4px 0;font-size:14px;line-height:1.5;color:#cfcfd6">${esc(b.x)}</p>`}
 function zoomImg(u){UI.zoom=u;render()}
+const slideUrl=(k,x)=>`slides/${k}/s-${String(x).padStart(2,'0')}.jpg`;
+function openSV(k,ci,j){UI.sv={k,ci,j,z:0};render();svKeys(true);if(!S.svSeen)setTimeout(()=>{S.svSeen=1;save();if(UI.sv)render()},4000)}
+function closeSV(){UI.sv=null;svKeys(false);render()}
+function svGo(d){const v=UI.sv;if(!v)return;const n=BOOKS[v.k].ch[v.ci].n.length;const j=v.j+d;
+  if(j<0||j>=n){if(navigator.vibrate)navigator.vibrate(10);return}v.j=j;v.z=0;render()}
+let _zt=0;function svZoom(){const v=UI.sv,n=Date.now();if(!v||n-_zt<400)return;_zt=n;v.z=v.z?0:1;render()}
+function svView(){const v=UI.sv,c=BOOKS[v.k].ch[v.ci],n=c.n.length,port=innerHeight>innerWidth;
+  return `<div class="sv${port?" rot":""}" ontouchstart="svTS(event)" ontouchend="svTE(event)"><div class="svr">
+  <div class="svs${v.z?" z":""}" ondblclick="svZoom()"><img src="${slideUrl(v.k,c.n[v.j])}" alt=""></div>
+  <div class="svt"><button class="svb" onclick="closeSV()" aria-label="close">✕</button><b>${esc(c.t)}</b><span>${v.j+1} / ${n}</span><button class="svb" onclick="svZoom()" aria-label="zoom">${v.z?"－":"＋"}</button></div>
+  ${v.j>0?`<button class="sva l" onclick="svGo(-1)">‹</button>`:""}${v.j<n-1?`<button class="sva r" onclick="svGo(1)">›</button>`:""}
+  ${port&&!S.svSeen?`<div class="svtip" onclick="S.svSeen=1;save();render()">📱 ${t("svr")}</div>`:""}
+  </div></div>`}
+let _sx=0,_sy=0,_lt=0;
+function svTS(e){const p=e.touches[0];_sx=p.clientX;_sy=p.clientY}
+function svTE(e){const v=UI.sv;if(!v)return;const p=e.changedTouches[0],dx=p.clientX-_sx,dy=p.clientY-_sy,now=Date.now();
+  if(Math.abs(dx)<12&&Math.abs(dy)<12){if(now-_lt<300){svZoom();_lt=0}else _lt=now;return}
+  if(v.z)return;const rot=innerHeight>innerWidth,d=rot?dy:dx,o=rot?dx:dy;
+  if(Math.abs(d)>50&&Math.abs(d)>Math.abs(o))svGo(d<0?1:-1)}
+function _svKey(e){if(!UI.sv)return;if(e.key==="ArrowRight")svGo(1);else if(e.key==="ArrowLeft")svGo(-1);else if(e.key==="Escape")closeSV()}
+function svKeys(on){document[on?"addEventListener":"removeEventListener"]("keydown",_svKey)}
+addEventListener("resize",()=>{if(UI.sv)render()});
 function reader(){const {k,i}=UI.view,c=BOOKS[k].ch[i],n=BOOKS[k].ch.length;
   let h=`<a class="back" onclick="openBook('${k}')">← ${pn(k)}</a><div class="hint">${i+1} ${t("of")} ${n}</div><div class="bar" style="margin-bottom:12px"><i style="width:${(i+1)/n*100}%"></i></div><h1 style="font-size:22px">${esc(c.t)}</h1>`;
-  c.n.forEach(x=>{h+=`<img class="sl" loading="lazy" alt="" onerror="this.outerHTML='<div class=card style=color:#F2B84B>⚠️ Slayd topilmadi. GitHub\'da <b>slides</b> papkasi yuklanganini tekshiring.</div>'" onclick="zoomImg(this.src)" src="slides/${k}/s-${String(x).padStart(2,'0')}.jpg">`});
+  h+=`<div class="svhint">🔍 ${t("svh")}</div>`;
+  c.n.forEach((x,j)=>{h+=`<button class="slw" onclick="openSV('${k}',${i},${j})"><img class="sl" loading="lazy" alt="" onerror="this.parentNode.outerHTML='<div class=card style=color:#F2B84B>⚠️ Slayd topilmadi</div>'" src="${slideUrl(k,x)}"><span class="slz">⤢</span></button>`});
   h+=`<button class="btn" onclick="finishCh('${k}',${i})">${i<n-1?t("nextc"):t("done")}</button>`;if(i>0)h+=`<button class="btn g" onclick="openCh('${k}',${i-1})">${t("prevc")}</button>`;return h}
 function finishCh(k,i){const d=S.done[k]=S.done[k]||[];if(!d.includes(i))d.push(i);save();sync();if(i<BOOKS[k].ch.length-1)openCh(k,i+1);else openBook(k)}
 function startTest(k){const tr=S.tests[k]||{};
