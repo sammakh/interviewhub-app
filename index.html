@@ -49,7 +49,16 @@ h2{font-size:17px;font-weight:800;margin:18px 0 10px}
 .lg.on .r{background:#C24443;border-color:#C24443}
 .back{display:inline-flex;align-items:center;gap:6px;background:#26262e;border:1px solid #4a4a55;color:#fff;font-weight:800;font-size:15px;padding:11px 18px;border-radius:99px;margin:2px 0 14px;cursor:pointer;min-height:44px}.back:active{background:#C24443;border-color:#C24443}
 .tot{background:#17171C;border:1px solid #2a2a30;border-radius:18px;text-align:center;padding:16px;margin:10px 0}
-.tot small{color:#9c9ca5;font-size:13px}.tot div{font-size:30px;font-weight:800;margin-top:4px}.tot div span{font-size:15px;color:#9c9ca5;font-weight:700}
+.tot small{color:#9c9ca5;font-size:13px}.tot div{font-size:30px;font-weight:800;margin-top:4px}.tot s.old{display:block;font-size:15px;color:#9c9ca5;font-weight:600;margin-bottom:2px}
+.tot em.pbadge{display:inline-block;margin-top:8px;font-style:normal;font-size:12px;font-weight:800;color:#3DDC97;background:#12392a;padding:4px 10px;border-radius:99px}
+.promo{display:flex;gap:8px;align-items:center;margin:0 0 10px}
+.promo input{flex:1;min-width:0;background:#17171C;border:1px solid #2a2a30;border-radius:14px;padding:13px 14px;color:#fff;font:inherit;font-weight:700;letter-spacing:.5px;text-transform:uppercase;outline:none}
+.promo input:focus{border-color:#C24443}
+.promo .pbtn{background:#2a2a30;color:#fff;font-weight:800;border-radius:14px;padding:13px 16px;font-size:14px}
+.promo.on{justify-content:space-between;background:#12392a;border:1px solid #1d5a40;border-radius:14px;padding:11px 14px;font-size:13px;color:#3DDC97}
+.promo .lnk{color:#cfcfd6;font-size:12px;font-weight:700;text-decoration:underline}
+.perr{color:#FF6B6C;font-size:12px;font-weight:700;margin:-4px 0 10px 4px}
+.tot div span{font-size:15px;color:#9c9ca5;font-weight:700}
 .li{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin:9px 0;line-height:1.35}
 .li i{width:20px;height:20px;border-radius:10px;background:#12392a;color:#3DDC97;font-style:normal;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
 .chk{display:flex;gap:10px;align-items:center;margin:14px 0 0;font-size:14px}
@@ -107,7 +116,7 @@ uz:{hello:"Salom",start:"Darslarni boshlash ›",startn:"Darslar bepul. Testdan 
 rules:"Shartlar",r1:"Hozir ishtirok <b style='color:#fff'>bepul</b>",r2:"Screeningdan o'tganlarga <b style='color:#fff'>3 tagacha intervyu</b> tashkil qilamiz",r3:"Ish kafolati yo'q: intervyu natijasi sizga bog'liq",
 d:{accounting:"Hisob-kitob va hujjatlar",update:"Yuk holatini kuzatish",safety:"Hujjatlar va xavfsizlik qoidalari",dispatch:"Yuk topish, narx kelishuvi",fleet:"Texnika va ta'mirlash nazorati",eld:"Haydovchi soatlari nazorati",sales:"Mijozlar bilan savdo",recruiting:"Haydovchi yollash"},
 sq:"Tanlovni saqlaymizmi?",sqy:"Siz tanladingiz:",sqn:"Keyin tanlovni o'zgartirish mumkin, lekin to'lovdan keyin emas.",sqok:"Ha, saqlash",back:"Orqaga",
-bpos:"← Pozitsiyalarni o'zgartirish",price:"Xizmat narxi",chosen:"Siz tanladingiz:",totl:"pozitsiya uchun jami",cur:"so'm",inc:"Narxga kiradi:",inc1:"Intervyularni real kompaniyalar bilan tashkil qilish",inc2:"Har bir pozitsiya uchun intervyuga tayyorgarlik",inc3:"CV tayyorlab berish",ready:"Tayyorlik:",readyt:"Intervyuga yaxshi tayyorlanish uchun bepul darslarni o'qing",lessons:"Darslar",cont:"Davom etish ›",
+bpos:"← Pozitsiyalarni o'zgartirish",price:"Xizmat narxi",chosen:"Siz tanladingiz:",totl:"pozitsiya uchun jami",prp:"Promokod",pra:"Qo'llash",prm:"Olib tashlash",prok:"Promokod qo'llandi",prbad:"Promokod noto'g'ri",prexp:"Promokod muddati tugagan",prlim:"Promokod limiti tugagan",prtry:"Ko'p urinish. 10 daqiqadan keyin qayta urining",prtg:"Promokod faqat Telegram ichida ishlaydi",prnet:"Tekshirib bo'lmadi. Internetni tekshiring",cur:"so'm",inc:"Narxga kiradi:",inc1:"Intervyularni real kompaniyalar bilan tashkil qilish",inc2:"Har bir pozitsiya uchun intervyuga tayyorgarlik",inc3:"CV tayyorlab berish",ready:"Tayyorlik:",readyt:"Intervyuga yaxshi tayyorlanish uchun bepul darslarni o'qing",lessons:"Darslar",cont:"Davom etish ›",
 bprice:"← Narxga qaytish",terms:"Asosiy shartlar",t1:"<b>3 tagacha intervyu</b> real kompaniyalar bilan tashkil qilinadi",t2:"Tayyorgarlik va CV tayyorlash narxga kiradi",t3:"<b>Ish kafolati yo'q.</b> Natija sizga bog'liq",t4:"To'lovdan keyin <b>Men</b> bo'limi ochiladi",tn:"To'liq shartlar keyingi bosqichda, shartnomada.",tacc:"Asosiy shartlarni o'qidim",tnext:"Keyingi: shartnoma ›",
 bterms:"← Asosiy shartlarga qaytish",contract:"Shartnoma",cdoc:"Xizmat shartnomasi",cdocs:"O'qish uchun oching",cdesc:"Shartnomada: xizmat tarkibi, tomonlar majburiyati, to'lov tartibi, qaytarish shartlari, ma'lumotlar maxfiyligi.",offersoon:"Shartnoma havolasi tez orada qo'shiladi.",cacc:"Shartnomani o'qidim va roziman",cnext:"Keyingi: to'lov ›",
 bcon:"← Shartnomaga qaytish",paytitle:"To'lov",amount:"To'lov summasi",method:"To'lov usuli",payvia:"orqali to'lash",paynote:"To'lov xavfsiz, to'lov tizimi sahifasida amalga oshadi",paysoon:"To'lov tez orada ulanadi.",
@@ -122,7 +131,7 @@ ru:{hello:"Привет",start:"Начать уроки ›",startn:"Уроки 
 rules:"Условия",r1:"Участие сейчас <b style='color:#fff'>бесплатно</b>",r2:"Прошедшим скрининг организуем <b style='color:#fff'>до 3 собеседований</b>",r3:"Гарантии работы нет: результат зависит от вас",
 d:{accounting:"Учёт и документы",update:"Отслеживание груза",safety:"Документы и правила безопасности",dispatch:"Поиск грузов, торг по цене",fleet:"Контроль техники и ремонта",eld:"Контроль часов водителей",sales:"Продажи клиентам",recruiting:"Найм водителей"},
 sq:"Сохранить выбор?",sqy:"Вы выбрали:",sqn:"Позже выбор можно изменить, но не после оплаты.",sqok:"Да, сохранить",back:"Назад",
-bpos:"← Изменить позиции",price:"Стоимость услуги",chosen:"Вы выбрали:",totl:"итого за позиции",cur:"сум",inc:"Что входит:",inc1:"Собеседования с реальными компаниями",inc2:"Подготовка к собеседованию по каждой позиции",inc3:"Составление CV",ready:"Готовность:",readyt:"Читайте бесплатные уроки, чтобы хорошо подготовиться",lessons:"Уроки",cont:"Продолжить ›",
+bpos:"← Изменить позиции",price:"Стоимость услуги",chosen:"Вы выбрали:",totl:"итого за позиции",cur:"сум",prp:"Промокод",pra:"Применить",prm:"Убрать",prok:"Промокод применён",prbad:"Неверный промокод",prexp:"Срок промокода истёк",prlim:"Лимит промокода исчерпан",prtry:"Слишком много попыток. Повторите через 10 минут",prtg:"Промокод работает только внутри Telegram",prnet:"Не удалось проверить. Проверьте интернет",inc:"Что входит:",inc1:"Собеседования с реальными компаниями",inc2:"Подготовка к собеседованию по каждой позиции",inc3:"Составление CV",ready:"Готовность:",readyt:"Читайте бесплатные уроки, чтобы хорошо подготовиться",lessons:"Уроки",cont:"Продолжить ›",
 bprice:"← Назад к цене",terms:"Основные условия",t1:"<b>До 3 собеседований</b> с реальными компаниями",t2:"Подготовка и CV входят в стоимость",t3:"<b>Гарантии работы нет.</b> Результат зависит от вас",t4:"После оплаты откроется раздел <b>Я</b>",tn:"Полные условия — на следующем этапе, в договоре.",tacc:"Я прочитал(а) основные условия",tnext:"Далее: договор ›",
 bterms:"← Назад к условиям",contract:"Договор",cdoc:"Договор на услуги",cdocs:"Открыть для чтения",cdesc:"В договоре: состав услуги, обязанности сторон, порядок оплаты, условия возврата, конфиденциальность данных.",offersoon:"Ссылка на договор скоро появится.",cacc:"Я прочитал(а) договор и согласен(на)",cnext:"Далее: оплата ›",
 bcon:"← Назад к договору",paytitle:"Оплата",amount:"Сумма оплаты",method:"Способ оплаты",payvia:"— оплатить",paynote:"Оплата безопасна и проходит на странице платёжной системы",paysoon:"Оплата скоро будет подключена.",
@@ -137,7 +146,7 @@ en:{hello:"Hello",start:"Start lessons ›",startn:"Lessons are free. Pass the t
 rules:"Terms",r1:"Participation is <b style='color:#fff'>free</b> for now",r2:"Those who pass screening get <b style='color:#fff'>up to 3 interviews</b>",r3:"No job guarantee: the interview result is up to you",
 d:{accounting:"Bookkeeping and documents",update:"Tracking load status",safety:"Documents and safety rules",dispatch:"Finding loads, rate negotiation",fleet:"Equipment and repair control",eld:"Driver hours monitoring",sales:"Selling to clients",recruiting:"Hiring drivers"},
 sq:"Save your selection?",sqy:"You selected:",sqn:"You can change it later, but not after payment.",sqok:"Yes, save",back:"Back",
-bpos:"← Change positions",price:"Service price",chosen:"You selected:",totl:"total for positions",cur:"UZS",inc:"Included:",inc1:"Interviews with real companies",inc2:"Interview preparation for each position",inc3:"CV preparation",ready:"Readiness:",readyt:"Read the free lessons to prepare well",lessons:"Lessons",cont:"Continue ›",
+bpos:"← Change positions",price:"Service price",chosen:"You selected:",totl:"total for positions",cur:"UZS",prp:"Promo code",pra:"Apply",prm:"Remove",prok:"Promo code applied",prbad:"Invalid promo code",prexp:"Promo code has expired",prlim:"Promo code limit reached",prtry:"Too many attempts. Try again in 10 minutes",prtg:"Promo codes work only inside Telegram",prnet:"Could not check. Check your connection",inc:"Included:",inc1:"Interviews with real companies",inc2:"Interview preparation for each position",inc3:"CV preparation",ready:"Readiness:",readyt:"Read the free lessons to prepare well",lessons:"Lessons",cont:"Continue ›",
 bprice:"← Back to price",terms:"Key terms",t1:"<b>Up to 3 interviews</b> with real companies",t2:"Preparation and CV are included in the price",t3:"<b>No job guarantee.</b> The result is up to you",t4:"The <b>Me</b> tab unlocks after payment",tn:"Full terms are in the next step, the contract.",tacc:"I have read the key terms",tnext:"Next: contract ›",
 bterms:"← Back to key terms",contract:"Contract",cdoc:"Service contract",cdocs:"Open to read",cdesc:"The contract covers: service scope, obligations, payment, refund terms, data privacy.",offersoon:"The contract link will be added soon.",cacc:"I have read and accept the contract",cnext:"Next: payment ›",
 bcon:"← Back to contract",paytitle:"Payment",amount:"Amount",method:"Payment method",payvia:"— pay",paynote:"Payment is secure and happens on the payment system page",paysoon:"Payment will be connected soon.",
@@ -148,7 +157,7 @@ steps:"Your steps",sp:"Payment",spd:"Received",scv:"CV preparation",scvd:"Waitin
 home:"Home",reels:"Reels",les:"Lessons",me:"Me",reelst:"Video lessons coming soon",
 ls:"Free lessons",soon:"Soon",ch:"ch.",nextc:"Next chapter ›",done:"Finish",prevc:"Previous",
 test:"Start test ›",testoff:"Tests are temporarily off",q:"Question",of:"/",res:"Congratulations!",resp:"Test passed",fail:"Not enough yet",need:"To pass you need at least",retry:"Try again",waitr:"You can retry:",nextles:"Next lesson ›",allok:"All lessons completed! 🎉",allokt:"You finished all selected lessons. Congratulations!"}};
-const S={lang:null,picks:[],stage:0,done:{},tests:{}};
+const S={lang:null,picks:[],stage:0,promo:null,done:{},tests:{}};
 let UI={tab:"home",flow:null,view:null,sheet:null,pm:"Payme",acc:false};
 const KEY="ih_v2";
 try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
@@ -163,9 +172,10 @@ function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.rando
 const FL={uz:["🇺🇿","O'zbekcha"],ru:["🇷🇺","Русский"],en:["🇬🇧","English"]};
 let QUOTE=null;
 const total=()=>S.picks.reduce((a,k)=>a+(PRICES[k]||0),0);
+const net=()=>S.promo?total()-Math.round(total()*S.promo.pct/100):total();
 const money=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g," ");
-const priceHtml=()=>QUOTE?esc(QUOTE):(S.picks.length?`${money(total())} <span>${t("cur")}</span>`:"—");
-const priceTxt=()=>QUOTE?QUOTE:(S.picks.length?`${money(total())} ${t("cur")}`:"—");
+const priceHtml=()=>QUOTE?esc(QUOTE):(S.picks.length?(S.promo?`<s class="old">${money(total())}</s>`:"")+`${money(net())} <span>${t("cur")}</span>`:"—");
+const priceTxt=()=>QUOTE?QUOTE:(S.picks.length?`${money(net())} ${t("cur")}`:"—");
 function head(){return `<div class="top"><div class="lk"><span class="ih">ih</span><span class="wm">interview<br>hub</span>${S.lang?`<button class="pl" onclick="UI.sheet='lang';render()">🌐 ${S.lang.toUpperCase()} ▾</button>`:""}</div></div>`}
 function nav(){const l=S.stage<5;return `<div class="nav">${[["home",t("home")],["reels",t("reels")],["lessons",t("les")],["me",t("me")+(l?" 🔒":"")]].map(x=>`<button class="${UI.tab===x[0]&&!UI.flow?'a':''}" onclick="go('${x[0]}')">${x[1]}</button>`).join("")}</div>`}
 function render(){
@@ -190,11 +200,20 @@ function home(){
   h+=`<h2 style="margin-top:22px">${t("rules")}</h2><div class="card" style="font-size:14px;line-height:1.6;color:#cfcfd6">• ${t("r1")}<br>• ${t("r2")}<br>• ${t("r3")}</div>`;
   return h}
 function togglePick(k){if(S.stage>=5)return;const i=S.picks.indexOf(k);if(i>=0)S.picks.splice(i,1);else if(S.picks.length<3)S.picks.push(k);save();render()}
+function promoBox(){if(S.stage>=5)return "";
+  if(S.promo)return `<div class="promo on"><span>🏷 ${t("prok")}: <b>${esc(S.promo.code)}</b></span><button class="lnk" onclick="applyPromo('')">${t("prm")}</button></div>`;
+  return `<div class="promo"><input id="pc" placeholder="${t("prp")}" maxlength="20" autocomplete="off" autocapitalize="characters" value="${esc(UI.pc||"")}" oninput="UI.pc=this.value" onkeydown="if(event.key==='Enter')applyPromo()"><button class="pbtn" ${UI.pbusy?"disabled":""} onclick="applyPromo()">${UI.pbusy?"…":t("pra")}</button></div>${UI.perr?`<div class="perr">${UI.perr}</div>`:""}`}
+async function applyPromo(c){const code=(c===undefined?(UI.pc||""):c).trim().toUpperCase();
+  if(c===undefined&&!code)return;UI.pbusy=true;UI.perr="";render();
+  const r=API_URL?await api("/promo",{code,picks:S.picks}):null;UI.pbusy=false;
+  if(r&&r.ok){S.promo=r.percent?{code:r.code,pct:r.percent}:null;UI.pc="";save();sync()}
+  else UI.perr=t(!r?"prnet":r.error==="bad initData"?"prtg":r.error==="limit"?"prlim":r.error==="expired"?"prexp":r.error==="tries"?"prtry":"prbad");
+  render()}
 function confirmPicks(){if(S.stage<1)S.stage=1;save();api("/picks",{picks:S.picks});UI.sheet=null;UI.flow=1;render();scrollTo(0,0)}
 function readiness(){const ks=S.picks.filter(k=>BOOKS[k]);return [ks.filter(k=>(S.tests[k]||{}).pass).length,ks.length]}
 function flow(){const f=UI.flow;
   if(f===1){const [a,b]=readiness();return `<a class="back" onclick="go('home')">${t("bpos")}</a><h1>${t("price")}</h1><div class="hint">${t("chosen")}</div><div style="margin:10px 0 4px">${S.picks.map(k=>`<span class="chip">${pn(k)}</span>`).join("")}</div>
-  <div class="tot"><small>${S.picks.length} ${t("totl")}</small><div>${priceHtml()}</div></div>
+  <div class="tot"><small>${S.picks.length} ${t("totl")}</small><div>${priceHtml()}</div>${S.promo?`<em class="pbadge">🏷 ${esc(S.promo.code)} · −${S.promo.pct}%</em>`:""}</div>${promoBox()}
   <div class="card"><b style="font-size:14px">${t("inc")}</b><div class="li"><i>✓</i>${t("inc1")}</div><div class="li"><i>✓</i>${t("inc2")}</div><div class="li"><i>✓</i>${t("inc3")}</div></div>
   ${b?`<div class="card" style="background:#2a2412;border-color:#4a3d18;display:flex;gap:12px;align-items:center"><span style="font-size:22px">📘</span><div style="font-size:12px;line-height:1.4;flex:1"><b style="color:#F2B84B;font-size:13px">${t("ready")} ${a} / ${b}</b><br>${t("readyt")}</div><button style="color:#F2B84B;font-weight:800;font-size:13px" onclick="go('lessons')">${t("lessons")} ›</button></div>`:""}
   <button class="btn" onclick="UI.flow=2;render();scrollTo(0,0)">${t("cont")}</button>`}

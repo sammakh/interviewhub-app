@@ -14,6 +14,8 @@ import io
 import json
 import logging
 import os
+import re
+import sqlite3
 import time
 from contextlib import closing
 from datetime import datetime, timedelta, timezone
@@ -99,8 +101,15 @@ def init_tables(db):
                 id INTEGER PRIMARY KEY AUTOINCREMENT, tg_id INTEGER, position TEXT,
                 score INTEGER, passed INTEGER, at TEXT);
             CREATE INDEX IF NOT EXISTS ix_attempts_user ON test_attempts (tg_id);
+            CREATE TABLE IF NOT EXISTS promo_codes (
+                code TEXT PRIMARY KEY, percent INTEGER, max_uses INTEGER, expires_on TEXT,
+                active INTEGER DEFAULT 1, note TEXT, created_at TEXT);
             """
         )
+        cols = {r[1] for r in con.execute("PRAGMA table_info(app_state)")}
+        for col, typ in (("promo_code", "TEXT"), ("promo_pct", "INTEGER DEFAULT 0"), ("base_amount", "INTEGER DEFAULT 0")):
+            if col not in cols:
+                con.execute(f"ALTER TABLE app_state ADD COLUMN {col} {typ}")
         con.commit()
 
 
@@ -193,15 +202,69 @@ async def api_hb(request):
 
 
 def store_picks(con, uid, picks):
-    r = con.execute("SELECT pay_status FROM app_state WHERE tg_id=?", (uid,)).fetchone()
+    r = con.execute("SELECT pay_status, promo_pct FROM app_state WHERE tg_id=?", (uid,)).fetchone()
     if r and r["pay_status"] == "paid":
         return False  # to'lovdan keyin tanlov o'zgarmaydi
-    amount = sum(PRICES[k] for k in picks)
+    base = sum(PRICES[k] for k in picks)
     con.execute(
-        "UPDATE app_state SET picks=?, amount=?, picks_at=? WHERE tg_id=?",
-        (json.dumps(picks), amount, now_iso(), uid),
+        "UPDATE app_state SET picks=?, base_amount=?, amount=?, picks_at=? WHERE tg_id=?",
+        (json.dumps(picks), base, apply_pct(base, (r["promo_pct"] if r else 0) or 0), now_iso(), uid),
     )
     return True
+
+
+def apply_pct(base, pct):
+    """Chegirmali summa. Ilovadagi net() bilan bir xil: base - round(base*pct/100)."""
+    return base - int(round(base * pct / 100))
+
+
+PROMO_RE = re.compile(r"^[A-Z0-9_-]{3,20}$")
+_promo_tries = {}
+
+
+def today_tz():
+    return datetime.now(TZ).date().isoformat()
+
+
+async def api_promo(request):
+    """Promokodni tekshiradi va foydalanuvchiga biriktiradi. Bo'sh kod = olib tashlash."""
+    user, body = await read_api(request)
+    uid, code = user["id"], str(body.get("code") or "").strip().upper()[:20]
+    now = time.time()
+    tries = [t for t in _promo_tries.get(uid, []) if now - t < 600]
+    with closing(request.app["db"]()) as con:
+        ensure_state(con, user)
+        st = con.execute("SELECT pay_status, picks FROM app_state WHERE tg_id=?", (uid,)).fetchone()
+        if st["pay_status"] == "paid":
+            return json_resp({"ok": False, "error": "locked"})
+        picks = clean_picks(body.get("picks")) or clean_picks(json.loads(st["picks"] or "[]"))
+        base = sum(PRICES[k] for k in picks)
+        if not code:
+            con.execute("UPDATE app_state SET promo_code=NULL, promo_pct=0, base_amount=?, amount=? WHERE tg_id=?",
+                        (base, base, uid))
+            con.commit()
+            return json_resp({"ok": True, "percent": 0, "base": base, "amount": base})
+        if len(tries) >= 10:
+            return json_resp({"ok": False, "error": "tries"})
+        row = con.execute("SELECT * FROM promo_codes WHERE code=?", (code,)).fetchone() if PROMO_RE.match(code) else None
+        err = None
+        if not row or not row["active"]:
+            err = "invalid"
+        elif row["expires_on"] and row["expires_on"] < today_tz():
+            err = "expired"
+        elif row["max_uses"]:
+            used = con.execute("SELECT COUNT(*) FROM app_state WHERE promo_code=? AND tg_id!=?", (code, uid)).fetchone()[0]
+            if used >= row["max_uses"]:
+                err = "limit"
+        if err:
+            tries.append(now)
+            _promo_tries[uid] = tries
+            return json_resp({"ok": False, "error": err})
+        pct = row["percent"]
+        con.execute("UPDATE app_state SET promo_code=?, promo_pct=?, picks=?, base_amount=?, amount=? WHERE tg_id=?",
+                    (code, pct, json.dumps(picks), base, apply_pct(base, pct), uid))
+        con.commit()
+    return json_resp({"ok": True, "code": code, "percent": pct, "base": base, "amount": apply_pct(base, pct)})
 
 
 async def api_picks(request):
@@ -566,6 +629,9 @@ async def admin_user(request):
                 ("Summa", f"<b>{money(s.get('amount'))}</b>"),
                 ("To'lov holati", tag(PAY_LABEL, pay) if PAYMENTS_ON or pay != "none"
                  else "<span class='tag'>Click/Payme hali ulanmagan</span>")]
+        if s.get("promo_code"):
+            rows.insert(1, ("Promokod", f"<b>{esc(s['promo_code'])}</b> −{s.get('promo_pct') or 0}% "
+                                        f"<small>(chegirmasiz {money(s.get('base_amount'))})</small>"))
         if s.get("pay_provider"):
             rows.append(("Tanlagan to'lov usuli", esc(s["pay_provider"])))
         if s.get("paid_at"):
@@ -662,14 +728,15 @@ async def admin_export(request):
     buf = io.StringIO()
     w = csv.writer(buf)
     w.writerow(["tg_id", "ism", "username", "telefon", "yosh", "ingliz", "tajriba", "tungi_smena", "oylik_usd",
-                "screening", "pozitsiyalar", "summa_som", "tolov", "tolov_tasdiqlangan", "ilovada_daqiqa",
+                "screening", "pozitsiyalar", "summa_som", "promokod", "tolov", "tolov_tasdiqlangan", "ilovada_daqiqa",
                 "kirishlar", "darslar_foiz", "testlar", "royxat_sanasi", "oxirgi_faollik"])
     for p in people:
         u, s = p["u"], p["s"]
         w.writerow([
             p["uid"], p["name"], p["username"] or "", u.get("phone", ""), u.get("age", ""), u.get("level", ""),
             u.get("exp", ""), u.get("shift", ""), u.get("salary_usd", ""), p["screen"] or "",
-            ", ".join(PN.get(k, k) for k in p["picks"]), s.get("amount") or "", p["pay"], fmt_dt(s.get("paid_at")),
+            ", ".join(PN.get(k, k) for k in p["picks"]), s.get("amount") or "",
+            f"{s['promo_code']} -{s.get('promo_pct')}%" if s.get("promo_code") else "", p["pay"], fmt_dt(s.get("paid_at")),
             round((s.get("total_sec") or 0) / 60), s.get("sessions") or 0,
             "" if p["lesson_pct"] is None else p["lesson_pct"],
             "; ".join(f"{PN.get(k, k)} {v}/10" for k, v in p["best"].items()), fmt_dt(p["created"]),
@@ -679,6 +746,85 @@ async def admin_export(request):
         body=buf.getvalue().encode("utf-8-sig"), content_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=interviewhub_nomzodlar.csv"},
     )
+
+
+async def admin_promo(request):
+    db = request.app["db"]
+    with closing(db()) as con:
+        codes = con.execute("SELECT * FROM promo_codes ORDER BY created_at DESC").fetchall()
+        used = dict(con.execute("SELECT promo_code, COUNT(*) FROM app_state WHERE promo_code IS NOT NULL GROUP BY promo_code").fetchall())
+        paid = dict(con.execute("SELECT promo_code, COUNT(*) FROM app_state WHERE promo_code IS NOT NULL AND pay_status='paid' GROUP BY promo_code").fetchall())
+    csrf = esc(csrf_token(request))
+    msg = {"ok": "Promokod yaratildi.", "dup": "Bunday kod allaqachon bor.", "bad": "Ma'lumot noto'g'ri: kod 3–20 ta lotin harfi/raqam, foiz 1–100.",
+           "tg": "Holat o'zgartirildi."}.get(request.query.get("m", ""), "")
+    today = today_tz()
+    rows = []
+    for r in codes:
+        if not r["active"]:
+            st = ("O'chirilgan", "")
+        elif r["expires_on"] and r["expires_on"] < today:
+            st = ("Muddati o'tgan", "no")
+        elif r["max_uses"] and used.get(r["code"], 0) >= r["max_uses"]:
+            st = ("Limit tugagan", "am")
+        else:
+            st = ("Faol", "ok")
+        btn = "O'chirish" if r["active"] else "Yoqish"
+        note = f"<br><small>{esc(r['note'])}</small>" if r["note"] else ""
+        rows.append(
+            f"<tr><td><b>{esc(r['code'])}</b>{note}</td>"
+            f"<td class='num'>−{r['percent']}%</td>"
+            f"<td class='num'>{used.get(r['code'], 0)} / {r['max_uses'] or '∞'}</td>"
+            f"<td class='num'>{paid.get(r['code'], 0)}</td>"
+            f"<td class='num'>{esc(r['expires_on'] or 'cheksiz')}</td>"
+            f"<td><span class='tag {st[1]}'>{st[0]}</span></td>"
+            f"<td><form method='post' action='/admin/promo/{esc(r['code'])}/toggle'><input type='hidden' name='csrf' value='{csrf}'>"
+            f"<button class='btn ghost'>{btn}</button></form></td></tr>"
+        )
+    body = f"""
+<h1>Promokodlar</h1>
+{f"<div class='flash'>{esc(msg)}</div>" if msg else ""}
+<section class='card' style='margin:14px 0'><h2>Yangi promokod</h2>
+<form method='post' action='/admin/promo' class='pf'>
+ <input type='hidden' name='csrf' value='{csrf}'>
+ <label>Kod<input name='code' required maxlength='20' pattern='[A-Za-z0-9_\\-]{{3,20}}' placeholder='BAHOR20' style='text-transform:uppercase'></label>
+ <label>Chegirma, %<input name='percent' type='number' min='1' max='100' required placeholder='20'></label>
+ <label>Necha kishi ishlata oladi<input name='max_uses' type='number' min='1' placeholder='cheksiz'></label>
+ <label>Amal qilish muddati (oxirgi kun)<input name='expires_on' type='date'></label>
+ <label class='wide'>Izoh (ixtiyoriy)<input name='note' maxlength='80' placeholder='Masalan: Instagram aksiyasi'></label>
+ <button class='btn'>Yaratish</button>
+</form><small class='hint'>Kod ilova kodida ko'rinmaydi, faqat serverda tekshiriladi. To'lovdan keyin nomzodning promokodi o'zgarmaydi.</small></section>
+<div class='tbl'><table><thead><tr><th>Kod</th><th>Chegirma</th><th>Ishlatgan / limit</th><th>To'lagan</th><th>Muddati</th><th>Holat</th><th></th></tr></thead>
+<tbody>{''.join(rows) or "<tr><td colspan='7' class='empty'>Hali promokod yo'q</td></tr>"}</tbody></table></div>"""
+    return page("Promokodlar", body)
+
+
+async def admin_promo_create(request):
+    f = request["form"]
+    code = str(f.get("code", "")).strip().upper()
+    try:
+        pct = int(f.get("percent", ""))
+        max_uses = int(f["max_uses"]) if str(f.get("max_uses", "")).strip() else None
+    except ValueError:
+        raise web.HTTPFound("/admin/promo?m=bad")
+    exp = str(f.get("expires_on", "")).strip() or None
+    if not PROMO_RE.match(code) or not 1 <= pct <= 100 or (max_uses is not None and max_uses < 1) \
+            or (exp and not re.match(r"^\d{4}-\d{2}-\d{2}$", exp)):
+        raise web.HTTPFound("/admin/promo?m=bad")
+    with closing(request.app["db"]()) as con:
+        try:
+            con.execute("INSERT INTO promo_codes (code, percent, max_uses, expires_on, active, note, created_at) VALUES (?,?,?,?,1,?,?)",
+                        (code, pct, max_uses, exp, str(f.get("note", "")).strip()[:80] or None, now_iso()))
+            con.commit()
+        except sqlite3.IntegrityError:
+            raise web.HTTPFound("/admin/promo?m=dup")
+    raise web.HTTPFound("/admin/promo?m=ok")
+
+
+async def admin_promo_toggle(request):
+    with closing(request.app["db"]()) as con:
+        con.execute("UPDATE promo_codes SET active=1-active WHERE code=?", (request.match_info["code"],))
+        con.commit()
+    raise web.HTTPFound("/admin/promo?m=tg")
 
 
 async def health(request):
@@ -699,7 +845,7 @@ CSS = """
 header{background:var(--brand);color:#fff;padding:12px 24px;display:flex;align-items:center;justify-content:space-between}
 header .lg{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px}
 header .ih{width:32px;height:32px;border-radius:50%;background:#fff;color:#0b0b0f;display:flex;align-items:center;justify-content:center;font-weight:800}
-header a{color:#fff;opacity:.85;text-decoration:none;font-size:13px}
+header a{color:#fff;opacity:.85;text-decoration:none;font-size:13px}header nav{display:flex;gap:16px}header a:hover{opacity:1}
 main{max-width:1280px;margin:0 auto;padding:20px 16px 48px}
 h1{font-size:22px;margin:0}h2{font-size:15px;margin:0 0 12px}small,.hint{color:var(--hint);font-size:12px}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:16px}
@@ -724,6 +870,7 @@ thead th{font-size:12px;color:var(--hint);font-weight:600;white-space:nowrap;pos
 .meter{height:8px;background:var(--line);border-radius:99px;overflow:hidden;min-width:80px}.meter i{display:block;height:100%;background:var(--brand)}
 video{width:100%;max-height:360px;border-radius:10px;margin-top:12px;background:#000}
 .flash{background:var(--okbg);color:var(--ok);padding:10px 14px;border-radius:10px;margin-bottom:12px;font-weight:600}
+.pf{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;align-items:end;margin-bottom:8px}.pf label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--hint)}.pf .wide{grid-column:span 2}@media (max-width:600px){.pf .wide{grid-column:auto}}
 .login{max-width:360px;margin:12vh auto;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
 .login input{width:100%;margin:14px 0}.login .btn{width:100%}.err{color:var(--no);margin-top:10px}
 @media (max-width:600px){header{padding:12px 16px}.grid{grid-template-columns:1fr}}
@@ -735,8 +882,9 @@ LOGIN_HTML = """<form class='login' method='post' action='/admin/login'><h1>Inte
 
 
 def page(title, body, nav=True, status=200):
-    head = ("<header><div class='lg'><span class='ih'>ih</span>Interview Hub · Admin</div>"
-            "<a href='/admin/logout'>Chiqish</a></header>") if nav else ""
+    head = ("<header><div class='lg'><span class='ih'>ih</span>Interview Hub · Admin</div><nav>"
+            "<a href='/admin'>Nomzodlar</a><a href='/admin/promo'>Promokodlar</a>"
+            "<a href='/admin/logout'>Chiqish</a></nav></header>") if nav else ""
     doc = (f"<!doctype html><html lang='uz'><head><meta charset='utf-8'>"
            f"<meta name='viewport' content='width=device-width,initial-scale=1'><meta name='robots' content='noindex'>"
            f"<title>{esc(title)} · Interview Hub</title><style>{CSS}</style></head>"
@@ -754,7 +902,8 @@ def build_app(*, bot, db, token, on_paid, on_decide):
     app["secret"] = hashlib.sha256(f"ih-admin|{token}|{password}".encode()).digest()
     app["origins"] = {o.strip() for o in os.getenv("ALLOWED_ORIGINS", "https://sammakh.github.io").split(",") if o.strip()}
     for path, h in [("/hb", api_hb), ("/picks", api_picks), ("/sync", api_sync), ("/result", api_result),
-                    ("/accept", api_accept), ("/pay", api_pay), ("/status", api_status), ("/quote", api_quote)]:
+                    ("/accept", api_accept), ("/pay", api_pay), ("/status", api_status), ("/quote", api_quote),
+                    ("/promo", api_promo)]:
         app.router.add_post("/api" + path, h)
         app.router.add_route("OPTIONS", "/api" + path, h)
     app.router.add_get("/", root)
@@ -768,6 +917,9 @@ def build_app(*, bot, db, token, on_paid, on_decide):
     app.router.add_get(r"/admin/u/{uid:\d+}/video", require_admin(admin_video))
     app.router.add_post(r"/admin/u/{uid:\d+}/pay", require_admin(admin_pay))
     app.router.add_post(r"/admin/u/{uid:\d+}/screen", require_admin(admin_screen))
+    app.router.add_get("/admin/promo", require_admin(admin_promo))
+    app.router.add_post("/admin/promo", require_admin(admin_promo_create))
+    app.router.add_post(r"/admin/promo/{code:[A-Z0-9_-]{3,20}}/toggle", require_admin(admin_promo_toggle))
     return app
 
 
