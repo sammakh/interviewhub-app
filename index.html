@@ -236,6 +236,32 @@ body{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
 .ls-say b{display:block;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--mu);margin-bottom:3px}
 .ls-say.me{margin-left:auto;background:rgba(210,63,64,.16);border-color:rgba(255,107,108,.3);border-radius:16px 16px 4px 16px}.ls-say.me b{color:#FF8A8B}
 .ls-open{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:6px;padding:10px;border-radius:12px;border:1px dashed var(--ln2);color:var(--mu);font-size:13px;font-weight:700}
+
+/* ===== Reels ===== */
+body.reels{padding-bottom:0;background:#000}
+body.reels .pad{padding:0;max-width:none;animation:none}
+.rf{position:fixed;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;background:#000;overscroll-behavior:contain;scrollbar-width:none}
+.rf::-webkit-scrollbar{display:none}
+.rv{position:relative;height:100vh;height:100dvh;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;background:#000}
+.rv video{position:absolute;left:0;right:0;top:calc(8px + env(safe-area-inset-top));bottom:calc(178px + env(safe-area-inset-bottom));width:100%;height:auto;max-height:none;object-fit:contain}
+.rv video{height:calc(100% - 186px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+.rv:after{content:"";position:absolute;left:0;right:0;bottom:0;height:calc(186px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(0,0,0,0),#000 30%);pointer-events:none}
+.rtap{position:absolute;left:0;right:0;top:0;bottom:calc(178px + env(safe-area-inset-bottom));z-index:1}
+.rside{position:absolute;right:12px;bottom:calc(98px + env(safe-area-inset-bottom));z-index:3;display:flex;flex-direction:row;gap:14px;align-items:flex-start}
+.rbtn{display:flex;flex-direction:column;align-items:center;gap:3px;color:#fff;text-align:center}
+.rbtn .rico{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.15)}
+.rbtn b{font-size:13px;font-weight:800;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.rbtn.pop .rico{animation:rpop .35s var(--ease)}
+@keyframes rpop{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+.rcap{position:absolute;left:14px;right:132px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:3;color:#fff}
+.rpi{font-size:17px;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.rds{font-size:13px;opacity:.85;margin-top:4px;line-height:1.4}
+.rgo{margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:99px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.25);color:#fff;font-weight:800;font-size:13px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.rheart{position:absolute;left:50%;top:40%;z-index:2;font-size:96px;transform:translate(-50%,-50%) scale(0);opacity:0;pointer-events:none;filter:drop-shadow(0 6px 20px rgba(0,0,0,.4))}
+.rheart.go{animation:rheart .8s var(--ease)}
+@keyframes rheart{0%{transform:translate(-50%,-50%) scale(0);opacity:0}25%{transform:translate(-50%,-50%) scale(1.15);opacity:1}55%{transform:translate(-50%,-50%) scale(.95);opacity:1}100%{transform:translate(-50%,-60%) scale(1);opacity:0}}
+.rsnd{position:absolute;top:calc(16px + env(safe-area-inset-top));right:14px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:18px;pointer-events:none}
+.rsnd.go{animation:rpop .35s var(--ease)}
 </style></head><body>
 <div id="app"></div>
 <script>
@@ -273,7 +299,7 @@ pend:"To'lov tekshirilmoqda",pendt:"To'lov tizimidan tasdiq kutilmoqda. Odatda b
 langt:"Tilni tanlang",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",lang:"Til",
 nm:"Kompaniya nomi",nmp:"Pozitsiya · sana",myint:"Mening intervyularim",sett:"Sozlamalar",mylock:"To'lovdan keyin ochiladi",mylocks:"Intervyular, CV va mock intervyu shu yerda bo'ladi",mygo:"To'lovga o'tish ›",
 steps:"Sizning qadamlaringiz",sp:"To'lov",spd:"Qabul qilindi",scv:"CV tayyorlash",scvd:"Ma'lumot kutilmoqda",scall:"Jamoa bilan call",scalld:"Vaqt tanlang",sint:"Intervyu",sintd:"Tayyorlanmoqda",wait:"Kompaniya tanlanmoqda",
-home:"Bosh sahifa",reels:"Reels",les:"Darslar",me:"Men",reelst:"Video darslar tez orada",
+home:"Bosh sahifa",reels:"Reels",rgo:"Darsni ochish",rpk:"Pozitsiyani tanlash",rsh:"Ulashish",les:"Darslar",me:"Men",reelst:"Video darslar tez orada",
 ls:"Bepul darslar",soon:"Tez orada",ch:"bob",rmt:"Matn",rms:"Slaydlar",rvs:"Slaydni ko'rish",svh:"Slaydni bosing — to'liq ekranda ochiladi",svr:"Telefonni yon tomonga burang — slayd kattaroq ko'rinadi",nextc:"Keyingi bob ›",done:"Tugatish",prevc:"Oldingi bob",
 test:"Testni boshlash ›",testoff:"Test hozircha o'chirilgan",q:"Savol",of:"/",res:"Tabriklaymiz!",resp:"Test topshirildi",fail:"Hali yetarli emas",need:"O'tish uchun kamida",retry:"Qayta urinish",waitr:"Qayta urinish mumkin:",nextles:"Keyingi darsga o'tish ›",allok:"Barcha darslar tugadi! 🎉",allokt:"Siz tanlangan hamma darslarni yakunladingiz. Tabriklaymiz!"},
 ru:{hello:"Привет",start:"Начать уроки ›",st1:"позиций",st2:"бесплатных курсов",st3:"собеседования",startn:"Уроки бесплатные. После теста откроется следующий этап.",pick:"Выберите позиции для собеседований",pickh:"До 3 позиций. Организуем собеседования по вашему выбору.",picked:"Выбрано:",clear:"Очистить",save:"Сохранить",
@@ -288,7 +314,7 @@ pend:"Проверяем оплату",pendt:"Ожидаем подтвержд�
 langt:"Выберите язык",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",lang:"Язык",
 nm:"Название компании",nmp:"Позиция · дата",myint:"Мои собеседования",sett:"Настройки",mylock:"Откроется после оплаты",mylocks:"Здесь будут ваши собеседования, CV и mock-интервью",mygo:"Перейти к оплате ›",
 steps:"Ваши шаги",sp:"Оплата",spd:"Принята",scv:"Подготовка CV",scvd:"Ждём данные",scall:"Звонок с командой",scalld:"Выберите время",sint:"Собеседование",sintd:"Готовится",wait:"Подбираем компанию",
-home:"Главная",reels:"Reels",les:"Уроки",me:"Я",reelst:"Видеоуроки скоро",
+home:"Главная",reels:"Reels",rgo:"Открыть урок",rpk:"Выбрать позицию",rsh:"Поделиться",les:"Уроки",me:"Я",reelst:"Видеоуроки скоро",
 ls:"Бесплатные уроки",soon:"Скоро",ch:"гл.",rmt:"Текст",rms:"Слайды",rvs:"Открыть слайд",svh:"Нажмите на слайд — откроется на весь экран",svr:"Поверните телефон боком — слайд будет крупнее",nextc:"Следующая глава ›",done:"Завершить",prevc:"Назад",
 test:"Начать тест ›",testoff:"Тест временно отключён",q:"Вопрос",of:"/",res:"Поздравляем!",resp:"Тест сдан",fail:"Пока недостаточно",need:"Для успеха нужно минимум",retry:"Повторить",waitr:"Повтор возможен:",nextles:"К следующему уроку ›",allok:"Все уроки пройдены! 🎉",allokt:"Вы завершили все выбранные уроки. Поздравляем!"},
 en:{hello:"Hello",start:"Start lessons ›",st1:"positions",st2:"free courses",st3:"interviews",startn:"Lessons are free. Pass the test to unlock the next step.",pick:"Choose interview positions",pickh:"Up to 3. We arrange interviews for your choice.",picked:"Selected:",clear:"Clear",save:"Save",
@@ -303,7 +329,7 @@ pend:"Checking payment",pendt:"Waiting for confirmation from the payment system.
 langt:"Choose language",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",lang:"Language",
 nm:"Company name",nmp:"Position · date",myint:"My interviews",sett:"Settings",mylock:"Opens after payment",mylocks:"Your interviews, CV and mock interview will appear here",mygo:"Go to payment ›",
 steps:"Your steps",sp:"Payment",spd:"Received",scv:"CV preparation",scvd:"Waiting for info",scall:"Call with the team",scalld:"Pick a time",sint:"Interview",sintd:"Being prepared",wait:"Company being selected",
-home:"Home",reels:"Reels",les:"Lessons",me:"Me",reelst:"Video lessons coming soon",
+home:"Home",reels:"Reels",rgo:"Open lesson",rpk:"Choose position",rsh:"Share",les:"Lessons",me:"Me",reelst:"Video lessons coming soon",
 ls:"Free lessons",soon:"Soon",ch:"ch.",rmt:"Text",rms:"Slides",rvs:"Open slide",svh:"Tap a slide to open it full screen",svr:"Turn your phone sideways for a bigger slide",nextc:"Next chapter ›",done:"Finish",prevc:"Previous",
 test:"Start test ›",testoff:"Tests are temporarily off",q:"Question",of:"/",res:"Congratulations!",resp:"Test passed",fail:"Not enough yet",need:"To pass you need at least",retry:"Try again",waitr:"You can retry:",nextles:"Next lesson ›",allok:"All lessons completed! 🎉",allokt:"You finished all selected lessons. Congratulations!"}};
 const S={lang:null,picks:[],stage:0,promo:null,done:{},tests:{}};
@@ -333,7 +359,9 @@ function render(){
   if(!S.lang){app.innerHTML=head()+`<div class="pad c" style="padding-top:36px"><div style="font-size:54px">🌐</div><h1 style="margin-top:10px">${T.uz.langt}</h1><div class="hint" style="margin-bottom:20px">${T.uz.langs}</div>${Object.keys(FL).map(l=>`<button class="lg ${l==='uz'?'on':''}" onclick="setLang('${l}')"><span>${FL[l][0]}</span>${FL[l][1]}<span class="r">${l==='uz'?'✓':''}</span></button>`).join("")}</div>`;return}
   let body;if(UI.flow)body=flow();else body=({home:home,reels:reels,lessons:lessonsTab,me:meTab}[UI.tab])();
   const v=UI.view||{},key=[UI.tab,UI.flow,v.t,v.k,v.i,v.end].join("|"),enter=key!==UI._key;UI._key=key;
-  app.innerHTML=head()+`<div class="pad${enter?" enter":""}">${body}</div>`+nav()+(UI.sheet?sheet():"")+(UI.sv?svView():"")+(UI.zoom?`<div style="position:fixed;inset:0;z-index:40;background:#000;overflow:auto"><button class="back" style="position:fixed;top:12px;left:12px;z-index:41" onclick="UI.zoom=null;render()">← ${t('back')}</button><img src="${UI.zoom}" style="width:230%;max-width:none;display:block;margin-top:70px;background:#fff"></div>`:"");
+  const isR=UI.tab==="reels"&&!UI.flow;document.body.classList.toggle("reels",isR);if(!isR&&_rio){_rio.disconnect();_rio=null}
+  app.innerHTML=(isR?"":head())+`<div class="pad${enter?" enter":""}">${body}</div>`+nav()+(UI.sheet?sheet():"")+(UI.sv?svView():"")+(UI.zoom?`<div style="position:fixed;inset:0;z-index:40;background:#000;overflow:auto"><button class="back" style="position:fixed;top:12px;left:12px;z-index:41" onclick="UI.zoom=null;render()">← ${t('back')}</button><img src="${UI.zoom}" style="width:230%;max-width:none;display:block;margin-top:70px;background:#fff"></div>`:"");
+  if(isR)setTimeout(rObserve,0);
 }
 function go(tab){UI.zoom=null;UI.sv=null;UI.tab=tab;UI.flow=null;UI.view=null;UI.sheet=null;render();scrollTo(0,0)}
 function setLang(l){S.lang=l;UI.sheet=null;save();render()}
@@ -394,7 +422,40 @@ function meTab(){
   const fk=[1,2,3].map(i=>`<div class="card" style="display:flex;gap:12px;align-items:center"><span class="n">${i}</span><div style="flex:1"><b style="font-size:14px">${t("nm")}</b><br><small class="hint">${t("nmp")}</small><div style="height:8px;background:#333;border-radius:4px;margin-top:8px"></div></div><span class="tag am">…</span></div>`).join("");
   return `<h1>${t("me")}</h1><h2 style="font-size:14px;color:#cfcfd6;margin-top:4px">${t("myint")}</h2><div class="blur">${fk}</div>${sett}
   <div class="lockcard"><div class="lkic">🔒</div><div class="lkt">${t("mylock")}</div><div class="lks">${t("mylocks")}</div><button class="btn lkb" onclick="${S.picks.length?"UI.flow=1;render()":"go('home')"}">${t("mygo")}</button></div>`}
-function reels(){return `<div class="c" style="padding-top:80px"><div style="font-size:54px">🎬</div><h2>${t("reelst")}</h2></div>`}
+const REELS=["dispatch","update","safety","fleet","accounting","recruiting","eld","sales"];
+const RBASE={dispatch:69,update:70,safety:60,fleet:43,accounting:44,recruiting:75,eld:66,sales:42};
+function rCount(k){return (UI.rc&&UI.rc[k]!=null?UI.rc[k]:RBASE[k])}
+function reels(){if(!UI.rl){UI.rl=1;loadReels()}
+  return `<div class="rf" id="rf">`+REELS.map((k,i)=>{const liked=(S.rlk||[]).includes(k);
+  return `<section class="rv" data-k="${k}"><video src="reels/${k}.mp4" playsinline loop muted preload="${i<2?"auto":"metadata"}"></video>
+  <div class="rtap" onclick="rTap(event,'${k}')"></div><div class="rheart" id="rh-${k}">❤️</div>
+  <div class="rsnd" id="rsnd-${k}">${UI.rmute===false?"🔊":"🔇"}</div>
+  <div class="rside"><button class="rbtn${liked?" on":""}" id="rb-${k}" onclick="rLike('${k}')"><span class="rico">${liked?"❤️":"🤍"}</span><b id="rc-${k}">${rCount(k)}</b></button>
+  <button class="rbtn" onclick="rShare('${k}')"><span class="rico">↗</span><b>${t("rsh")}</b></button></div>
+  <div class="rcap"><div class="rpi">${PI[k]||""} ${pn(k)}</div><div class="rds">${t("d")[k]||""}</div>
+  ${BOOKS[k]?`<button class="rgo" onclick="UI.rl=0;go('lessons');openBook('${k}')">📖 ${t("rgo")}</button>`:`<button class="rgo" onclick="UI.rl=0;go('home')">✨ ${t("rpk")}</button>`}</div></section>`}).join("")+`</div>`}
+async function loadReels(){if(!API_URL)return;const r=await fetch(API_URL+"/reels",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initData:tg&&tg.initData||""})}).then(r=>r.json()).catch(()=>null);
+  if(!r||!r.counts)return;UI.rc=r.counts;if(tg&&tg.initData){S.rlk=r.mine;save()}
+  REELS.forEach(k=>{const c=document.getElementById("rc-"+k);if(c)c.textContent=rCount(k);const b=document.getElementById("rb-"+k),on=(S.rlk||[]).includes(k);if(b){b.classList.toggle("on",on);b.querySelector(".rico").textContent=on?"❤️":"🤍"}})}
+function rSet(k,on){const l=S.rlk=S.rlk||[],was=l.includes(k);if(on===was)return;
+  if(on)l.push(k);else l.splice(l.indexOf(k),1);save();UI.rc=UI.rc||{...RBASE};UI.rc[k]=rCount(k)+(on?1:-1);
+  const b=document.getElementById("rb-"+k),c=document.getElementById("rc-"+k);
+  if(b){b.classList.toggle("on",on);b.querySelector(".rico").textContent=on?"❤️":"🤍";b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop")}
+  if(c)c.textContent=UI.rc[k];
+  try{tg.HapticFeedback.impactOccurred("light")}catch(e){}
+  if(API_URL&&tg&&tg.initData)api("/like",{reel:k,on}).then(r=>{if(r&&r.count!=null){UI.rc[k]=r.count;const c2=document.getElementById("rc-"+k);if(c2)c2.textContent=r.count}})}
+function rLike(k){rSet(k,!(S.rlk||[]).includes(k))}
+let _rt=0;function rTap(e,k){const now=Date.now();
+  if(now-_rt<300){_rt=0;rSet(k,true);const h=document.getElementById("rh-"+k);if(h){h.classList.remove("go");void h.offsetWidth;h.classList.add("go")}return}
+  _rt=now;setTimeout(()=>{if(_rt&&Date.now()-_rt>=290){_rt=0;UI.rmute=UI.rmute===false?true:false;
+    document.querySelectorAll(".rv video").forEach(v=>v.muted=UI.rmute!==false);
+    document.querySelectorAll(".rsnd").forEach(x=>{x.textContent=UI.rmute===false?"🔊":"🔇";x.classList.remove("go");void x.offsetWidth;x.classList.add("go")})}},300)}
+function rShare(k){const u="https://t.me/interviewhub_bot";const txt=`${pn(k)} — Interview Hub`;const link=`https://t.me/share/url?url=${encodeURIComponent(u)}&text=${encodeURIComponent(txt)}`;
+  try{tg.openTelegramLink(link)}catch(e){window.open(link)}}
+let _rio=null;function rObserve(){if(_rio)_rio.disconnect();const f=document.getElementById("rf");if(!f)return;
+  _rio=new IntersectionObserver(es=>es.forEach(en=>{const v=en.target.querySelector("video");if(!v)return;
+    if(en.isIntersecting&&en.intersectionRatio>.6){v.muted=UI.rmute!==false;v.play().catch(()=>{})}else{v.pause()}}),{threshold:[0,.6,1]});
+  f.querySelectorAll(".rv").forEach(x=>_rio.observe(x))}
 const PI={accounting:"💵",update:"📍",safety:"🛡️",dispatch:"🚚",fleet:"🔧",eld:"⏱️",recruiting:"🤝",sales:"📈"};
 function lessonsTab(){
   const v=UI.view;if(v){if(v.t==="ch")return chapters(v.k);if(v.t==="read")return reader();if(v.t==="test")return testView()}

@@ -101,6 +101,8 @@ def init_tables(db):
                 id INTEGER PRIMARY KEY AUTOINCREMENT, tg_id INTEGER, position TEXT,
                 score INTEGER, passed INTEGER, at TEXT);
             CREATE INDEX IF NOT EXISTS ix_attempts_user ON test_attempts (tg_id);
+            CREATE TABLE IF NOT EXISTS reel_likes (
+                tg_id INTEGER, reel TEXT, at TEXT, PRIMARY KEY (tg_id, reel));
             CREATE TABLE IF NOT EXISTS promo_codes (
                 code TEXT PRIMARY KEY, percent INTEGER, max_uses INTEGER, expires_on TEXT,
                 active INTEGER DEFAULT 1, note TEXT, created_at TEXT);
@@ -115,7 +117,7 @@ def init_tables(db):
 
 def delete_app_data(db, tg_id):
     with closing(db()) as con:
-        for t in ("app_state", "lesson_progress", "test_attempts"):
+        for t in ("app_state", "lesson_progress", "test_attempts", "reel_likes"):
             con.execute(f"DELETE FROM {t} WHERE tg_id=?", (tg_id,))
         con.commit()
 
@@ -212,6 +214,47 @@ def store_picks(con, uid, picks):
         (json.dumps(picks), base, apply_pct(base, (r["promo_pct"] if r else 0) or 0), now_iso(), uid),
     )
     return True
+
+
+REELS = ("dispatch", "update", "safety", "fleet", "accounting", "recruiting", "eld", "sales")
+
+
+def reel_base(reel):
+    """Har bir video uchun doimiy boshlang'ich layklar soni (40–80)."""
+    return 40 + int(hashlib.sha256(f"ih-reel|{reel}".encode()).hexdigest(), 16) % 41
+
+
+def reel_counts(con):
+    real = dict(con.execute("SELECT reel, COUNT(*) FROM reel_likes GROUP BY reel").fetchall())
+    return {r: reel_base(r) + real.get(r, 0) for r in REELS}
+
+
+async def api_reels(request):
+    """Layklar soni va foydalanuvchining o'zi bosganlari. Telegram tashqarisida faqat sonlar."""
+    try:
+        user, _ = await read_api(request)
+    except web.HTTPUnauthorized:
+        user = None
+    with closing(request.app["db"]()) as con:
+        counts = reel_counts(con)
+        mine = [r for (r,) in con.execute("SELECT reel FROM reel_likes WHERE tg_id=?", (user["id"],))] if user else []
+    return json_resp({"counts": counts, "mine": mine})
+
+
+async def api_like(request):
+    user, body = await read_api(request)
+    reel, on = body.get("reel"), bool(body.get("on"))
+    if reel not in REELS:
+        raise web.HTTPBadRequest(text="bad reel")
+    with closing(request.app["db"]()) as con:
+        ensure_state(con, user)
+        if on:
+            con.execute("INSERT OR IGNORE INTO reel_likes (tg_id, reel, at) VALUES (?,?,?)", (user["id"], reel, now_iso()))
+        else:
+            con.execute("DELETE FROM reel_likes WHERE tg_id=? AND reel=?", (user["id"], reel))
+        con.commit()
+        count = reel_counts(con)[reel]
+    return json_resp({"ok": True, "reel": reel, "liked": on, "count": count})
 
 
 def apply_pct(base, pct):
@@ -935,7 +978,7 @@ def build_app(*, bot, db, token, on_paid, on_decide):
     app["origins"] = {o.strip() for o in os.getenv("ALLOWED_ORIGINS", "https://sammakh.github.io").split(",") if o.strip()}
     for path, h in [("/hb", api_hb), ("/picks", api_picks), ("/sync", api_sync), ("/result", api_result),
                     ("/accept", api_accept), ("/pay", api_pay), ("/status", api_status), ("/quote", api_quote),
-                    ("/promo", api_promo)]:
+                    ("/promo", api_promo), ("/reels", api_reels), ("/like", api_like)]:
         app.router.add_post("/api" + path, h)
         app.router.add_route("OPTIONS", "/api" + path, h)
     app.router.add_get("/", root)
