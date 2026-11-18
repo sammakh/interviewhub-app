@@ -178,6 +178,7 @@ async def read_api(request):
         raise web.HTTPBadRequest(text="bad json")
     if not isinstance(body, dict):
         raise web.HTTPBadRequest(text="bad json")
+    request["body"] = body
     user = verify_init_data(body.get("initData", ""), request.app["token"])
     if not user:
         raise web.HTTPUnauthorized(text="bad initData")
@@ -222,13 +223,53 @@ PROMO_RE = re.compile(r"^[A-Z0-9_-]{3,20}$")
 _promo_tries = {}
 
 
+def check_code(con, code, uid=None):
+    """(row, xato) qaytaradi. xato: None | invalid | expired | limit."""
+    row = con.execute("SELECT * FROM promo_codes WHERE code=?", (code,)).fetchone() if PROMO_RE.match(code) else None
+    if not row or not row["active"]:
+        return None, "invalid"
+    if row["expires_on"] and row["expires_on"] < today_tz():
+        return None, "expired"
+    if row["max_uses"]:
+        used = con.execute("SELECT COUNT(*) FROM app_state WHERE promo_code=? AND tg_id IS NOT ?", (code, uid)).fetchone()[0]
+        if used >= row["max_uses"]:
+            return None, "limit"
+    return row, None
+
+
+async def promo_preview(request):
+    """Brauzerda sinov uchun: kodni tekshiradi, chegirmani hisoblaydi, hech narsa yozmaydi."""
+    body = request["body"]
+    ip = request.headers.get("X-Forwarded-For", request.remote or "").split(",")[0].strip()
+    now = time.time()
+    tries = [t for t in _promo_tries.get(ip, []) if now - t < 600]
+    code = str(body.get("code") or "").strip().upper()[:20]
+    base = sum(PRICES[k] for k in clean_picks(body.get("picks")))
+    if not code:
+        return json_resp({"ok": True, "percent": 0, "base": base, "amount": base, "preview": True})
+    if len(tries) >= 10:
+        return json_resp({"ok": False, "error": "tries"})
+    with closing(request.app["db"]()) as con:
+        row, err = check_code(con, code)
+    if err:
+        tries.append(now)
+        _promo_tries[ip] = tries
+        return json_resp({"ok": False, "error": err})
+    return json_resp({"ok": True, "code": code, "percent": row["percent"], "base": base,
+                      "amount": apply_pct(base, row["percent"]), "preview": True})
+
+
 def today_tz():
     return datetime.now(TZ).date().isoformat()
 
 
 async def api_promo(request):
-    """Promokodni tekshiradi va foydalanuvchiga biriktiradi. Bo'sh kod = olib tashlash."""
-    user, body = await read_api(request)
+    """Promokodni tekshiradi va foydalanuvchiga biriktiradi. Bo'sh kod = olib tashlash.
+    Telegram tashqarisida (initData yo'q) faqat tekshiradi: hech narsa saqlanmaydi, limit sarflanmaydi."""
+    try:
+        user, body = await read_api(request)
+    except web.HTTPUnauthorized:
+        return await promo_preview(request)
     uid, code = user["id"], str(body.get("code") or "").strip().upper()[:20]
     now = time.time()
     tries = [t for t in _promo_tries.get(uid, []) if now - t < 600]
@@ -246,16 +287,7 @@ async def api_promo(request):
             return json_resp({"ok": True, "percent": 0, "base": base, "amount": base})
         if len(tries) >= 10:
             return json_resp({"ok": False, "error": "tries"})
-        row = con.execute("SELECT * FROM promo_codes WHERE code=?", (code,)).fetchone() if PROMO_RE.match(code) else None
-        err = None
-        if not row or not row["active"]:
-            err = "invalid"
-        elif row["expires_on"] and row["expires_on"] < today_tz():
-            err = "expired"
-        elif row["max_uses"]:
-            used = con.execute("SELECT COUNT(*) FROM app_state WHERE promo_code=? AND tg_id!=?", (code, uid)).fetchone()[0]
-            if used >= row["max_uses"]:
-                err = "limit"
+        row, err = check_code(con, code, uid)
         if err:
             tries.append(now)
             _promo_tries[uid] = tries
