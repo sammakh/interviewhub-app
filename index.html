@@ -9,6 +9,17 @@ html,body{background:#0B0B0F;color:#fff;font-family:-apple-system,"Helvetica Neu
 body{min-height:100vh;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;text-align:left}
 .top{background:#C24443;padding:12px 18px 0;position:sticky;top:0;z-index:5}
+.lockcard{position:fixed;left:14px;right:14px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:7;padding:18px 16px 16px;border-radius:24px;text-align:center;
+background:linear-gradient(160deg,rgba(207,54,55,.22),rgba(23,23,28,.45) 55%);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);
+border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 40px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(207,54,55,.25);animation:lkin .5s cubic-bezier(.2,.8,.2,1)}
+.lkic{width:46px;height:46px;margin:-40px auto 8px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:linear-gradient(145deg,#E04646,#9E2A2B);box-shadow:0 0 0 6px rgba(207,54,55,.18),0 8px 24px rgba(207,54,55,.45);animation:lkpulse 2.4s ease-in-out infinite}
+.lkt{font-weight:800;font-size:16px;color:#fff}.lks{font-size:12px;color:rgba(255,255,255,.65);margin-top:4px;line-height:1.4}
+.lkb{margin-top:14px;position:relative;overflow:hidden;background:linear-gradient(135deg,#E04646,#B83233);box-shadow:0 6px 20px rgba(207,54,55,.4)}
+.lkb:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:lkshine 3s ease-in-out infinite}
+@keyframes lkin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes lkpulse{0%,100%{box-shadow:0 0 0 6px rgba(207,54,55,.18),0 8px 24px rgba(207,54,55,.45)}50%{box-shadow:0 0 0 12px rgba(207,54,55,.06),0 8px 28px rgba(207,54,55,.6)}}
+@keyframes lkshine{0%,60%{left:-60%}100%{left:130%}}
+@media (prefers-reduced-motion:reduce){.lockcard,.lkic,.lkb:after{animation:none}}
 .lk{display:flex;align-items:center;gap:10px;padding:2px 0 14px}
 .ih{width:40px;height:40px;border-radius:20px;background:#fff;color:#111;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:20px}
 .wm{font-weight:800;line-height:1;font-size:17px}
@@ -25,6 +36,7 @@ h2{font-size:17px;font-weight:800;margin:18px 0 10px}
 .pos.on{background:#2a1517;border-color:#C24443}
 .pos b{font-size:15px;display:block;margin-bottom:4px}.pos span.d{font-size:12px;color:#9c9ca5;line-height:1.35;display:block;padding-right:6px}
 .pos .ck{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:11px;border:2px solid #444;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800}
+.pos .pr{display:block;margin-top:8px;font-size:13px;font-weight:800;color:#fff}.pos.on .pr{color:#FF6B6C}
 .pos.on .ck{background:#C24443;border-color:#C24443}
 .nav{position:fixed;bottom:0;left:0;right:0;height:calc(64px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:#0B0B0F;border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center;font-size:11px;color:#9c9ca5;z-index:6}
 .nav button{flex:1;text-align:center;color:#9c9ca5;font-size:11px;padding:14px 0}.nav .a{color:#FF6B6C;font-weight:700}
@@ -100,7 +112,7 @@ bterms:"← Asosiy shartlarga qaytish",contract:"Shartnoma",cdoc:"Xizmat shartno
 bcon:"← Shartnomaga qaytish",paytitle:"To'lov",amount:"To'lov summasi",method:"To'lov usuli",payvia:"orqali to'lash",paynote:"To'lov xavfsiz, to'lov tizimi sahifasida amalga oshadi",paysoon:"To'lov tez orada ulanadi.",
 pend:"To'lov tekshirilmoqda",pendt:"To'lov tizimidan tasdiq kutilmoqda. Odatda bir necha soniya oladi.",refresh:"Holatni yangilash",paid:"To'lov qabul qilindi",paidt:"Rahmat! Tayyorgarlikni boshlang.",paidb:"Men bo'limiga o'tish ›",
 langt:"Tilni tanlang",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",lang:"Til",
-nm:"Kompaniya nomi",nmp:"Pozitsiya · sana",myint:"Mening intervyularim",sett:"Sozlamalar",mylock:"To'lovdan keyin ochiladi",mygo:"To'lovga o'tish ›",
+nm:"Kompaniya nomi",nmp:"Pozitsiya · sana",myint:"Mening intervyularim",sett:"Sozlamalar",mylock:"To'lovdan keyin ochiladi",mylocks:"Intervyular, CV va mock intervyu shu yerda bo'ladi",mygo:"To'lovga o'tish ›",
 steps:"Sizning qadamlaringiz",sp:"To'lov",spd:"Qabul qilindi",scv:"CV tayyorlash",scvd:"Ma'lumot kutilmoqda",scall:"Jamoa bilan call",scalld:"Vaqt tanlang",sint:"Intervyu",sintd:"Tayyorlanmoqda",wait:"Kompaniya tanlanmoqda",
 home:"Bosh sahifa",reels:"Reels",les:"Darslar",me:"Men",reelst:"Video darslar tez orada",
 ls:"Bepul darslar",soon:"Tez orada",ch:"bob",nextc:"Keyingi bob ›",done:"Tugatish",prevc:"Oldingi bob",
@@ -115,7 +127,7 @@ bterms:"← Назад к условиям",contract:"Договор",cdoc:"До
 bcon:"← Назад к договору",paytitle:"Оплата",amount:"Сумма оплаты",method:"Способ оплаты",payvia:"— оплатить",paynote:"Оплата безопасна и проходит на странице платёжной системы",paysoon:"Оплата скоро будет подключена.",
 pend:"Проверяем оплату",pendt:"Ожидаем подтверждение от платёжной системы. Обычно несколько секунд.",refresh:"Обновить статус",paid:"Оплата принята",paidt:"Спасибо! Начинайте подготовку.",paidb:"Перейти в «Я» ›",
 langt:"Выберите язык",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",lang:"Язык",
-nm:"Название компании",nmp:"Позиция · дата",myint:"Мои собеседования",sett:"Настройки",mylock:"Откроется после оплаты",mygo:"Перейти к оплате ›",
+nm:"Название компании",nmp:"Позиция · дата",myint:"Мои собеседования",sett:"Настройки",mylock:"Откроется после оплаты",mylocks:"Здесь будут ваши собеседования, CV и mock-интервью",mygo:"Перейти к оплате ›",
 steps:"Ваши шаги",sp:"Оплата",spd:"Принята",scv:"Подготовка CV",scvd:"Ждём данные",scall:"Звонок с командой",scalld:"Выберите время",sint:"Собеседование",sintd:"Готовится",wait:"Подбираем компанию",
 home:"Главная",reels:"Reels",les:"Уроки",me:"Я",reelst:"Видеоуроки скоро",
 ls:"Бесплатные уроки",soon:"Скоро",ch:"гл.",nextc:"Следующая глава ›",done:"Завершить",prevc:"Назад",
@@ -130,7 +142,7 @@ bterms:"← Back to key terms",contract:"Contract",cdoc:"Service contract",cdocs
 bcon:"← Back to contract",paytitle:"Payment",amount:"Amount",method:"Payment method",payvia:"— pay",paynote:"Payment is secure and happens on the payment system page",paysoon:"Payment will be connected soon.",
 pend:"Checking payment",pendt:"Waiting for confirmation from the payment system. Usually a few seconds.",refresh:"Refresh status",paid:"Payment received",paidt:"Thank you! Start preparing.",paidb:"Go to Me ›",
 langt:"Choose language",langs:"Выберите язык · Choose language",langc:"Til / Язык / Language",lang:"Language",
-nm:"Company name",nmp:"Position · date",myint:"My interviews",sett:"Settings",mylock:"Opens after payment",mygo:"Go to payment ›",
+nm:"Company name",nmp:"Position · date",myint:"My interviews",sett:"Settings",mylock:"Opens after payment",mylocks:"Your interviews, CV and mock interview will appear here",mygo:"Go to payment ›",
 steps:"Your steps",sp:"Payment",spd:"Received",scv:"CV preparation",scvd:"Waiting for info",scall:"Call with the team",scalld:"Pick a time",sint:"Interview",sintd:"Being prepared",wait:"Company being selected",
 home:"Home",reels:"Reels",les:"Lessons",me:"Me",reelst:"Video lessons coming soon",
 ls:"Free lessons",soon:"Soon",ch:"ch.",nextc:"Next chapter ›",done:"Finish",prevc:"Previous",
@@ -170,7 +182,7 @@ function sheet(){
 function home(){
   const u=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.first_name)||"";
   let h=`<h1>${t("hello")}${u?", "+esc(u):""}!</h1><button class="btn" style="margin-top:12px" onclick="go('lessons')">${t("start")}</button><div class="hint c" style="margin:8px 0 18px">${t("startn")}</div>`;
-  h+=`<h2 style="margin-top:6px">${t("pick")}</h2><div class="hint" style="margin-bottom:12px">${t("pickh")}</div><div class="grid">`+POS.map(k=>{const on=S.picks.includes(k);return `<button class="pos ${on?'on':''}" onclick="togglePick('${k}')"><span class="ck">${on?'✓':''}</span><b>${pn(k)}</b><span class="d">${t("d")[k]}</span></button>`}).join("")+`</div>`;
+  h+=`<h2 style="margin-top:6px">${t("pick")}</h2><div class="hint" style="margin-bottom:12px">${t("pickh")}</div><div class="grid">`+POS.map(k=>{const on=S.picks.includes(k);return `<button class="pos ${on?'on':''}" onclick="togglePick('${k}')"><span class="ck">${on?'✓':''}</span><b>${pn(k)}</b><span class="d">${t("d")[k]}</span><span class="pr">${money(PRICES[k]||0)} ${t("cur")}</span></button>`}).join("")+`</div>`;
   h+=`<div style="display:flex;justify-content:space-between;margin:14px 0 0;font-size:14px" class="hint"><span>${t("picked")} <b style="color:#fff">${S.picks.length} / 3</b></span><button style="color:#FF6B6C;font-weight:800" onclick="S.picks=[];render()">${t("clear")}</button></div>`;
   h+=`<button class="btn ${S.picks.length?'':'off'}" ${S.picks.length?"":"disabled"} onclick="UI.sheet='save';render()">${t("save")}</button>`;
   if(S.stage>=1&&S.stage<5)h+=`<button class="btn g" onclick="UI.flow=1;render()">${t("cont")}</button>`;
@@ -207,7 +219,7 @@ function meTab(){
     <h2 style="font-size:14px;color:#cfcfd6">${t("myint")}</h2>`+S.picks.map((k,i)=>`<div class="card" style="display:flex;gap:12px;align-items:center"><span class="n">${i+1}</span><div style="flex:1"><b style="font-size:14px">${pn(k)}</b><br><small class="hint">${t("wait")}</small></div><span class="tag">…</span></div>`).join("")+sett}
   const fk=[1,2,3].map(i=>`<div class="card" style="display:flex;gap:12px;align-items:center"><span class="n">${i}</span><div style="flex:1"><b style="font-size:14px">${t("nm")}</b><br><small class="hint">${t("nmp")}</small><div style="height:8px;background:#333;border-radius:4px;margin-top:8px"></div></div><span class="tag am">…</span></div>`).join("");
   return `<h1>${t("me")}</h1><h2 style="font-size:14px;color:#cfcfd6;margin-top:4px">${t("myint")}</h2><div class="blur">${fk}</div>${sett}
-  <div style="position:fixed;left:14px;right:14px;bottom:calc(76px + env(safe-area-inset-bottom));background:#17171C;border:1px solid #C24443;border-radius:20px;padding:14px;z-index:7"><div class="c" style="font-weight:800;font-size:14px">🔒 ${t("mylock")}</div><button class="btn" style="margin-top:10px;text-align:center" onclick="${S.picks.length?"UI.flow=1;render()":"go('home')"}">${t("mygo")}</button></div>`}
+  <div class="lockcard"><div class="lkic">🔒</div><div class="lkt">${t("mylock")}</div><div class="lks">${t("mylocks")}</div><button class="btn lkb" onclick="${S.picks.length?"UI.flow=1;render()":"go('home')"}">${t("mygo")}</button></div>`}
 function reels(){return `<div class="c" style="padding-top:80px"><div style="font-size:54px">🎬</div><h2>${t("reelst")}</h2></div>`}
 function lessonsTab(){
   const v=UI.view;if(v){if(v.t==="ch")return chapters(v.k);if(v.t==="read")return reader();if(v.t==="test")return testView()}
