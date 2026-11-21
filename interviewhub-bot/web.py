@@ -229,6 +229,30 @@ def reel_counts(con):
     return {r: reel_base(r) + real.get(r, 0) for r in REELS}
 
 
+_log_hits = {}
+
+
+async def api_log(request):
+    """Ilovadagi JS xatolarini Railway logiga yozadi (diagnostika). Har IP uchun 10 daqiqada 30 tagacha."""
+    ip = request.headers.get("X-Forwarded-For", request.remote or "").split(",")[0].strip()
+    now = time.time()
+    hits = [t for t in _log_hits.get(ip, []) if now - t < 600]
+    if len(hits) >= 30:
+        return json_resp({"ok": False})
+    hits.append(now)
+    _log_hits[ip] = hits
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    if not isinstance(body, dict):
+        body = {}
+    clip = lambda v, n: str(v or "")[:n].replace("\n", " | ")
+    log.warning("APP-ERROR %s | where=%s | ua=%s | stack=%s", clip(body.get("m"), 300), clip(body.get("w"), 80),
+                clip(request.headers.get("User-Agent"), 160), clip(body.get("s"), 700))
+    return json_resp({"ok": True})
+
+
 async def api_reels(request):
     """Layklar soni va foydalanuvchining o'zi bosganlari. Telegram tashqarisida faqat sonlar."""
     try:
@@ -978,7 +1002,8 @@ def build_app(*, bot, db, token, on_paid, on_decide):
     app["origins"] = {o.strip() for o in os.getenv("ALLOWED_ORIGINS", "https://sammakh.github.io").split(",") if o.strip()}
     for path, h in [("/hb", api_hb), ("/picks", api_picks), ("/sync", api_sync), ("/result", api_result),
                     ("/accept", api_accept), ("/pay", api_pay), ("/status", api_status), ("/quote", api_quote),
-                    ("/promo", api_promo), ("/reels", api_reels), ("/like", api_like)]:
+                    ("/promo", api_promo), ("/reels", api_reels), ("/like", api_like),
+                    ("/log", api_log)]:
         app.router.add_post("/api" + path, h)
         app.router.add_route("OPTIONS", "/api" + path, h)
     app.router.add_get("/", root)

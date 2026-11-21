@@ -280,6 +280,11 @@ body.reels .pad{padding:0;max-width:none;animation:none}
 </style></head><body>
 <div id="app"></div>
 <script>
+/* ===== Diagnostika: xatolar serverga (Railway log) ===== */
+window.__ihErr=function(m,w,st){try{window.__ihE=(window.__ihE||0)+1;if(window.__ihE>8)return;
+  fetch("https://interviewhub-bot-production.up.railway.app/api/log",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({m:String(m),w:String(w||""),s:String(st||"")})}).catch(function(){})}catch(e){}};
+window.addEventListener("error",function(e){__ihErr(e.message,(e.filename||"").split("/").pop()+":"+e.lineno+":"+e.colno,e.error&&e.error.stack)});
+window.addEventListener("unhandledrejection",function(e){var r=e.reason||{};__ihErr("promise: "+(r.message||r),"promise",r.stack)});
 /* ===== CONFIG ===== */
 const API_URL="https://interviewhub-bot-production.up.railway.app/api"; // /hb /sync /picks /result /accept /pay /status
 const OFFER_URL="";            // public offer page link
@@ -369,7 +374,9 @@ const priceTxt=()=>QUOTE?QUOTE:(S.picks.length?`${money(net())} ${t("cur")}`:"�
 function head(){return `<div class="top"><div class="lk"><span class="ih">ih</span><span class="wm">interview<br>hub</span>${S.lang?`<button class="pl" onclick="UI.sheet='lang';render()">🌐 ${S.lang.toUpperCase()} ▾</button>`:""}</div></div>`}
 const ICO={home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',reels:'<rect x="3" y="3" width="18" height="18" rx="4"/><path d="m10 8.5 5 3.5-5 3.5z"/>',lessons:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'};
 function nav(){const l=S.stage<5;return `<div class="nav">${[["home",t("home")],["reels",t("reels")],["lessons",t("les")],["me",t("me")]].map(x=>`<button class="${UI.tab===x[0]&&!UI.flow?'a':''}" onclick="go('${x[0]}')"><span class="ni"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICO[x[0]]}</svg>${x[0]==="me"&&l?'<em>🔒</em>':''}</span>${x[1]}</button>`).join("")}</div>`}
-function render(){
+function render(){try{_render()}catch(e){__ihErr(e.message,"render "+UI.tab+"/"+UI.flow+"/"+(UI.view&&UI.view.t),e.stack)}
+  try{const b=document.body;void b.offsetHeight;requestAnimationFrame(()=>{b.style.outline=b.style.outline?"":"0 solid transparent"})}catch(e){}}
+function _render(){
   const app=$("#app");
   if(!S.lang){app.innerHTML=head()+`<div class="pad c" style="padding-top:36px"><div style="font-size:54px">🌐</div><h1 style="margin-top:10px">${T.uz.langt}</h1><div class="hint" style="margin-bottom:20px">${T.uz.langs}</div>${Object.keys(FL).map(l=>`<button class="lg ${l==='uz'?'on':''}" onclick="setLang('${l}')"><span>${FL[l][0]}</span>${FL[l][1]}<span class="r">${l==='uz'?'✓':''}</span></button>`).join("")}</div>`;return}
   let body;if(UI.flow)body=flow();else body=({home:home,reels:reels,lessons:lessonsTab,me:meTab}[UI.tab])();
@@ -566,6 +573,8 @@ function sync(){if(DEMO)return;const tot={},ts={};Object.keys(BOOKS).forEach(k=>
   Object.keys(S.tests).forEach(k=>{const v=S.tests[k];if(v&&typeof v.score==="number")ts[k]={score:v.score,pass:!!v.pass}});
   api("/sync",{picks:S.picks,done:S.done,totals:tot,tests:ts,lang:S.lang})}
 function hb(){if(!DEMO&&document.visibilityState==="visible")api("/hb",{})}
+if(API_URL&&!DEMO&&tg&&tg.initData&&!sessionStorage.getItem("ihdiag")){try{sessionStorage.setItem("ihdiag","1")}catch(e){}
+  __ihErr("boot-ok","diag",JSON.stringify({p:tg.platform,v:tg.version,coarse:matchMedia("(pointer:coarse)").matches,hover:matchMedia("(hover:none)").matches,w:innerWidth,h:innerHeight}))}
 if(API_URL&&!DEMO){sync();hb();setInterval(hb,30000);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")hb()});
   if(S.stage<5)api("/status",{}).then(r=>{if(r&&r.paid){S.stage=5;save();render()}})}
