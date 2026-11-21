@@ -273,7 +273,13 @@ body.reels .pad{padding:0;max-width:none;animation:none}
   .pl,.slz,.rgo,.rbtn .rico{-webkit-backdrop-filter:none;backdrop-filter:none}
   .rbtn .rico{background:rgba(0,0,0,.55)}.rgo{background:rgba(40,40,46,.9)}
   .pad.enter .grid>*,.pad.enter .bk,.pad.enter .card,.pad.enter .pm{animation:none}
-  .pad.enter{animation:fadein .2s ease-out}
+  /* iOS: butun sahifa animatsiyasi ulkan grafik qatlam yaratib, xotira tugab qolishiga olib kelardi */
+  .pad.enter,.pad{animation:none!important}
+  .hero:before,.hero:after,.pos.on:after,.top:before,body:before{display:none!important}
+  .hero{border:1px solid rgba(255,107,108,.45)}
+  .card,.tot,.bk,.pos,.pm,.lg,.o,.ls-card,.btn,.btn.g,.top,.lockcard,.lkic,.lkb,.slw,.nav,.pos.on,.pm.on,.lg.on{box-shadow:none!important}
+  .lockcard{animation:none}.rheart{filter:none}
+  .stats b{background:none;-webkit-background-clip:border-box;background-clip:border-box;color:#FFD0D0}
   .bk,.pos,.pm,.lg,.o,.btn{transition:transform .12s ease-out}
   .top{box-shadow:0 6px 18px rgba(194,53,54,.25)}
 }
