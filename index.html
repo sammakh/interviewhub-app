@@ -142,7 +142,7 @@ background:radial-gradient(120% 90% at 100% 0%,rgba(210,63,64,.45),transparent 6
 @media (prefers-reduced-motion:reduce){.pad.enter{animation:none}.bk,.pos,.pm,.lg,.o,.btn{transition:none}}
 
 /* ===== Kuchli qatlam ===== */
-body{background:radial-gradient(90% 40% at 50% 0%,rgba(210,63,64,.16),transparent 70%),radial-gradient(60% 30% at 100% 60%,rgba(210,63,64,.07),transparent 70%),var(--bg);background-attachment:fixed}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(90% 40% at 50% 0%,rgba(210,63,64,.16),transparent 70%),radial-gradient(60% 30% at 100% 60%,rgba(210,63,64,.07),transparent 70%)}
 .top{background:linear-gradient(135deg,#E04748 0%,#C23536 55%,#9E2829 100%);border-radius:0 0 22px 22px;padding-bottom:2px;overflow:hidden;box-shadow:0 10px 30px rgba(194,53,54,.35)}
 .top:before{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 85% -20%,rgba(255,255,255,.28),transparent 60%);pointer-events:none}
 .top .ih{box-shadow:0 4px 14px rgba(0,0,0,.25)}
@@ -262,6 +262,21 @@ body.reels .pad{padding:0;max-width:none;animation:none}
 @keyframes rheart{0%{transform:translate(-50%,-50%) scale(0);opacity:0}25%{transform:translate(-50%,-50%) scale(1.15);opacity:1}55%{transform:translate(-50%,-50%) scale(.95);opacity:1}100%{transform:translate(-50%,-60%) scale(1);opacity:0}}
 .rsnd{position:absolute;top:calc(16px + env(safe-area-inset-top));right:14px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:18px;pointer-events:none}
 .rsnd.go{animation:rpop .35s var(--ease)}
+
+/* ===== Telefonlar uchun yengil rejim (iOS qotishining oldini oladi) ===== */
+@media (hover:none),(pointer:coarse){
+  .hero:before{animation:none;background:linear-gradient(135deg,rgba(255,107,108,.9),rgba(255,107,108,.15) 40%,rgba(255,255,255,.25) 70%,rgba(255,107,108,.5))}
+  .btn.shine:after,.lkb:after{animation:none;display:none}
+  .lkic{animation:none}
+  .nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(22,22,27,.97)}
+  .lockcard{-webkit-backdrop-filter:none;backdrop-filter:none;background:linear-gradient(160deg,rgba(80,24,26,.97),rgba(23,23,28,.97) 60%)}
+  .pl,.slz,.rgo,.rbtn .rico{-webkit-backdrop-filter:none;backdrop-filter:none}
+  .rbtn .rico{background:rgba(0,0,0,.55)}.rgo{background:rgba(40,40,46,.9)}
+  .pad.enter .grid>*,.pad.enter .bk,.pad.enter .card,.pad.enter .pm{animation:none}
+  .pad.enter{animation:fadein .2s ease-out}
+  .bk,.pos,.pm,.lg,.o,.btn{transition:transform .12s ease-out}
+  .top{box-shadow:0 6px 18px rgba(194,53,54,.25)}
+}
 </style></head><body>
 <div id="app"></div>
 <script>
