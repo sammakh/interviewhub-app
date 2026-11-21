@@ -287,10 +287,16 @@ body.reels .pad{padding:0;max-width:none;animation:none}
 <div id="app"></div>
 <script>
 /* ===== Diagnostika: xatolar serverga (Railway log) ===== */
-window.__ihErr=function(m,w,st){try{window.__ihE=(window.__ihE||0)+1;if(window.__ihE>8)return;
+window.__ihErr=function(m,w,st){try{window.__ihE=(window.__ihE||0)+1;if(window.__ihE>20)return;
   fetch("https://interviewhub-bot-production.up.railway.app/api/log",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({m:String(m),w:String(w||""),s:String(st||"")})}).catch(function(){})}catch(e){}};
 window.addEventListener("error",function(e){__ihErr(e.message,(e.filename||"").split("/").pop()+":"+e.lineno+":"+e.colno,e.error&&e.error.stack)});
 window.addEventListener("unhandledrejection",function(e){var r=e.reason||{};__ihErr("promise: "+(r.message||r),"promise",r.stack)});
+window.__ihTap=0;window.__ihT0=Date.now();
+function __ihDesc(el){if(!el)return "null";var d=el.tagName+(el.className&&typeof el.className==="string"?"."+el.className.trim().split(/\s+/).join("."):"");
+  var oc=el.closest&&el.closest("[onclick]");return d+(oc?" > onclick="+String(oc.getAttribute("onclick")).slice(0,40):" (onclick yo'q)")}
+["touchend","click"].forEach(function(ev){document.addEventListener(ev,function(e){try{if(window.__ihTap>=8||Date.now()-window.__ihT0>180000)return;window.__ihTap++;
+  var p=e.changedTouches?e.changedTouches[0]:e,top=document.elementFromPoint(p.clientX,p.clientY);
+  __ihErr("tap-"+ev,"diag","target="+__ihDesc(e.target)+" | top="+__ihDesc(top)+" | xy="+Math.round(p.clientX)+","+Math.round(p.clientY)+" | sy="+Math.round(scrollY))}catch(x){}},true)});
 /* ===== CONFIG ===== */
 const API_URL="https://interviewhub-bot-production.up.railway.app/api"; // /hb /sync /picks /result /accept /pay /status
 const OFFER_URL="";            // public offer page link
@@ -380,7 +386,7 @@ const priceTxt=()=>QUOTE?QUOTE:(S.picks.length?`${money(net())} ${t("cur")}`:"�
 function topBar(){return `<div class="top"><div class="lk"><span class="ih">ih</span><span class="wm">interview<br>hub</span>${S.lang?`<button class="pl" onclick="UI.sheet='lang';render()">🌐 ${S.lang.toUpperCase()} ▾</button>`:""}</div></div>`}
 const ICO={home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',reels:'<rect x="3" y="3" width="18" height="18" rx="4"/><path d="m10 8.5 5 3.5-5 3.5z"/>',lessons:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/>',me:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'};
 function nav(){const l=S.stage<5;return `<div class="nav">${[["home",t("home")],["reels",t("reels")],["lessons",t("les")],["me",t("me")]].map(x=>`<button class="${UI.tab===x[0]&&!UI.flow?'a':''}" onclick="go('${x[0]}')"><span class="ni"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICO[x[0]]}</svg>${x[0]==="me"&&l?'<em>🔒</em>':''}</span>${x[1]}</button>`).join("")}</div>`}
-function render(){try{_render()}catch(e){__ihErr(e.message,"render "+UI.tab+"/"+UI.flow+"/"+(UI.view&&UI.view.t),e.stack)}
+function render(){try{_render();if(window.__ihR===undefined)window.__ihR=0;if(window.__ihR++<4&&tg&&tg.initData)__ihErr("render-ok","diag",UI.tab+"/"+UI.flow+" picks="+S.picks.join(","))}catch(e){__ihErr(e.message,"render "+UI.tab+"/"+UI.flow+"/"+(UI.view&&UI.view.t),e.stack)}
   try{const b=document.body;void b.offsetHeight;requestAnimationFrame(()=>{b.style.outline=b.style.outline?"":"0 solid transparent"})}catch(e){}}
 function _render(){
   const app=$("#app");
